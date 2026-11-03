@@ -21,7 +21,9 @@
     <div class="st-tabs" role="tablist">
       <button role="tab" data-tab="kitchen" aria-selected="true">Kitchen <span class="badge" id="bKitchen" hidden></span></button>
       <button role="tab" data-tab="rentals">Rentals <span class="badge" id="bRentals" hidden></span></button>
+      <button role="tab" data-tab="calendar">Calendar</button>
       <button role="tab" data-tab="fleet">Fleet <span class="badge" id="bFleet" hidden></span></button>
+      <button role="tab" data-tab="members">Members</button>
       <button role="tab" data-tab="map">Map</button>
       <button role="tab" data-tab="today">Today</button>
     </div>
@@ -31,6 +33,19 @@
     <section data-pane="rentals" hidden>
       <div class="row" style="justify-content:space-between;align-items:center"><h2>Rentals &amp; drivers</h2><button class="sb go" id="walkIn" type="button">+ Walk-in</button></div>
       <div class="cols" id="rentals"></div>
+    </section>
+    <section data-pane="calendar" hidden>
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h2>Who has which scooter</h2>
+        <div class="row"><button class="sb" type="button" id="calPrev">&larr; Earlier</button><button class="sb" type="button" id="calToday">Today</button><button class="sb" type="button" id="calNext">Later &rarr;</button></div>
+      </div>
+      <p class="mute" style="margin-bottom:12px">The same data the website calendar uses. Each model row shows how many are still free; under it, every booking. Tap a booking to open it.</p>
+      <div class="gantt-wrap"><table class="gantt" id="gantt"></table></div>
+    </section>
+    <section data-pane="members" hidden>
+      <h2>Members</h2>
+      <p class="mute" style="margin-bottom:12px">People who signed in on the website. Points come from paid orders and rentals; you can add or take away points with a reason.</p>
+      <div style="overflow:auto"><table class="tbl" id="members"></table></div>
     </section>
     <section data-pane="fleet" hidden>
       <div class="row" style="justify-content:space-between;align-items:center"><h2>Fleet</h2><button class="sb go" id="addBike" type="button">+ Add bike</button></div>

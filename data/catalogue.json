@@ -237,5 +237,28 @@
       "name": "Full day tour",
       "price": null
     }
-  ]
+  ],
+  "loyalty": {
+    "_note": "Proposed by Djinja-C, NOT yet agreed by the owner: shown as [ADD: confirm] until confirmed is true.",
+    "confirmed": false,
+    "perIDR": 10000,
+    "redeemPoints": 100,
+    "redeemValue": 25000
+  },
+  "rental": {
+    "_note": "Booking rules. Version changes force members to accept the terms again.",
+    "termsVersion": "2026-11-03-draft",
+    "requiredDocs": [
+      {
+        "id": "passport",
+        "name": "Passport photo page"
+      },
+      {
+        "id": "licence",
+        "name": "Driving licence (motorcycle, or international permit with motorcycle category)"
+      }
+    ],
+    "holdMinutes": 30,
+    "maxDays": 90
+  }
 }

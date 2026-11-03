@@ -98,12 +98,22 @@
       of.address.required = m === 'delivery';
     };
     of.querySelectorAll('[name=mode]').forEach(function (r) { r.onchange = modeSync; }); modeSync();
+    // pay online and points appear only when they can work
+    document.addEventListener('take:member-ready', function () {
+      var m = window.TAKE_MEMBER || {}, cfg = m.config || {}, me = m.data, L = T.loyalty;
+      var ps = $('#paySeg'); if (ps) ps.hidden = !cfg.pay;
+      var pr = $('#ptsRow');
+      if (pr && me && me.points >= L.redeemPoints) { pr.hidden = false; pr.querySelector('span').textContent = 'Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.'; }
+      if (me) { if (!of.name.value) of.name.value = me.member.name || ''; if (!of.wa.value) of.wa.value = me.member.wa || ''; }
+    });
     of.addEventListener('submit', function (e) {
       e.preventDefault();
       var t = totals(), note = $('#orderNote');
       if (!t.n) { note.textContent = 'Your order is empty. Tap + on a dish first.'; $('#menu-list').scrollIntoView({ behavior: 'smooth' }); return; }
       var d = Object.fromEntries(new FormData(of));
       d.items = Object.keys(cart).map(function (id) { return { id: id, qty: cart[id] }; });
+      d.usePoints = !!(of.usePoints && of.usePoints.checked);
+      if (!d.pay) d.pay = 'counter';
       var label = { dine: 'Eat here' + (d.tbl ? ' (table ' + d.tbl + ')' : ''), pickup: 'Pick up', delivery: 'Delivery to: ' + d.address }[d.mode];
       var text = function (id) {
         return ['TAKE order' + (id ? ' #' + id : ''), Object.keys(cart).map(function (x) { return cart[x] + ' x ' + byId[x].name; }).join('\n'),
@@ -113,8 +123,9 @@
       api('orders', { method: 'POST', body: JSON.stringify(d) }).then(function (r) {
         var link = location.origin + '/?order=' + r.id + '&t=' + r.token;
         try { localStorage.setItem('take_last_order', link); } catch (x) {}
-        wa(T.wa.eat, text(r.id) + '\nFollow: ' + link);
         cart = {}; save(); renderMenu(); renderCart(); of.reset(); modeSync();
+        if (r.pay_url) { location.href = r.pay_url; return; }   // the staff app shows it at once
+        wa(T.wa.eat, text(r.id) + '\nFollow: ' + link);
         location.href = link;
       }).catch(function (err) {
         note.textContent = 'Could not reach our system (' + err.message + '). We opened WhatsApp instead: just press send.';
@@ -135,7 +146,7 @@
         (b.day ? '' : '<p class="mute" style="font-size:13px">' + addTag('day, week, month price') + '</p>') +
         '<a class="more" href="#book" data-pick="' + b.id + '">Book this one →</a></div>';
     }).join('');
-    el.querySelectorAll('[data-pick]').forEach(function (a) { a.onclick = function () { $('#rentModel').value = a.getAttribute('data-pick'); quote(); }; });
+    el.querySelectorAll('[data-pick]').forEach(function (a) { a.onclick = function () { document.dispatchEvent(new CustomEvent('take:pick', { detail: a.getAttribute('data-pick') })); }; });
   }
   var rf = $('#rentForm');
   function quote() {
@@ -196,7 +207,9 @@
         showStatus('<p class="label">Order #' + o.id + '</p><h2>' + names[o.status] + '</h2>' +
           (o.status === 'cancelled' ? '<p>The kitchen cancelled this order. WhatsApp us if this is a surprise.</p>' : line(['Received', 'Cooking', names.ready, 'Done'], names[o.status])) +
           '<ul class="list">' + o.items.map(function (i) { return '<li>' + i.qty + ' × ' + esc(i.name) + '<em>' + (i.price ? k(i.price * i.qty) : 'at counter') + '</em></li>'; }).join('') + '</ul>' +
-          '<p class="cart-sum">Total <b>' + rp(o.total) + '</b></p><p class="note">This page updates by itself. Keep it open or save the link.</p>');
+          '<p class="cart-sum">Total <b>' + rp(o.total - (o.discount || 0)) + '</b>' + (o.discount ? ' <small class="mute">(' + rp(o.discount) + ' off with points)</small>' : '') + '</p>' +
+          (o.paid ? '<p class="chip-paid">Paid' + (o.pay === 'online' ? ' online' : '') + '</p>' : o.invoice_url ? '<a class="btn btn-green" href="' + esc(o.invoice_url) + '">Pay now</a>' : '') +
+          '<p class="note">This page updates by itself. Keep it open or save the link.</p>');
         if (o.status !== 'done' && o.status !== 'cancelled') setTimeout(poll, 15000);
       }).catch(function () { showStatus('<h2>Order not found</h2><p>Check the link, or WhatsApp the kitchen.</p>'); });
     };
@@ -207,12 +220,24 @@
     var load = function () {
       api('bookings/' + encodeURIComponent(bid) + '?t=' + encodeURIComponent(bt)).then(function (b) {
         var name = b.kind === 'rent' ? ((T.bikes.filter(function (x) { return x.id === b.model; })[0] || {}).name || b.model) : b.model;
-        var names = { request: 'Request sent', confirmed: 'Confirmed', out: b.kind === 'rent' ? 'Enjoy the ride' : 'On the way', returned: 'Returned, thank you', cancelled: 'Cancelled' };
+        var names = { pending: 'Awaiting payment', request: 'Request sent', confirmed: b.paid ? 'Paid, see you at the shop' : 'Confirmed', out: b.kind === 'rent' ? 'Enjoy the ride' : 'On the way', returned: 'Returned, thank you', cancelled: 'Cancelled' };
+        var first = b.status === 'pending' ? names.pending : 'Request sent';
         showStatus('<p class="label">Booking #' + b.id + '</p><h2>' + names[b.status] + '</h2><p><b>' + esc(name) + '</b> · ' + esc(b.start) + (b.end ? ' to ' + esc(b.end) : '') + '</p>' +
-          (b.status === 'cancelled' ? '' : line(['Request sent', 'Confirmed', names.out, b.kind === 'rent' ? 'Returned, thank you' : 'Done'], names[b.status])) +
+          (b.status === 'cancelled' ? '' : line([first, names.confirmed, names.out, b.kind === 'rent' ? 'Returned, thank you' : 'Done'], names[b.status])) +
+          (b.price ? '<p class="cart-sum">' + (b.paid ? 'Paid ' : 'To pay ') + '<b>' + rp(b.price - (b.discount || 0)) + '</b></p>' : '') +
+          (b.status === 'pending' && b.hold ? '<p class="note">We hold the scooter for you until ' + new Date(b.hold.replace(' ', 'T') + 'Z').toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Makassar' }) + ' Bali time. After that the dates may go to someone else.</p>' : '') +
+          (b.status === 'pending' && !b.hold ? '<p class="note">The 30-minute hold ran out. Pay now and we check the scooter is still free.</p>' : '') +
+          (b.canPay ? '<button class="btn btn-green" type="button" id="payNow">Pay now</button><p class="form-note" id="payNote"></p>' : '') +
           (b.status === 'request' ? '<p class="note">We confirm on WhatsApp during opening times, 7am to 8pm.</p>' : '') +
-          (b.status === 'out' && b.kind === 'rent' ? '<div class="card" style="margin-top:14px"><b>Broken down, flat tyre or lost?</b><p class="mute">Share your location and we can find you. It is only shared while you press the button, and deleted when the bike is back.</p><div class="row" style="margin-top:12px"><button class="btn btn-green" id="shareLoc" type="button">' + (watching ? 'Sharing my location' : 'Share my location') + '</button><a class="btn btn-ghost" href="https://wa.me/' + T.wa.ride + '?text=' + encodeURIComponent('Help, booking #' + b.id + ' ' + name) + '" target="_blank" rel="noopener">WhatsApp help</a></div><p class="form-note" id="locNote"></p></div>' : ''));
+          (b.status === 'confirmed' && b.kind === 'rent' ? '<p class="note">Pick it up at the shop between 7am and 8pm on ' + esc(b.start) + '. Bring your passport and driving licence.</p>' : '') +
+          (b.status === 'out' && b.kind === 'rent' ? '<div class="card" style="margin-top:14px"><b>Broken down, flat tyre or lost?</b><p class="mute">Share your location so we know where you are, and WhatsApp us. It is only shared while sharing is on, and deleted when the bike is back.</p><div class="row" style="margin-top:12px"><button class="btn btn-green" id="shareLoc" type="button">' + (watching ? 'Sharing my location' : 'Share my location') + '</button><a class="btn btn-ghost" href="https://wa.me/' + T.wa.ride + '?text=' + encodeURIComponent('Help, booking #' + b.id + ' ' + name) + '" target="_blank" rel="noopener">WhatsApp help</a></div><p class="form-note" id="locNote"></p></div>' : ''));
         var sb = $('#shareLoc'); if (sb) sb.onclick = share;
+        var pn = $('#payNow'); if (pn) pn.onclick = function () {
+          pn.disabled = true;
+          api('pay', { method: 'POST', body: JSON.stringify({ kind: 'booking', id: bid, t: bt }) })
+            .then(function (r) { location.href = r.pay_url; })
+            .catch(function (e) { $('#payNote').textContent = e.message; pn.disabled = false; });
+        };
         if (b.status !== 'returned' && b.status !== 'cancelled') setTimeout(load, 60000);
       }).catch(function () { showStatus('<h2>Booking not found</h2><p>Check the link, or WhatsApp us.</p>'); });
     };

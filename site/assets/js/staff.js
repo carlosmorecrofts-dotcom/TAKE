@@ -33,7 +33,7 @@
       tab = b.getAttribute('data-tab');
       document.querySelectorAll('[data-tab]').forEach(function (x) { x.setAttribute('aria-selected', x === b); });
       document.querySelectorAll('[data-pane]').forEach(function (p) { p.hidden = p.getAttribute('data-pane') !== tab; });
-      if (tab === 'map') drawMap(); if (tab === 'today') takings(); if (tab === 'fleet') svcLog();
+      if (tab === 'map') drawMap(); if (tab === 'today') takings(); if (tab === 'fleet') svcLog(); if (tab === 'calendar') gantt(); if (tab === 'members') members();
     };
   });
 
@@ -41,11 +41,11 @@
     api('board').then(function (d) {
       data = d;
       var ids = d.orders.filter(function (o) { return o.status === 'new'; }).map(function (o) { return o.id; });
-      var req = d.bookings.filter(function (b) { return b.status === 'request'; }).map(function (b) { return 'b' + b.id; });
+      var req = d.bookings.filter(function (b) { return ['request', 'pending', 'confirmed'].indexOf(b.status) >= 0; }).map(function (b) { return 'b' + b.id + (b.paid ? 'p' : ''); });
       var now = ids.concat(req);
       if (seen && now.some(function (x) { return seen.indexOf(x) < 0; })) { beep(); toast('New order or booking'); }
       seen = now;
-      kitchen(); rentals(); fleet(); if (tab === 'map') drawMap();
+      kitchen(); rentals(); fleet(); if (tab === 'map') drawMap(); if (tab === 'calendar') gantt();
     }).catch(function (e) { toast('Offline: ' + e.message); });
   }
 
@@ -61,7 +61,7 @@
         var mode = { dine: 'Eat here' + (o.tbl ? ' · table ' + esc(o.tbl) : ''), pickup: 'Pick up', delivery: 'Delivery' }[o.mode];
         return '<div class="tk' + (c[0] === 'new' && ago(o.created).indexOf('h') > 0 ? ' late' : '') + '"><header><span>#' + o.id + ' ' + esc(o.name) + '</span><span>' + ago(o.created) + '</span></header>' +
           '<div class="meta">' + mode + (o.address ? ': ' + esc(o.address) : '') + '</div><ul>' + o.items.map(function (i) { return '<li><b>' + i.qty + '×</b> ' + esc(i.name) + '</li>'; }).join('') + '</ul>' +
-          (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total) + (o.paid ? ' · <b>paid</b>' : ' · not paid') + '</div>' +
+          (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total - (o.discount || 0)) + (o.discount ? ' (points used)' : '') + (o.paid ? ' · <b class="ok">paid' + (o.pay === 'online' ? ' online' : '') + '</b>' : o.pay === 'online' ? ' · <b class="wait">paying online...</b>' : ' · pay at counter') + (o.member_email ? ' · ★ member' : '') + '</div>' +
           '<div class="acts">' + (next[o.status] ? '<button class="sb go" data-o="' + o.id + '" data-s="' + next[o.status][0] + '">' + next[o.status][1] + '</button>' : '') +
           (o.paid ? '' : '<button class="sb" data-o="' + o.id + '" data-paid="1">Paid</button>') +
           '<a class="sb" href="' + telWa(o.wa) + '" target="_blank" rel="noopener">WhatsApp</a>' +
@@ -82,12 +82,12 @@
     var t = today(), bk = data.bookings;
     var late = function (b) { return b.status === 'out' && b.kind === 'rent' && b.end && b.end < t; };
     var groups = [
-      ['New requests', bk.filter(function (b) { return b.status === 'request'; })],
-      ['Confirmed, to hand over', bk.filter(function (b) { return b.status === 'confirmed'; })],
+      ['Requests and awaiting payment', bk.filter(function (b) { return b.status === 'request' || b.status === 'pending'; })],
+      ['Confirmed, to hand over', bk.filter(function (b) { return b.status === 'confirmed'; }).sort(function (a, b) { return (a.start || '').localeCompare(b.start || ''); })],
       ['Out now', bk.filter(function (b) { return b.status === 'out'; }).sort(function (a, b) { return (a.end || '').localeCompare(b.end || ''); })],
       ['Back recently', bk.filter(function (b) { return b.status === 'returned'; })],
     ];
-    var nLate = bk.filter(late).length, nReq = groups[0][1].length;
+    var nLate = bk.filter(late).length, nReq = bk.filter(function (b) { return b.status === 'request'; }).length;
     $('#bRentals').hidden = !(nLate + nReq); $('#bRentals').textContent = nLate + nReq;
     $('#rentals').innerHTML = groups.map(function (g) {
       return '<div class="col"><h3>' + g[0] + ' (' + g[1].length + ')</h3>' + g[1].map(function (b) {
@@ -98,16 +98,19 @@
           '<div><b>' + what + '</b>' + (bike ? ' · ' + esc(bike.plate || 'bike ' + bike.id) : '') + '</div>' +
           '<div class="meta">' + esc(b.start) + (b.end ? ' → ' + esc(b.end) : '') + (b.people ? ' · ' + b.people + ' people' : '') + (late(b) ? ' · <b style="color:#ff8a96">OVERDUE</b>' : '') + '</div>' +
           (b.hotel ? '<div class="meta">' + esc(b.hotel) + '</div>' : '') + (b.note ? '<div class="meta">"' + esc(b.note) + '"</div>' : '') +
-          '<div class="meta">' + (b.price ? rp(b.price) : 'no price yet') + (b.deposit ? ' · deposit ' + rp(b.deposit) : '') + (b.paid ? ' · paid' : '') + (b.km_out != null ? ' · km out ' + b.km_out : '') + (b.km_in != null ? ' · in ' + b.km_in : '') + '</div>' +
+          '<div class="meta">' + (b.price ? rp(b.price - (b.discount || 0)) : 'no price yet') + (b.deposit ? ' · deposit ' + rp(b.deposit) : '') + (b.paid ? ' · <b class="ok">paid' + (b.pay === 'online' ? ' online' : '') + '</b>' : b.status === 'pending' ? ' · <b class="wait">paying online...</b>' : b.price ? ' · <b class="wait">not paid</b>' : '') + (b.km_out != null ? ' · km out ' + b.km_out : '') + (b.km_in != null ? ' · in ' + b.km_in : '') + '</div>' +
+          (b.kind === 'rent' ? '<div class="meta">' + (b.member_email ? esc(b.member_email) + ' · ' : 'walk-in · ') + (b.docs.length ? b.docs.map(function (d) { return '<button type="button" class="sb" data-doc="' + d.id + '">' + (d.kind === 'passport' ? 'Passport' : 'Licence') + '</button>'; }).join(' ') : (b.member_email ? '<b class="wait">no documents</b>' : 'check documents at the desk')) + '</div>' : '') +
           '<div class="acts">' + acts(b) + '<a class="sb" href="' + telWa(b.wa) + '" target="_blank" rel="noopener">WhatsApp</a></div></div>';
       }).join('') + '</div>';
     }).join('');
     $('#rentals').querySelectorAll('[data-b]').forEach(function (el) { el.onclick = function () { doBooking(+el.dataset.b, el.dataset.a); }; });
+    $('#rentals').querySelectorAll('[data-doc]').forEach(function (el) { el.onclick = function () { showDoc(+el.dataset.doc); }; });
   }
   function acts(b) {
     var a = function (act, label, cls) { return '<button type="button" class="sb ' + (cls || '') + '" data-b="' + b.id + '" data-a="' + act + '">' + label + '</button>'; };
+    if (b.status === 'pending') return a('cancel', 'Cancel', 'warn');
     if (b.status === 'request') return a('confirm', 'Confirm', 'go') + a('cancel', 'Decline', 'warn');
-    if (b.status === 'confirmed') return (b.kind === 'rent' ? a('checkout', 'Hand over bike', 'go') : a('done', 'Trip done', 'go')) + a('cancel', 'Cancel', 'warn');
+    if (b.status === 'confirmed') return (b.kind === 'rent' ? a('checkout', 'Hand over bike', 'go') : a('done', 'Trip done', 'go')) + (b.paid ? '' : a('paid', 'Paid')) + a('cancel', 'Cancel', 'warn');
     if (b.status === 'out') return (b.kind === 'rent' ? a('checkin', 'Check in', 'go') + a('extend', 'Extend') + a('track', 'Map') : a('done', 'Trip done', 'go')) + (b.paid ? '' : a('paid', 'Paid'));
     return '';
   }
@@ -127,6 +130,7 @@
     if (act === 'checkout') {
       var free = data.bikes.filter(function (x) { return x.status === 'available'; }).sort(function (x, y) { return (x.model === b.model ? 0 : 1) - (y.model === b.model ? 0 : 1); });
       if (!free.length) return toast('No bike is available. Check in or free one in Fleet first.');
+      if (!b.paid && !confirm('Booking #' + id + ' is not paid yet. Hand the bike over anyway?')) return;
       return dialog('Hand over #' + id + ': ' + bikeName(b.model), [
         ['bike_id', 'Bike', 'select', free[0].id, free.map(function (x) { return [x.id, bikeName(x.model) + ' · ' + (x.plate || 'no plate') + ' · ' + x.km + ' km']; })],
         ['km', 'Odometer km', 'number', free[0].km], ['fuel', 'Fuel', 'select', 'Full', [['Full', 'Full'], ['3/4', '3/4'], ['1/2', '1/2'], ['1/4', '1/4']]],
@@ -180,6 +184,71 @@
         return '<tr><td>' + esc(m.at.slice(0, 10)) + '</td><td>' + bikeName(m.model) + ' ' + esc(m.plate || '') + '</td><td>' + (m.km || '') + '</td><td>' + esc(m.what) + '</td><td>' + rp(m.cost) + '</td></tr>';
       }).join('');
     });
+  }
+
+  // ---- documents: fetched with the PIN header, shown in the page, never in a link
+  function showDoc(id) {
+    fetch('/api/staff/docs/' + id, { headers: { 'x-staff-pin': pin } }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(function (bl) {
+      var u = URL.createObjectURL(bl), f = $('#dlgForm');
+      f.innerHTML = (bl.type === 'application/pdf' ? '<iframe src="' + u + '" style="width:100%;height:70vh;border:0"></iframe>' : '<img src="' + u + '" alt="Document" style="width:100%;border-radius:12px">') +
+        '<div class="row"><button class="btn btn-ghost" type="button" id="dlgX">Close</button></div>';
+      $('#dlg').hidden = false;
+      $('#dlgX').onclick = function () { $('#dlg').hidden = true; URL.revokeObjectURL(u); };
+    }).catch(function () { toast('Could not open the document.'); });
+  }
+
+  // ---- fleet calendar: one row of free counts per model, then its bookings as bars
+  var calFrom = null;
+  function gantt() {
+    if (!calFrom) { var d0 = new Date(); d0.setDate(d0.getDate() - 2); calFrom = d0.toISOString().slice(0, 10); }
+    api('calendar?from=' + calFrom + '&days=21').then(function (c) {
+      var days = c.models[Object.keys(c.models)[0]] ? c.models[Object.keys(c.models)[0]].days.map(function (d) { return d.date; }) : [];
+      if (!days.length) { $('#gantt').innerHTML = '<tr><td>Add bikes in Fleet first.</td></tr>'; return; }
+      var head = '<tr><th>Scooter</th>' + days.map(function (d) { var dt = new Date(d + 'T00:00:00Z'); return '<th class="' + (d === c.today ? 'is-today' : '') + '">' + ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'][dt.getUTCDay()] + '<br>' + dt.getUTCDate() + '</th>'; }).join('') + '</tr>';
+      var rows = Object.keys(c.models).map(function (mid) {
+        var m = c.models[mid];
+        var top = '<tr class="g-model"><th>' + esc(bikeName(mid)) + ' <small>' + m.total + ' bike' + (m.total === 1 ? '' : 's') + '</small></th>' + m.days.map(function (d) {
+          return '<td class="' + (d.free < 1 ? 'g-full' : d.free === 1 ? 'g-last' : 'g-free') + (d.date === c.today ? ' is-today' : '') + '">' + d.free + '</td>';
+        }).join('') + '</tr>';
+        var bars = c.bookings.filter(function (b) { return b.model === mid; }).map(function (b) {
+          var bike = c.bikes.filter(function (x) { return x.id === b.bike_id; })[0];
+          var cells = '', i = 0;
+          while (i < days.length) {
+            var d = days[i], on = b.start <= d && (d < b.end || (b.status === 'out' && b.end <= c.today && d <= c.today));
+            if (!on) { cells += '<td' + (d === c.today ? ' class="is-today"' : '') + '></td>'; i++; continue; }
+            var span = 0; while (i + span < days.length && (b.start <= days[i + span] && (days[i + span] < b.end || (b.status === 'out' && b.end <= c.today && days[i + span] <= c.today)))) span++;
+            var late = b.status === 'out' && b.end <= c.today;
+            cells += '<td colspan="' + span + '"><button type="button" class="g-bar s-' + (late ? 'late' : b.status) + (b.paid ? ' paid' : '') + '" data-gb="' + b.id + '">#' + b.id + ' ' + esc(b.name || '') + (bike ? ' · ' + esc(bike.plate || '') : '') + (late ? ' · LATE' : '') + '</button></td>';
+            i += span;
+          }
+          return '<tr class="g-row"><th></th>' + cells + '</tr>';
+        }).join('');
+        return top + bars;
+      }).join('');
+      $('#gantt').innerHTML = head + rows;
+      $('#gantt').querySelectorAll('[data-gb]').forEach(function (el) {
+        el.onclick = function () { $('[data-tab=rentals]').click(); setTimeout(function () { var t = document.querySelector('[data-b="' + el.dataset.gb + '"]'); if (t) { t.closest('.tk').scrollIntoView({ block: 'center' }); t.closest('.tk').classList.add('flash'); } }, 200); };
+      });
+    }).catch(function (e) { toast(e.message); });
+  }
+  var shiftCal = function (n) { var d = new Date(calFrom + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); calFrom = d.toISOString().slice(0, 10); gantt(); };
+  $('#calPrev').onclick = function () { shiftCal(-14); };
+  $('#calNext').onclick = function () { shiftCal(14); };
+  $('#calToday').onclick = function () { calFrom = null; gantt(); };
+
+  // ---- members and points
+  function members() {
+    api('members').then(function (r) {
+      $('#members').innerHTML = '<tr><th>Member</th><th>WhatsApp</th><th>Points</th><th>Rider details</th><th>Since</th><th></th></tr>' + r.members.map(function (m) {
+        var ok = m.docs >= r.required && m.terms_version === r.termsVersion;
+        return '<tr><td><b>' + esc(m.name || '-') + '</b><br><small class="mute">' + esc(m.email) + '</small></td><td>' + (m.wa ? '<a href="' + telWa(m.wa) + '" target="_blank" rel="noopener">' + esc(m.wa) + '</a>' : '-') + '</td>' +
+          '<td><b>' + m.points + '</b></td><td>' + (ok ? '<span class="pill available">ready</span>' : '<span class="pill">' + m.docs + '/' + r.required + ' docs' + (m.terms_version === r.termsVersion ? '' : ', terms') + '</span>') + '</td>' +
+          '<td>' + esc(m.created.slice(0, 10)) + '</td><td><button class="sb" type="button" data-pts="' + m.id + '">Points</button></td></tr>';
+      }).join('');
+      $('#members').querySelectorAll('[data-pts]').forEach(function (el) {
+        el.onclick = function () { dialog('Add or take away points', [['delta', 'Points (e.g. 20 or -20)', 'number', ''], ['reason', 'Reason', 'text', '']], function (v) { return api('members/' + el.dataset.pts + '/points', 'POST', v).then(members); }); };
+      });
+    }).catch(function (e) { toast(e.message); });
   }
 
   // ---- map

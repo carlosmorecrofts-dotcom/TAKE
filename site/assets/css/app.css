@@ -117,3 +117,20 @@ html[data-v="eat"] .vswitch [data-to="eat"], html[data-v="ride"] .vswitch [data-
   .tbl { font-size: 13px; }
   .cart-fab { bottom: 84px; }
 }
+
+/* staff: payment state, fleet calendar */
+.tk b.ok { color: #6be3a1; } .tk b.wait { color: var(--gold); }
+.tk.flash { box-shadow: 0 0 0 2px var(--gold) inset; }
+.gantt-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 14px; }
+.gantt { border-collapse: collapse; font-size: 12px; min-width: 900px; width: 100%; }
+.gantt th, .gantt td { border-right: 1px solid rgba(251, 243, 238, .06); padding: 4px; text-align: center; white-space: nowrap; }
+.gantt th:first-child { position: sticky; left: 0; background: #181313; text-align: left; min-width: 150px; z-index: 1; padding-left: 10px; }
+.gantt th small { color: var(--mute); font-weight: 400; }
+.gantt .is-today { background: rgba(242, 193, 78, .08); }
+.g-model td { font-weight: 700; } .g-model { border-top: 1px solid var(--line); }
+.g-free { color: #6be3a1; } .g-last { color: var(--gold); } .g-full { color: #ff8a96; background: rgba(255, 59, 78, .08); }
+.g-bar { width: 100%; text-align: left; font: 600 11px Inter, sans-serif; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: rgba(255, 90, 110, .14); color: var(--txt); cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
+.g-bar.paid, .g-bar.s-out { background: rgba(107, 227, 161, .18); border-color: rgba(107, 227, 161, .5); }
+.g-bar.s-pending, .g-bar.s-request { background: rgba(242, 193, 78, .14); border-color: rgba(242, 193, 78, .5); border-style: dashed; }
+.g-bar.s-late { background: rgba(255, 59, 78, .3); border-color: #ff3b4e; }
+.g-bar.s-returned { opacity: .5; }

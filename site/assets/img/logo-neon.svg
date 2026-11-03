@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 370 152" role="img" aria-label="TAKE">
+  <!-- TAKE logo as neon tubes: the T mark and the letters drawn as strokes, white-hot core with a red glow, readable from far away.
+       Redrawn from the banner photo (2026-11-03); replace the shapes with the owner's original artwork when available. -->
+  <defs>
+    <filter id="wide" filterUnits="userSpaceOnUse" x="-20" y="-20" width="370" height="152"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="near" filterUnits="userSpaceOnUse" x="-20" y="-20" width="370" height="152"><feGaussianBlur stdDeviation="3"/></filter>
+    <g id="tubes" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- the mark: rounded T outline, bar inside the top, bar inside the stem -->
+      <path d="M22 16H74a11 11 0 0 1 0 22H59V78a11 11 0 0 1-22 0V38H22a11 11 0 0 1 0-22Z"/>
+      <path d="M24 27H62"/>
+      <path d="M48 50V74"/>
+      <!-- T A K E -->
+      <path d="M104 22H146M125 22V90"/>
+      <path d="M156 90L180 22L204 90M165 66H195"/>
+      <path d="M220 22V90M256 22L221 58M233 47L260 90"/>
+      <path d="M306 22H274V90H306M274 56H300"/>
+    </g>
+  </defs>
+  <use href="#tubes" stroke="#ff2d4a" stroke-width="16" opacity=".55" filter="url(#wide)"/>
+  <use href="#tubes" stroke="#ff5a6e" stroke-width="9" opacity=".9" filter="url(#near)"/>
+  <use href="#tubes" stroke="#ff8a98" stroke-width="5.5"/>
+  <use href="#tubes" stroke="#fff6f7" stroke-width="2.6"/>
+</svg>

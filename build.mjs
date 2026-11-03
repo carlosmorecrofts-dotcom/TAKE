@@ -21,6 +21,7 @@ const CONFIG = {
   hours: 'Open every day, 7am to 8pm',
   instagram: '',
   email: '',
+  payLive: false,                 // true once the Xendit keys are set on the Pages project
 };
 // The two Google Maps places (ids from the place link, 2026-11-03).
 const PLACES = {
@@ -41,6 +42,12 @@ const VARIANTS = {
     file: 'ride.html', path: '/ride',
     title: 'Scooter Rental Canggu from Rp 85K a day | TAKE Scooter Rental Berawa',
     description: 'Rent a Scoopy, Beat, Vario, NMAX, PCX, ADV or XMAX in Berawa, Canggu, from Rp 85K a day. Drivers for the airport, Ubud, Uluwatu and Mount Batur sunrise treks. Book online, confirm on WhatsApp.',
+    image: '/assets/img/og-ride.jpg', hero: '/assets/img/shop-side.jpg',
+  },
+  terms: {
+    file: 'terms.html', path: '/terms', look: 'ride', place: 'ride',
+    title: 'Scooter rental terms | TAKE Scooter Rental Canggu',
+    description: 'Rental terms for TAKE Scooter Rental in Berawa, Canggu: who can rent, licence and documents, payment in advance, pick-up and return, damage, accidents and cancellations.',
     image: '/assets/img/og-ride.jpg', hero: '/assets/img/shop-side.jpg',
   },
 };
@@ -68,6 +75,8 @@ const FAQ = [
   ['Do you deliver food?', `Yes. Order on this page and choose delivery, or WhatsApp the kitchen on 0821 9133 7592.`],
   ['How much is a scooter a day?', `From Rp ${k(minDay)} a day: ${priced.map((b) => `${b.name} ${k(b.day)}`).join(', ')}.`],
   ['How do I book a scooter?', 'Choose a model and your dates on the scooter page and send the request. We confirm the bike and the price on WhatsApp, then you pick it up at the shop.'],
+  ['How do I pay?', CONFIG.payLive ? 'Scooter rentals are paid in advance online when you book. Food can be paid online when you order, or at the counter. Online payment is by QRIS, e-wallets, bank transfer or card through Xendit.' : 'Online payment is coming soon. For now we confirm your scooter booking on WhatsApp and you pay at the shop; food is paid at the counter.'],
+  ['How do TAKE Points work?', `Sign in as a member with your email. You get 1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooter rentals, and ${cat.loyalty.redeemPoints} points take Rp ${k(cat.loyalty.redeemValue)} off your next order or rental.`],
   ['Do you have drivers and tours?', `Yes: ${cat.trips.map((t) => t.name).join(', ')}. Send a request with the date and pick-up place.`],
 ];
 const faqHtml = FAQ.map(([q, a]) => `<details class="card faq"><summary><h3>${esc(q)}</h3></summary><p>${esc(a)}</p></details>`).join('');
@@ -98,6 +107,19 @@ const TOKENS = {
   '{{ADD_DEPOSIT}}': add('deposit and documents needed (passport? licence?)'),
   '{{ADD_PAY}}': add('payment: cash, QRIS, transfer, card?'),
   '{{ADD_STORY}}': add('owner name and a line about how TAKE started'),
+  // rental terms: decisions only the owner can make
+  '{{TERMS_VERSION}}': cat.rental.termsVersion,
+  '{{ADD_PAY_LIVE}}': CONFIG.payLive ? '' : add('online payment switches on when the TAKE Xendit account is approved'),
+  '{{ADD_AGE}}': add('minimum age, if not 18'),
+  '{{ADD_DOC_HOLD}}': add('do you keep the passport, a copy, or nothing during the rental?'),
+  '{{ADD_FUEL}}': add('what you charge if it comes back with less'),
+  '{{ADD_INSURANCE}}': add('is there any insurance, and what the renter pays if there is an accident'),
+  '{{ADD_DAMAGE}}': add('how damage is assessed and charged'),
+  '{{ADD_LATE}}': add('charge per extra day or per hour'),
+  '{{ADD_CANCEL}}': add('refund rules: e.g. full refund up to 24 hours before pick-up, none after'),
+  '{{ADD_AREA}}': add('areas not allowed, e.g. Nusa islands by ferry, other islands, off-road'),
+  '{{ADD_RETENTION}}': add('how long document photos are kept after the last rental'),
+  '{{POINTS_RULE}}': `1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooters. ${cat.loyalty.redeemPoints} points = Rp ${k(cat.loyalty.redeemValue)} off.` + (cat.loyalty.confirmed ? '' : ' ' + add('owner to confirm these rates')),
 };
 const fill = (s) => Object.entries(TOKENS).reduce((t, [a, b]) => t.split(a).join(b), s);
 
@@ -131,9 +153,9 @@ function structured(v) {
       itemOffered: { '@type': 'Product', name: b.name, description: `${b.cc}cc ${b.kind.toLowerCase()} scooter` } })),
   };
   const page = { '@type': 'WebPage', '@id': CONFIG.site + VARIANTS[v].path, url: CONFIG.site + VARIANTS[v].path, name: VARIANTS[v].title,
-    description: VARIANTS[v].description, about: { '@id': (v === 'eat' ? cafe : rental)['@id'] }, inLanguage: 'en' };
+    description: VARIANTS[v].description, about: { '@id': ((VARIANTS[v].place || v) === 'eat' ? cafe : rental)['@id'] }, inLanguage: 'en' };
   const faq = { '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
-  return { '@context': 'https://schema.org', '@graph': v === 'eat' ? [page, cafe, rental, faq] : [page, rental, cafe, faq] };
+  return { '@context': 'https://schema.org', '@graph': v === 'terms' ? [page, rental] : v === 'eat' ? [page, cafe, rental, faq] : [page, rental, cafe, faq] };
 }
 
 const ICON_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.9 3 3 6.6 3 11.1c0 2.5 1.2 4.7 3.2 6.2L5.5 21l3.9-2.1c.8.2 1.7.3 2.6.3 5.1 0 9-3.6 9-8.1S17.1 3 12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
@@ -162,9 +184,10 @@ function oneH1(html, v) {
 }
 
 function layout(v, body) {
-  const V = VARIANTS[v], url = CONFIG.site + V.path, P = PLACES[v];
+  const V = VARIANTS[v], url = CONFIG.site + V.path, P = PLACES[V.place || v], look = V.look || v;
+  const pre = v === 'terms' ? '/ride' : ''; // section links from the terms page go to the scooter page
   return `<!doctype html>
-<html lang="en" data-v="${v}">
+<html lang="en" data-v="${look}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -190,24 +213,26 @@ function layout(v, body) {
 <link rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" href="/assets/css/fx.css">
 <link rel="stylesheet" href="/assets/css/app.css">
+<link rel="stylesheet" href="/assets/css/members.css">
 <script type="application/ld+json">${JSON.stringify(structured(v)).replace(/</g, '\\u003c')}</script>
 </head>
 <body class="page-${v}">
 <header class="nav">
-  <a class="logo" href="/"><img src="/assets/img/icon.svg" alt="TAKE Canggu logo" width="52" height="52"><span>TAKE <b>Canggu</b></span></a>
+  <a class="logo logo-neon" href="/" aria-label="TAKE Canggu, home"><img src="/assets/img/logo-neon.svg" alt="TAKE" width="140" height="58"><span><b>Canggu</b></span></a>
   <nav class="vswitch" aria-label="Coffee or scooters">
     <a data-to="eat" data-title="${esc(VARIANTS.eat.title)}" href="/"${v === 'eat' ? ' aria-current="page"' : ''}>Coffee &amp; Eatery</a>
     <a data-to="ride" data-title="${esc(VARIANTS.ride.title)}" href="/ride"${v === 'ride' ? ' aria-current="page"' : ''}>Scooters &amp; Transport</a>
   </nav>
   <nav id="menu" aria-label="On this page">
     <a class="only-eat" href="#menu-list">Menu</a><a class="only-eat" href="#order">Order</a>
-    <a class="only-ride" href="#fleet">Scooters</a><a class="only-ride" href="#transport">Transport</a><a class="only-ride" href="#book">Book</a>
-    <a href="#reviews">Reviews</a><a href="#faq">Questions</a><a href="#find">Find us</a>
+    <a class="only-ride" href="${pre}#fleet">Scooters</a><a class="only-ride" href="${pre}#book">Book</a><a class="only-ride" href="${pre}#transport">Transport</a>
+    <a href="${pre}#points">Points</a><a href="${pre}#faq">Questions</a><a href="${pre}#find">Find us</a><a href="/terms" class="only-ride">Terms</a>
   </nav>
+  <button class="member-btn" id="memberBtn" type="button" aria-haspopup="dialog" aria-controls="memberDrawer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Member</span></button>
   <button class="burger" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <main>
-${oneH1(fill(body), v)}
+${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 </main>
 <footer class="foot">
   <div class="wrap foot-grid">
@@ -217,7 +242,7 @@ ${oneH1(fill(body), v)}
       <p class="mute" style="font-size:14px">${CONFIG.address}</p>
     </div>
     <div><h4>Eat</h4><a href="/#menu-list">Menu</a><a href="/#order">Order food</a><a href="https://wa.me/${CONFIG.waEat}" target="_blank" rel="noopener">Delivery WhatsApp</a><a href="${mapsUrl(PLACES.eat)}" target="_blank" rel="noopener">Take Coffee on Google Maps</a></div>
-    <div><h4>Ride</h4><a href="/ride#fleet">Scooter rental Canggu</a><a href="/ride#transport">Drivers &amp; tours</a><a href="https://wa.me/${CONFIG.waRide}" target="_blank" rel="noopener">Rental WhatsApp</a><a href="${mapsUrl(PLACES.ride)}" target="_blank" rel="noopener">TAKE Scooter Rental on Google Maps</a></div>
+    <div><h4>Ride</h4><a href="/ride#fleet">Scooter rental Canggu</a><a href="/ride#transport">Drivers &amp; tours</a><a href="https://wa.me/${CONFIG.waRide}" target="_blank" rel="noopener">Rental WhatsApp</a><a href="${mapsUrl(PLACES.ride)}" target="_blank" rel="noopener">TAKE Scooter Rental on Google Maps</a><a href="/terms">Rental terms</a></div>
   </div>
   <div class="wrap foot-base">
     <span>&copy; ${new Date().getFullYear()} TAKE Coffee &amp; Eatery, TAKE Scooter Rental</span>
@@ -229,6 +254,8 @@ ${oneH1(fill(body), v)}
 <button class="cart-fab only-eat" id="cartFab" type="button" hidden>Order <b id="cartCount">0</b> · <span id="cartTotal"></span></button>
 <script src="/assets/js/data.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/member.js"></script>
+<script src="/assets/js/book.js"></script>
 <script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>
 </body>
@@ -246,15 +273,21 @@ const read = (f) => {
   return { meta: { ...JSON.parse(m[1]), slug: f.replace(/\.html$/, '') }, body: raw.slice(m[0].length) };
 };
 const home = read('index.html');
-for (const v of Object.keys(VARIANTS)) fs.writeFileSync(path.join(outDir, VARIANTS[v].file), layout(v, home.body));
+for (const v of ['eat', 'ride']) fs.writeFileSync(path.join(outDir, VARIANTS[v].file), layout(v, home.body));
+fs.writeFileSync(path.join(outDir, VARIANTS.terms.file), layout('terms', read('terms.html').body));
 const staff = read('staff.html');
 fs.writeFileSync(path.join(outDir, 'staff.html'), staffLayout(staff.meta, staff.body));
 
 // catalogue for browser and server
-const pub = { menu: cat.menu, bikes: cat.bikes, trips: cat.trips, wa: { eat: CONFIG.waEat, ride: CONFIG.waRide } };
+const pub = { menu: cat.menu, bikes: cat.bikes, trips: cat.trips, loyalty: cat.loyalty, rental: cat.rental, wa: { eat: CONFIG.waEat, ride: CONFIG.waRide } };
 fs.writeFileSync(path.join(outDir, 'assets', 'js', 'data.js'), `// generated by build.mjs from data/catalogue.json\nwindow.TAKE = ${JSON.stringify(pub)};\n`);
+// The server takes every price and rule from here, never from the browser.
 const menuMap = Object.fromEntries(cat.menu.map((i) => [i.id, { name: i.name, price: i.price }]));
-fs.writeFileSync(path.join(ROOT, 'functions', 'api', '_menu.js'), `// generated by build.mjs from data/catalogue.json\nexport const MENU = ${JSON.stringify(menuMap, null, 1)};\n`);
+const bikeMap = Object.fromEntries(cat.bikes.map((b) => [b.id, { name: b.name, day: b.day }]));
+fs.writeFileSync(path.join(ROOT, 'functions', 'api', '_catalogue.js'), `// generated by build.mjs from data/catalogue.json\n` +
+  `export const MENU = ${JSON.stringify(menuMap)};\nexport const BIKES = ${JSON.stringify(bikeMap)};\n` +
+  `export const LOYALTY = ${JSON.stringify(cat.loyalty)};\nexport const RENTAL = ${JSON.stringify(cat.rental)};\n`);
+if (fs.existsSync(path.join(ROOT, 'functions', 'api', '_menu.js'))) fs.unlinkSync(path.join(ROOT, 'functions', 'api', '_menu.js'));
 
 // routing + SEO. /ride is served by ride.html (Pages drops .html); old links keep working.
 fs.writeFileSync(path.join(outDir, '_redirects'), '/eat / 301\n/scooter /ride 301\n/scooters /ride 301\n/rental /ride 301\n');
@@ -263,6 +296,7 @@ const today = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>${CONFIG.site}/</loc><lastmod>${today}</lastmod><image:image><image:loc>${CONFIG.site}/assets/img/shop-front.jpg</image:loc></image:image></url>
+  <url><loc>${CONFIG.site}/terms</loc><lastmod>${today}</lastmod></url>
   <url><loc>${CONFIG.site}/ride</loc><lastmod>${today}</lastmod><image:image><image:loc>${CONFIG.site}/assets/img/shop-side.jpg</image:loc></image:image></url>
 </urlset>
 `);
