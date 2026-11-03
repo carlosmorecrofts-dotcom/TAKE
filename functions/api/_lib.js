@@ -99,10 +99,13 @@ export async function rangeFree(db, model, start, end, exceptId) {
   const full = c.days.find((d) => d.free < 1);
   return { ok: c.total > 0 && !full, total: c.total, fullOn: full ? full.date : null };
 }
-// Rental price: day rate x days. Week and month rates join here when the owner gives them.
+// Rental price: day rate x days; from 7 days, full weeks at the week rate plus the
+// extra days at the day rate, never more than one more full week. book.js uses the same rule.
 export function rentPrice(model, n) {
   const b = BIKES[model];
-  return b && b.day ? b.day * n : null;
+  if (!b || !b.day) return null;
+  if (!b.week || n < 7) return b.day * n;
+  return Math.min(Math.floor(n / 7) * b.week + (n % 7) * b.day, Math.ceil(n / 7) * b.week);
 }
 
 // ---------------- payments (Xendit hosted invoice page)

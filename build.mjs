@@ -62,11 +62,17 @@ const minFood = Math.min(...cat.menu.filter((i) => i.price).map((i) => i.price))
 const maxFood = Math.max(...cat.menu.filter((i) => i.price).map((i) => i.price));
 const cc = cat.bikes.map((b) => b.cc);
 
-// Reviews: paste real Google reviews here, word for word. Never invent one.
-const REVIEWS = [];
+// Reviews: real Google reviews only, word for word, never invented. They live in
+// data/reviews.json; the wall, the averages and "show more" follow from it.
+const REVIEWS = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'reviews.json'), 'utf8')).reviews || [];
+const SHOW = 9;
 const reviewsHtml = REVIEWS.length
-  ? REVIEWS.map((r) => `<figure class="card review"><div class="stars" aria-label="${r.stars} out of 5">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div><blockquote>${r.text}</blockquote><figcaption>${r.name}<small>${r.when} on Google</small></figcaption></figure>`).join('')
-  : `<div class="card review">${add('6 real Google reviews: name, stars, text, date. Pasted word for word, never written by us.')}</div>`;
+  ? REVIEWS.map((r, i) => `<figure class="card review${i >= SHOW ? ' more' : ''}"><div class="review-top"><div class="stars" aria-label="${r.stars} out of 5">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div><span class="chip">${r.place === 'ride' ? 'Scooters' : 'Café'}</span></div><blockquote>${esc(r.text)}</blockquote><figcaption>${esc(r.name)}<small>${esc(r.when)} on Google</small></figcaption></figure>`).join('')
+  : `<div class="card review">${add('paste the real Google reviews into data/reviews.json, word for word. The wall, the average rating and "show more" appear by themselves.')}</div>`;
+const avg = (list) => (list.reduce((s, r) => s + r.stars, 0) / list.length).toFixed(1);
+const sumFor = (place, label) => { const l = REVIEWS.filter((r) => r.place === place); return l.length ? `<div><b>${avg(l)}</b><span>${label} · ${l.length} review${l.length > 1 ? 's' : ''} shown</span></div>` : ''; };
+const reviewSummary = REVIEWS.length ? `<div class="review-sum">${sumFor('eat', 'Café')}${sumFor('ride', 'Scooters')}</div>` : '';
+const reviewMore = REVIEWS.length > SHOW ? `<button class="btn btn-ghost review-more" type="button" onclick="document.getElementById('reviewWall').classList.add('all');this.remove()">Show all ${REVIEWS.length} reviews</button>` : '';
 
 // FAQ: only facts we have. Shown on the page and given to Google as FAQPage.
 const FAQ = [
@@ -96,6 +102,8 @@ const TOKENS = {
   '{{RIDE_PHONES}}': CONFIG.ridePhones.map((p) => `<a href="https://wa.me/62${p.replace(/\D/g, '').slice(1)}" target="_blank" rel="noopener">${p}</a>`).join(' · '),
   '{{MAP_EMBED}}': `https://www.openstreetmap.org/export/embed.html?bbox=${PLACES.eat.lng - 0.006},${PLACES.eat.lat - 0.004},${PLACES.eat.lng + 0.006},${PLACES.eat.lat + 0.004}&layer=mapnik&marker=${PLACES.eat.lat},${PLACES.eat.lng}`,
   '{{REVIEWS}}': reviewsHtml,
+  '{{REVIEW_SUMMARY}}': reviewSummary,
+  '{{REVIEW_MORE}}': reviewMore,
   '{{FAQ}}': faqHtml,
   '{{MENU_STATIC}}': menuStatic,
   '{{FLEET_STATIC}}': fleetStatic,
@@ -249,13 +257,27 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
     <span><a href="/staff" rel="nofollow">Staff</a> · Website by <a href="https://djinja-c.com" target="_blank" rel="noopener">Djinja-C</a></span>
   </div>
 </footer>
-<a class="wa-float only-eat" href="https://wa.me/${CONFIG.waEat}" target="_blank" rel="noopener">${ICON_WA}<span>WhatsApp the kitchen</span></a>
-<a class="wa-float only-ride" href="https://wa.me/${CONFIG.waRide}" target="_blank" rel="noopener">${ICON_WA}<span>WhatsApp rentals</span></a>
+<button class="chat-launch" id="chatLaunch" type="button" aria-expanded="false" aria-controls="chatPanel">${ICON_WA}<span>Questions?</span></button>
+<div class="chat" id="chatPanel" role="dialog" aria-label="Chat with TAKE" hidden>
+  <div class="chat-head">
+    <img src="/assets/img/icon.svg" alt="" width="40" height="40">
+    <div><b>TAKE assistant</b><small>Instant answers. A person is one tap away.</small></div>
+    <button class="chat-x" type="button" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <form class="chat-form" id="chatForm">
+    <input id="chatInput" autocomplete="off" placeholder="Type your question" aria-label="Type your question">
+    <button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8z"/></svg></button>
+  </form>
+  <a class="chat-human" id="chatHuman" href="https://wa.me/${look === 'eat' ? CONFIG.waEat : CONFIG.waRide}" target="_blank" rel="noopener">${ICON_WA}<span>Talk to a person on WhatsApp</span></a>
+</div>
 <button class="cart-fab only-eat" id="cartFab" type="button" hidden>Order <b id="cartCount">0</b> · <span id="cartTotal"></span></button>
 <script src="/assets/js/data.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/member.js"></script>
 <script src="/assets/js/book.js"></script>
+<script src="/assets/js/chat.js"></script>
 <script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>
 </body>
@@ -279,11 +301,11 @@ const staff = read('staff.html');
 fs.writeFileSync(path.join(outDir, 'staff.html'), staffLayout(staff.meta, staff.body));
 
 // catalogue for browser and server
-const pub = { menu: cat.menu, bikes: cat.bikes, trips: cat.trips, loyalty: cat.loyalty, rental: cat.rental, wa: { eat: CONFIG.waEat, ride: CONFIG.waRide } };
+const pub = { menu: cat.menu, bikes: cat.bikes, trips: cat.trips, loyalty: cat.loyalty, rental: cat.rental, payLive: CONFIG.payLive, wa: { eat: CONFIG.waEat, ride: CONFIG.waRide } };
 fs.writeFileSync(path.join(outDir, 'assets', 'js', 'data.js'), `// generated by build.mjs from data/catalogue.json\nwindow.TAKE = ${JSON.stringify(pub)};\n`);
 // The server takes every price and rule from here, never from the browser.
 const menuMap = Object.fromEntries(cat.menu.map((i) => [i.id, { name: i.name, price: i.price }]));
-const bikeMap = Object.fromEntries(cat.bikes.map((b) => [b.id, { name: b.name, day: b.day }]));
+const bikeMap = Object.fromEntries(cat.bikes.map((b) => [b.id, { name: b.name, day: b.day, week: b.week }]));
 fs.writeFileSync(path.join(ROOT, 'functions', 'api', '_catalogue.js'), `// generated by build.mjs from data/catalogue.json\n` +
   `export const MENU = ${JSON.stringify(menuMap)};\nexport const BIKES = ${JSON.stringify(bikeMap)};\n` +
   `export const LOYALTY = ${JSON.stringify(cat.loyalty)};\nexport const RENTAL = ${JSON.stringify(cat.rental)};\n`);

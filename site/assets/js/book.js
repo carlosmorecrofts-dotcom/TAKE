@@ -30,7 +30,13 @@
   var day = function (date) { return S.avail[S.model + date]; };
 
   function bike() { return T.bikes.filter(function (b) { return b.id === S.model; })[0]; }
-  function price() { var b = bike(); return S.start && S.end && b.day ? b.day * nights(S.start, S.end) : null; }
+  // same rule as the server (functions/api/_lib.js rentPrice)
+  function price() {
+    var b = bike(); if (!(S.start && S.end && b.day)) return null;
+    var n = nights(S.start, S.end);
+    if (!b.week || n < 7) return b.day * n;
+    return Math.min(Math.floor(n / 7) * b.week + (n % 7) * b.day, Math.ceil(n / 7) * b.week);
+  }
 
   function monthHtml(first) {
     var y = first.getFullYear(), mo = first.getMonth(), lead = (first.getDay() + 6) % 7, len = new Date(y, mo + 1, 0).getDate();
@@ -78,7 +84,7 @@
       '<div class="cal-legend"><span class="lg free"></span>Free <span class="lg last"></span>Last one <span class="lg full"></span>Booked <span class="lg sel"></span>Your dates</div>' +
       '<p class="cal-hint">' + esc(S.msg || (!S.start ? 'Tap your pick-up day.' : !S.end ? 'Now tap your return day.' : '')) + '</p>' +
       '<div class="bk-sum' + (S.end ? ' ready' : '') + '">' +
-        '<div><b>' + (S.end ? esc(S.start) + ' to ' + esc(S.end) : 'Choose dates') + '</b><small>' + (n ? n + ' day' + (n > 1 ? 's' : '') + ' × ' + k(b.day) : 'Pick-up and return at the shop, 7am to 8pm') + '</small></div>' +
+        '<div><b>' + (S.end ? esc(S.start) + ' to ' + esc(S.end) : 'Choose dates') + '</b><small>' + (n ? n + ' day' + (n > 1 ? 's' : '') + (b.week && n >= 7 ? ', week rate ' + k(b.week) : ' × ' + k(b.day)) : 'Pick-up and return at the shop, 7am to 8pm') + '</small></div>' +
         '<div class="bk-price">' + (p ? rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : n ? 'Price on WhatsApp' : '') + '</div>' +
       '</div>' +
       (canPts && S.end ? '<label class="m-agree"><input type="checkbox" id="bkPts"' + (S.usePoints ? ' checked' : '') + '> Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.</label>' : '') +

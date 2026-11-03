@@ -1,5 +1,5 @@
 {
-  "_note": "Prices in IDR. null = not on the banner yet: shows as [ADD: price] and the staff confirm it. Edit here, then node build.mjs. Day rates from the TAKE price list photo 2026-11-03 (XMAX 300K and ADV 175K are handwritten corrections). Week/month rates not given yet.",
+  "_note": "Prices in IDR. null = not on the banner yet: shows as [ADD: price] and the staff confirm it. Edit here, then node build.mjs. Day rates from the TAKE price list photo 2026-11-03 (XMAX 300K and ADV 175K are handwritten corrections). Week/month rates not given yet. Week rates from the owner on WhatsApp 2026-11-03; a 720K/week row had its label cut off (probably Vario): not set until confirmed.",
   "menu": [
     {
       "id": "easy-breakfast",
@@ -105,7 +105,7 @@
       "cc": 110,
       "kind": "Automatic",
       "day": 100000,
-      "week": null,
+      "week": 600000,
       "month": null
     },
     {
@@ -114,7 +114,7 @@
       "cc": 125,
       "kind": "Automatic",
       "day": 100000,
-      "week": null,
+      "week": 600000,
       "month": null
     },
     {
@@ -132,7 +132,7 @@
       "cc": 155,
       "kind": "Automatic",
       "day": 150000,
-      "week": null,
+      "week": 900000,
       "month": null
     },
     {
@@ -141,7 +141,7 @@
       "cc": 160,
       "kind": "Automatic",
       "day": 150000,
-      "week": null,
+      "week": 900000,
       "month": null
     },
     {
@@ -150,7 +150,7 @@
       "cc": 160,
       "kind": "Automatic",
       "day": 175000,
-      "week": null,
+      "week": 900000,
       "month": null
     },
     {
@@ -159,7 +159,7 @@
       "cc": 250,
       "kind": "Automatic",
       "day": 300000,
-      "week": null,
+      "week": 1500000,
       "month": null
     },
     {

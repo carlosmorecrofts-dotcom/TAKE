@@ -1,0 +1,4 @@
+{
+  "_note": "Real Google reviews only, copied word for word. Never write one. 'place' is 'eat' (Take Coffee Canggu) or 'ride' (TAKE SCOOTER RENTAL). Example entry: {\"place\": \"ride\", \"name\": \"First name L.\", \"stars\": 5, \"when\": \"2 weeks ago\", \"text\": \"...\"}. Then run node build.mjs.",
+  "reviews": []
+}

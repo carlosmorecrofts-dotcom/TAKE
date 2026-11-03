@@ -107,9 +107,18 @@
 
 <section class="section only-ride" id="riders">
   <div class="wrap">
-    <div class="section-head"><div><p class="label">Our riders</p><h2>Picked up <span class="script">right here</span></h2></div><p class="mute">Riders on TAKE scooters outside the shop.</p></div>
-    <div class="gal g4">
-      <figure><img src="/assets/img/riders-group.jpg" alt="A group of riders with Honda scooters in front of the TAKE Scooter Rental and TAKE Coffee Canggu signs" width="678" height="808" loading="lazy"></figure>
+    <div class="riders-top">
+      <figure class="riders-hero"><img src="/assets/img/riders-group.jpg" alt="A group of riders with Honda scooters in front of the TAKE Scooter Rental and TAKE Coffee Canggu signs" width="678" height="808" loading="lazy"></figure>
+      <div class="riders-copy">
+        <p class="label">Our riders</p>
+        <h2>Picked up <span class="script">right here</span></h2>
+        <p class="lead">Every photo here is a real TAKE rider, taken outside our shop in Perum Prapta Canggu Asri, a quiet lane off Jalan Pantai Berawa. Groups of friends and solo travellers all start the same way: pick a scooter at the shop and ride out into Canggu.</p>
+        <p>There is a scooter for every kind of trip. A Honda Beat, Scoopy or Yamaha Gear is easy to park for short hops to the beach and the cafés. A Honda Vario or Yamaha Fazzio suits everyday riding. For longer days out to Uluwatu, Tanah Lot or the hills, a Yamaha NMAX, Honda PCX or ADV gives you more comfort and power. Day prices start at Rp 85K.</p>
+        <p>Check the calendar for the days you need, book, and collect your scooter at the shop between 7am and 8pm. Bring your passport and driving licence, and WhatsApp us whenever you need a hand.</p>
+        <div class="row" style="margin-top:20px"><a class="btn btn-green" href="#book">See free dates</a><a class="btn btn-ghost" href="#fleet">All scooters and prices</a></div>
+      </div>
+    </div>
+    <div class="gal g3 riders-row">
       <figure><img src="/assets/img/rider-pcx.jpg" alt="A rider in a helmet on a blue Honda PCX outside TAKE" width="678" height="808" loading="lazy"><figcaption>Honda PCX</figcaption></figure>
       <figure><img src="/assets/img/rider-nmax.jpg" alt="A rider on a black Yamaha NMAX next to the TAKE rental banner" width="678" height="808" loading="lazy"><figcaption>Yamaha NMAX</figcaption></figure>
       <figure><img src="/assets/img/rider-vario.jpg" alt="A smiling rider in a helmet with a white Honda Vario" width="678" height="808" loading="lazy"><figcaption>Honda Vario</figcaption></figure>
@@ -165,15 +174,6 @@
 </section>
 
 <!-- ============ BOTH ============ -->
-<section class="section band" id="reviews">
-  <div class="wrap">
-    <div class="section-head">
-      <div><p class="label">Reviews</p><h2>What guests say</h2></div>
-      <a class="btn btn-ghost" href="{{MAPS}}" target="_blank" rel="noopener">All reviews on Google</a>
-    </div>
-    <div class="grid g3">{{REVIEWS}}</div>
-  </div>
-</section>
 
 <section class="section" id="points">
   <div class="wrap split">
@@ -214,6 +214,25 @@
     <div class="mapbox">
       <img src="/assets/img/shop-side.jpg" alt="The TAKE house: TAKE Scooter Rental and TAKE Coffee Canggu signs over a terrace with plants" loading="lazy">
       <iframe title="Map: TAKE Canggu" src="{{MAP_EMBED}}" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="label">Reviews</p><h2>What guests <span class="script">say</span></h2></div>
+      <div class="row">
+        <a class="btn btn-ghost" href="{{MAPS}}" target="_blank" rel="noopener">Café on Google</a>
+        <a class="btn btn-ghost" href="{{MAPS_RIDE}}" target="_blank" rel="noopener">Scooters on Google</a>
+      </div>
+    </div>
+    {{REVIEW_SUMMARY}}
+    <div class="review-wall" id="reviewWall">{{REVIEWS}}</div>
+    {{REVIEW_MORE}}
+    <div class="review-cta card">
+      <div><h3>Been to TAKE?</h3><p class="mute">A short review on Google helps other travellers find us.</p></div>
+      <div class="row"><a class="btn btn-green" href="{{MAPS}}" target="_blank" rel="noopener">Review the café</a><a class="btn btn-green" href="{{MAPS_RIDE}}" target="_blank" rel="noopener">Review the scooters</a></div>
     </div>
   </div>
 </section>
