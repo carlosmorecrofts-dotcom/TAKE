@@ -133,6 +133,7 @@ ${fill(body)}
 <button class="cart-fab only-eat" id="cartFab" type="button" hidden>Order <b id="cartCount">0</b> · <span id="cartTotal"></span></button>
 <script src="/assets/js/data.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>
 </body>
 </html>
