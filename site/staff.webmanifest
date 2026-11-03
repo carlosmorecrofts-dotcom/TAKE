@@ -1,0 +1,2 @@
+{ "name": "TAKE staff", "short_name": "TAKE staff", "start_url": "/staff", "display": "standalone", "background_color": "#0c0a0a", "theme_color": "#0c0a0a",
+  "icons": [{ "src": "/assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }] }

@@ -1,0 +1,177 @@
+<!--meta {"title":"TAKE Canggu | Coffee, food, scooter rental and drivers in Berawa","description":"TAKE Coffee & Eatery and TAKE Scooter Rental, Jl. Pantai Berawa, Canggu. Order breakfast, lunch and dinner for pick-up or delivery, rent a Scoopy, NMAX or PCX, or book an airport transfer or tour. Open 7am to 8pm."} -->
+<section class="hero only-eat">
+  <div>
+    <p class="kicker">Canggu · Bali · Breakfast · Lunch · Dinner</p>
+    <h1>TAKE Coffee<br><span class="script">&amp; Eatery</span></h1>
+  </div>
+  <div>
+    <p class="lead">Nasi goreng from 15K, pizza, burgers, fresh juice and coffee, in a quiet lane off Jalan Pantai Berawa. Eat with us, pick up, or have it delivered.</p>
+    <div class="row"><a class="btn btn-green" href="#menu-list">See the menu &amp; order</a><a class="btn btn-ghost" href="/ride">Need a scooter?</a></div>
+  </div>
+</section>
+<section class="hero only-ride">
+  <div>
+    <p class="kicker">Canggu · Bali · Scooters · Drivers · Tours</p>
+    <h1>TAKE Scooter<br><span class="script">Rental &amp; Transport</span></h1>
+  </div>
+  <div>
+    <p class="lead">Scoopy, Beat, Vario, NMAX, PCX, ADV and more, by the day, week or month. Airport transfers, Ubud, Uluwatu, sunrise treks on Batur and Agung.</p>
+    <div class="row"><a class="btn btn-green" href="#fleet">Choose a scooter</a><a class="btn btn-ghost" href="#transport">Book a driver</a></div>
+  </div>
+</section>
+
+<div class="wrap lift">
+  <div class="facts facts-4">
+    <div><b>7am to 8pm</b><span>Every day</span></div>
+    <div class="only-eat"><b>Delivery</b><span>Call or order here</span></div>
+    <div class="only-ride"><b>Day, week, month</b><span>Rental terms</span></div>
+    <div class="only-eat"><b>From 15K</b><span>Indonesian &amp; Western</span></div>
+    <div class="only-ride"><b>9 models</b><span>110cc to 160cc</span></div>
+    <div><b>Berawa</b><span>Perum Prapta Canggu Asri</span></div>
+  </div>
+</div>
+
+<!-- status of an order or booking: shown when the link has ?order= or ?booking= -->
+<section class="section" id="status" hidden>
+  <div class="wrap"><div class="card status-card" id="statusCard"></div></div>
+</section>
+
+<!-- ============ EAT ============ -->
+<section class="section only-eat" id="menu-list">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="label">Menu</p><h2>Tap to add</h2></div>
+      <p class="mute">Prices in Indonesian rupiah (K = thousand). Drinks priced at the counter for now. {{ADD_PAY}}</p>
+    </div>
+    <div class="cats" id="menuCats"></div>
+    <div class="grid g3" id="menuGrid"></div>
+  </div>
+</section>
+
+<section class="section band only-eat" id="order">
+  <div class="wrap split">
+    <div>
+      <p class="label">Your order</p>
+      <h2>Send it to the kitchen</h2>
+      <ul class="list cart" id="cartList"><li class="mute">Nothing yet. Tap a dish above.</li></ul>
+      <p class="cart-sum">Total <b id="cartSum">0</b></p>
+      <p class="note">Delivery: {{ADD_DELIVERY}}</p>
+    </div>
+    <form class="form card" id="orderForm">
+      <div class="seg" role="radiogroup" aria-label="How">
+        <label><input type="radio" name="mode" value="dine" checked><span>Eat here</span></label>
+        <label><input type="radio" name="mode" value="pickup"><span>Pick up</span></label>
+        <label><input type="radio" name="mode" value="delivery"><span>Delivery</span></label>
+      </div>
+      <div class="two">
+        <label>Name<input name="name" required autocomplete="name"></label>
+        <label>WhatsApp<input name="wa" required inputmode="tel" autocomplete="tel" placeholder="+62 ..."></label>
+      </div>
+      <label class="if-dine">Table (optional)<input name="tbl"></label>
+      <label class="if-delivery" hidden>Where to deliver (villa, street, Google Maps link)<textarea name="address" rows="2"></textarea></label>
+      <label>Note for the kitchen<input name="note" placeholder="No chilli, extra egg..."></label>
+      <button class="btn btn-green" type="submit">Place order</button>
+      <p class="form-note" id="orderNote">You get a link to follow your order. We also open WhatsApp so the kitchen sees it at once.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ RIDE ============ -->
+<section class="section only-ride" id="fleet">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="label">Scooters</p><h2>Pick your ride</h2></div>
+      <p class="mute">Helmets included. Live count of what is free in the shop right now. Deposit: {{ADD_DEPOSIT}}</p>
+    </div>
+    <div class="grid g3" id="fleetGrid"></div>
+  </div>
+</section>
+
+<section class="section band only-ride" id="book">
+  <div class="wrap split">
+    <div>
+      <p class="label">Book a scooter</p>
+      <h2>Reserve it, we confirm on WhatsApp</h2>
+      <ul class="ticks">
+        <li>Choose a model and your dates</li>
+        <li>We confirm the bike and price on WhatsApp</li>
+        <li>Pick up at the shop, or ask us to bring it to your villa</li>
+        <li>Lost or broken down? Share your location from your booking link and we come to you</li>
+      </ul>
+      <p class="note">Call or WhatsApp: {{RIDE_PHONES}}</p>
+    </div>
+    <form class="form card" id="rentForm">
+      <label>Scooter<select name="model" id="rentModel" required></select></label>
+      <div class="two">
+        <label>Pick-up date<input type="date" name="start" required></label>
+        <label>Return date<input type="date" name="end" required></label>
+      </div>
+      <p class="quote" id="rentQuote"></p>
+      <div class="two">
+        <label>Name<input name="name" required autocomplete="name"></label>
+        <label>WhatsApp<input name="wa" required inputmode="tel" autocomplete="tel" placeholder="+62 ..."></label>
+      </div>
+      <label>Where are you staying?<input name="hotel" placeholder="Villa name or area"></label>
+      <label>Anything else<input name="note" placeholder="Delivery to villa, two helmets, surf rack..."></label>
+      <button class="btn btn-green" type="submit">Request this scooter</button>
+      <p class="form-note" id="rentNote"></p>
+    </form>
+  </div>
+</section>
+
+<section class="section only-ride" id="transport">
+  <div class="wrap split">
+    <div>
+      <p class="label">TAKE Transport</p>
+      <h2>Driver, airport &amp; tours</h2>
+      <ul class="list">{{TRIPS}}</ul>
+    </div>
+    <form class="form card" id="tripForm">
+      <label>Where to<select name="model" required>{{TRIP_OPTIONS}}</select></label>
+      <div class="two">
+        <label>Date<input type="date" name="start" required></label>
+        <label>Pick-up time<input type="time" name="time" value="08:00"></label>
+      </div>
+      <div class="two">
+        <label>Name<input name="name" required autocomplete="name"></label>
+        <label>WhatsApp<input name="wa" required inputmode="tel" autocomplete="tel"></label>
+      </div>
+      <div class="two">
+        <label>People<input type="number" name="people" min="1" max="20" value="2"></label>
+        <label>Pick-up place<input name="hotel" placeholder="Villa / flight number"></label>
+      </div>
+      <button class="btn btn-green" type="submit">Request a driver</button>
+      <p class="form-note" id="tripNote"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ BOTH ============ -->
+<section class="section band" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="label">Reviews</p><h2>What guests say</h2></div>
+      <a class="btn btn-ghost" href="{{MAPS}}" target="_blank" rel="noopener">All reviews on Google</a>
+    </div>
+    <div class="grid g3">{{REVIEWS}}</div>
+  </div>
+</section>
+
+<section class="section" id="find">
+  <div class="wrap split">
+    <div>
+      <p class="label">Find us</p>
+      <h2>One small house, two signs</h2>
+      <p class="lead">TAKE Coffee and TAKE Scooter Rental share the white house with the two signs, 50 metres in from Jalan Pantai Berawa. {{ADD_STORY}}</p>
+      <div class="contact-list" style="margin-top:22px">
+        <a href="{{MAPS}}" target="_blank" rel="noopener"><div><b>{{ADDRESS}}</b><small>Open in Google Maps</small></div></a>
+        <div><div><b>{{HOURS}}</b><small>Kitchen and rental desk</small></div></div>
+        <a href="https://wa.me/{{WA_EAT}}" target="_blank" rel="noopener"><div><b>Kitchen &amp; delivery: 0821 9133 7592</b><small>WhatsApp</small></div></a>
+      </div>
+    </div>
+    <div class="mapbox">
+      <img src="/assets/img/shop-side.jpg" alt="The TAKE house: TAKE Scooter Rental and TAKE Coffee Canggu signs over a terrace with plants" loading="lazy">
+      <iframe title="Map: TAKE Canggu" src="{{MAP_EMBED}}" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>

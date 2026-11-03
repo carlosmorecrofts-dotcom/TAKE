@@ -1,0 +1,241 @@
+{
+  "_note": "Prices in IDR. null = not on the banner yet: shows as [ADD: price] and the staff confirm it. Edit here, then node build.mjs. Day rates from the TAKE price list photo 2026-11-03 (XMAX 300K and ADV 175K are handwritten corrections). Week/month rates not given yet.",
+  "menu": [
+    {
+      "id": "easy-breakfast",
+      "cat": "Breakfast",
+      "name": "Easy Breakfast",
+      "price": 40000
+    },
+    {
+      "id": "nasi-goreng",
+      "cat": "Indonesian",
+      "name": "Fried Rice / Nasi Goreng",
+      "price": 15000
+    },
+    {
+      "id": "mie-goreng",
+      "cat": "Indonesian",
+      "name": "Fried Noodles / Mie Goreng",
+      "price": 18000
+    },
+    {
+      "id": "sweet-sour-chicken",
+      "cat": "Indonesian",
+      "name": "Sweet and Sour Chicken / Koloke",
+      "price": 25000
+    },
+    {
+      "id": "fuyung-hai",
+      "cat": "Indonesian",
+      "name": "Omelette in Sweet Sauce / Fuyung Hai",
+      "price": 22000
+    },
+    {
+      "id": "cap-cay",
+      "cat": "Indonesian",
+      "name": "Cap Cay",
+      "price": 20000
+    },
+    {
+      "id": "pasta",
+      "cat": "Western",
+      "name": "Pasta",
+      "price": 30000
+    },
+    {
+      "id": "pizza",
+      "cat": "Western",
+      "name": "Pizza",
+      "price": 30000
+    },
+    {
+      "id": "burger",
+      "cat": "Western",
+      "name": "Burger",
+      "price": 25000
+    },
+    {
+      "id": "coffee",
+      "cat": "Drinks",
+      "name": "Coffee",
+      "price": null
+    },
+    {
+      "id": "juice",
+      "cat": "Drinks",
+      "name": "Fresh Juice",
+      "price": null
+    },
+    {
+      "id": "coconut",
+      "cat": "Drinks",
+      "name": "Coconut Water",
+      "price": null
+    },
+    {
+      "id": "beer",
+      "cat": "Drinks",
+      "name": "Beer",
+      "price": null
+    }
+  ],
+  "bikes": [
+    {
+      "id": "beat",
+      "name": "Honda Beat",
+      "cc": 110,
+      "kind": "Automatic",
+      "day": 85000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "gear",
+      "name": "Yamaha Gear",
+      "cc": 125,
+      "kind": "Automatic",
+      "day": 85000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "scoopy",
+      "name": "Honda Scoopy",
+      "cc": 110,
+      "kind": "Automatic",
+      "day": 100000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "fazzio",
+      "name": "Yamaha Fazzio",
+      "cc": 125,
+      "kind": "Automatic",
+      "day": 100000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "vario",
+      "name": "Honda Vario",
+      "cc": 125,
+      "kind": "Automatic",
+      "day": 120000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "nmax",
+      "name": "Yamaha NMAX",
+      "cc": 155,
+      "kind": "Automatic",
+      "day": 150000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "pcx",
+      "name": "Honda PCX",
+      "cc": 160,
+      "kind": "Automatic",
+      "day": 150000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "adv",
+      "name": "Honda ADV",
+      "cc": 160,
+      "kind": "Automatic",
+      "day": 175000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "xmax",
+      "name": "Yamaha XMAX",
+      "cc": 250,
+      "kind": "Automatic",
+      "day": 300000,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "genio",
+      "name": "Honda Genio",
+      "cc": 110,
+      "kind": "Automatic",
+      "day": null,
+      "week": null,
+      "month": null
+    },
+    {
+      "id": "xsr",
+      "name": "Yamaha XSR",
+      "cc": 155,
+      "kind": "Manual",
+      "day": null,
+      "week": null,
+      "month": null
+    }
+  ],
+  "trips": [
+    {
+      "id": "airport",
+      "name": "Airport transfer",
+      "price": null
+    },
+    {
+      "id": "sanur",
+      "name": "Sanur",
+      "price": null
+    },
+    {
+      "id": "ubud",
+      "name": "Ubud",
+      "price": null
+    },
+    {
+      "id": "nusa-dua",
+      "name": "Nusa Dua",
+      "price": null
+    },
+    {
+      "id": "uluwatu",
+      "name": "Uluwatu",
+      "price": null
+    },
+    {
+      "id": "tanah-lot",
+      "name": "Tanah Lot",
+      "price": null
+    },
+    {
+      "id": "candi-dasa",
+      "name": "Candi Dasa",
+      "price": null
+    },
+    {
+      "id": "padang-bay",
+      "name": "Padang Bay",
+      "price": null
+    },
+    {
+      "id": "batur",
+      "name": "Trekking Mount Batur",
+      "price": null
+    },
+    {
+      "id": "agung",
+      "name": "Trekking Mount Agung",
+      "price": null
+    },
+    {
+      "id": "full-day",
+      "name": "Full day tour",
+      "price": null
+    }
+  ]
+}
