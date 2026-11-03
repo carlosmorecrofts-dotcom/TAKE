@@ -1,2 +1,4 @@
-/eat / 200
-/ride / 200
+/eat / 301
+/scooter /ride 301
+/scooters /ride 301
+/rental /ride 301

@@ -5,9 +5,19 @@ html[data-v="ride"] .hero.only-ride { background-image: linear-gradient(0deg, rg
 
 /* variant switch in the header */
 .vswitch { display: flex; padding: 4px; border-radius: 999px; background: rgba(24, 19, 19, .75); border: 1px solid var(--line); backdrop-filter: blur(8px); }
-.vswitch button { font: 600 14px Inter, sans-serif; color: var(--txt); background: none; border: 0; padding: 9px 16px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.vswitch a { font: 600 14px Inter, sans-serif; color: var(--txt); text-decoration: none; padding: 9px 16px; border-radius: 999px; cursor: pointer; white-space: nowrap; text-align: center; }
 html[data-v="eat"] .vswitch [data-to="eat"], html[data-v="ride"] .vswitch [data-to="ride"] { background: var(--green); color: var(--green-ink); }
 .nav nav { margin-inline-start: auto; }
+
+/* the other page's headline, kept as text so each page has one h1 */
+.hero .h1 { font-family: Oswald, Impact, sans-serif; text-transform: uppercase; line-height: 1; font-weight: 700; font-size: clamp(46px, 8vw, 104px); margin-top: 18px; }
+/* questions */
+.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 600 24px Inter, sans-serif; color: var(--green); flex: none; }
+.faq[open] summary::after { content: "\2212"; }
+.faq h3 { font-size: 19px; margin: 0; }
+.faq p { margin-top: 12px; }
 
 /* menu */
 .cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
@@ -101,7 +111,7 @@ html[data-v="eat"] .vswitch [data-to="eat"], html[data-v="ride"] .vswitch [data-
 @media (max-width: 1320px) { .vswitch { margin-inline-start: auto; } .nav .burger { margin-inline-start: 6px; } }
 @media (max-width: 680px) {
   .nav { flex-wrap: wrap; }
-  .vswitch { order: 3; width: 100%; } .vswitch button { flex: 1; padding: 9px 6px; font-size: 13px; }
+  .vswitch { order: 3; width: 100%; } .vswitch a { flex: 1; padding: 9px 6px; font-size: 13px; }
   .hero { padding-top: 170px; }
   .cols, .kpis { grid-template-columns: 1fr; }
   .tbl { font-size: 13px; }

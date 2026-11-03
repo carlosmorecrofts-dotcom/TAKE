@@ -1,0 +1,6 @@
+/staff
+  X-Robots-Tag: noindex, nofollow
+/api/*
+  X-Robots-Tag: noindex
+/assets/*
+  Cache-Control: public, max-age=604800

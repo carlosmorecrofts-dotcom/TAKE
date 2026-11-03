@@ -1,6 +1,6 @@
 // Scroll transitions: blocks rise into place once as they arrive, pictures
-// slide in from alternating sides, and the THEME marker (a scooter) travels
-// down the right edge as you scroll. Needs space.js loaded first for THEME.
+// slide in from alternating sides, and the THEME marker (a scooter) rides
+// along a progress bar across the top as you scroll. Needs space.js loaded first for THEME.
 (function () {
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var side = 0;
@@ -56,8 +56,8 @@
   function onScroll() {
     var max = document.documentElement.scrollHeight - innerHeight;
     var p = max > 0 ? Math.min(1, scrollY / max) : 0;
-    fill.style.transform = 'scaleY(' + p + ')';
-    mark.style.top = 'calc(' + (p * 100) + '% - ' + (p * 26) + 'px)';
+    fill.style.transform = 'scaleX(' + p + ')';
+    mark.style.left = 'calc(' + (p * 100) + '% - ' + (p * 24) + 'px)';
   }
   addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 })();

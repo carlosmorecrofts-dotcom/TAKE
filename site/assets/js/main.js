@@ -15,11 +15,24 @@
   }
 
   // ---- variant + menu button
-  document.querySelectorAll('.vswitch button').forEach(function (b) {
-    b.addEventListener('click', function () {
+  // The switch is two real links (/ and /ride, each its own page for search
+  // engines). On a click we swap in place instead of reloading.
+  function setVariant(v, push) {
+    root.dataset.v = v;
+    document.querySelectorAll('.vswitch a').forEach(function (a) {
+      var on = a.getAttribute('data-to') === v;
+      if (on) { a.setAttribute('aria-current', 'page'); document.title = a.getAttribute('data-title') || document.title; } else a.removeAttribute('aria-current');
+      if (on && push) history.pushState({ v: v }, '', a.getAttribute('href'));
+    });
+  }
+  window.addEventListener('popstate', function () { setVariant(location.pathname.indexOf('/ride') === 0 ? 'ride' : 'eat'); });
+  document.querySelectorAll('.vswitch a').forEach(function (b) {
+    b.addEventListener('click', function (e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault();
       var v = b.getAttribute('data-to');
-      root.dataset.v = v;
-      history.replaceState(null, '', '/' + v);
+      if (root.dataset.v === v) return;
+      setVariant(v, true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       window.dispatchEvent(new Event('scroll'));
     });
@@ -98,7 +111,7 @@
       };
       var btn = of.querySelector('button[type=submit]'); btn.disabled = true; note.textContent = 'Sending...';
       api('orders', { method: 'POST', body: JSON.stringify(d) }).then(function (r) {
-        var link = location.origin + '/eat?order=' + r.id + '&t=' + r.token;
+        var link = location.origin + '/?order=' + r.id + '&t=' + r.token;
         try { localStorage.setItem('take_last_order', link); } catch (x) {}
         wa(T.wa.eat, text(r.id) + '\nFollow: ' + link);
         cart = {}; save(); renderMenu(); renderCart(); of.reset(); modeSync();
@@ -197,7 +210,7 @@
         var names = { request: 'Request sent', confirmed: 'Confirmed', out: b.kind === 'rent' ? 'Enjoy the ride' : 'On the way', returned: 'Returned, thank you', cancelled: 'Cancelled' };
         showStatus('<p class="label">Booking #' + b.id + '</p><h2>' + names[b.status] + '</h2><p><b>' + esc(name) + '</b> · ' + esc(b.start) + (b.end ? ' to ' + esc(b.end) : '') + '</p>' +
           (b.status === 'cancelled' ? '' : line(['Request sent', 'Confirmed', names.out, b.kind === 'rent' ? 'Returned, thank you' : 'Done'], names[b.status])) +
-          (b.status === 'request' ? '<p class="note">We confirm on WhatsApp, usually within the hour during opening times.</p>' : '') +
+          (b.status === 'request' ? '<p class="note">We confirm on WhatsApp during opening times, 7am to 8pm.</p>' : '') +
           (b.status === 'out' && b.kind === 'rent' ? '<div class="card" style="margin-top:14px"><b>Broken down, flat tyre or lost?</b><p class="mute">Share your location and we can find you. It is only shared while you press the button, and deleted when the bike is back.</p><div class="row" style="margin-top:12px"><button class="btn btn-green" id="shareLoc" type="button">' + (watching ? 'Sharing my location' : 'Share my location') + '</button><a class="btn btn-ghost" href="https://wa.me/' + T.wa.ride + '?text=' + encodeURIComponent('Help, booking #' + b.id + ' ' + name) + '" target="_blank" rel="noopener">WhatsApp help</a></div><p class="form-note" id="locNote"></p></div>' : ''));
         var sb = $('#shareLoc'); if (sb) sb.onclick = share;
         if (b.status !== 'returned' && b.status !== 'cancelled') setTimeout(load, 60000);
