@@ -61,7 +61,8 @@
     var el = $('#menuGrid'); if (!el) return;
     el.innerHTML = T.menu.filter(function (i) { return curCat === 'All' || i.cat === curCat; }).map(function (i) {
       var q = cart[i.id] || 0;
-      return '<div class="card dish"><div><span class="label">' + i.cat + '</span><h3>' + esc(i.name) + '</h3><span class="price">' +
+      return '<div class="card dish' + (i.img ? ' has-img' : '') + '">' + (i.img ? '<img class="dish-img" src="/assets/img/' + i.img + '" alt="' + esc(i.name) + ' at TAKE" loading="lazy">' : '') +
+        '<div class="dish-body"><span class="label">' + i.cat + '</span><h3>' + esc(i.name) + '</h3>' + (i.desc ? '<p class="dish-desc">' + esc(i.desc) + '</p>' : '') + '<span class="price">' +
         (i.price ? k(i.price) : 'Price at the counter') + '</span></div><div class="qty" data-id="' + i.id + '">' +
         (q ? '<button type="button" class="minus" aria-label="One less ' + esc(i.name) + '">&minus;</button><b>' + q + '</b>' : '') +
         '<button type="button" class="plus" aria-label="Add ' + esc(i.name) + '">+</button></div></div>';
@@ -141,7 +142,9 @@
     el.innerHTML = T.bikes.map(function (b) {
       var f = free[b.id], av = f == null ? '' : f.free > 0 ? '<span class="avail ok">' + f.free + ' free now</span>' : '<span class="avail no">All out right now: book ahead</span>';
       var r = function (n, w) { return '<div><b>' + (n ? k(n) : '?') + '</b>' + w + '</div>'; };
-      return '<div class="card bike"><span class="label">' + b.cc + 'cc · ' + b.kind + '</span><h3>' + esc(b.name) + '</h3>' + av +
+      var ph = (T.bikePhotos || {})[b.id];
+      return '<div class="card bike">' + (ph ? '<img class="bike-img" src="/assets/img/' + ph.file + '" alt="" loading="lazy"><a class="bike-credit" href="' + ph.source + '" target="_blank" rel="noopener" title="' + esc(ph.title) + '">Photo: ' + esc(ph.author) + ', ' + esc(ph.licence) + '</a>' : '') +
+        '<span class="label">' + b.cc + 'cc · ' + b.kind + '</span><h3>' + esc(b.name) + '</h3>' + av +
         '<div class="rates">' + r(b.day, 'day') + r(b.week, 'week') + r(b.month, 'month') + '</div>' +
         (b.day ? '' : '<p class="mute" style="font-size:13px">' + addTag('day, week, month price') + '</p>') +
         '<a class="more" href="#book" data-pick="' + b.id + '">Book this one →</a></div>';

@@ -38,13 +38,13 @@
       a: 'Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, a quiet lane off Jalan Pantai Berawa in Tibubeneng, Canggu. Look for the white house with the two signs. The map is in the Find us section.',
       k: ['where', 'address', 'location', 'find', 'map', 'direction', 'berawa', 'alamat', 'lokasi', 'dimana', 'di mana'] },
     { id: 'menu', area: 'eat', q: 'What is on the menu?',
-      a: 'Easy Breakfast, nasi goreng, mie goreng, sweet and sour chicken, fuyung hai, cap cay, pasta, pizza and burgers, plus coffee, fresh juice, coconut water and beer. Prices are in the Menu section.',
+      a: 'Local and western food, Bali style. Breakfasts, nasi goreng and mi goreng, sweet and sour chicken, fuyung hai, cap cay, four pizzas, spaghetti bolognese, carbonara and aglio olio, small bites, coffee, fresh juices, young coconut and Bintang. Everything with prices is in the Menu section.',
       k: ['menu', 'food', 'eat', 'breakfast', 'lunch', 'dinner', 'nasi', 'mie', 'pizza', 'burger', 'pasta', 'makan', 'makanan', 'sarapan'] },
     { id: 'delivery', area: 'eat', q: 'Do you deliver food?',
       a: 'Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0821 9133 7592.',
       k: ['deliver', 'delivery', 'bring', 'villa', 'antar', 'kirim', 'pesan antar'] },
     { id: 'coffee', area: 'eat', q: 'Do you serve coffee?',
-      a: 'Yes, coffee all day from 7am, and also fresh juice, coconut water and beer. Drink prices are at the counter.',
+      a: 'Yes, from 7am: latte or cappuccino hot or cold 20K, Bali coffee 10K. Also fresh juices from 15K, young coconut 20K, traditional jamu and Bintang 35K.',
       k: ['coffee', 'kopi', 'latte', 'drink', 'juice', 'coconut', 'beer', 'minum', 'bir', 'kelapa'] },
     { id: 'trips', area: 'ride', q: 'Do you have drivers and tours?',
       a: 'Yes: ' + T.trips.map(function (t) { return t.name; }).join(', ') + '. Send a request in the Transport section with the date and pick-up place.',
@@ -129,6 +129,18 @@
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-v'] });
   document.addEventListener('click', function (e) {
     var t = e.target.closest && e.target.closest('[data-open-chat]');
-    if (t) { e.preventDefault(); open(); }
+    if (t) { e.preventDefault(); hideBubble(); open(); }
   });
+
+  // the greeting bubble next to the photo: shown once a visitor has looked
+  // around for a moment, and gone for good when closed or when the chat opens
+  var bubble = document.getElementById('buddyBubble');
+  function hideBubble() { if (bubble) bubble.hidden = true; try { localStorage.setItem('take_bubble', '1'); } catch (x) {} }
+  if (bubble) {
+    var seen = false; try { seen = !!localStorage.getItem('take_bubble'); } catch (x) {}
+    document.getElementById('buddyText').textContent = isRide ? 'Hi, welcome to TAKE! Questions about scooters, prices or booking?' : 'Hi, welcome to TAKE! Questions about the menu, delivery or our scooters?';
+    if (!seen) setTimeout(function () { if (panel.hidden) bubble.hidden = false; }, 4000);
+    bubble.querySelector('.buddy-x').addEventListener('click', hideBubble);
+    launch.addEventListener('click', hideBubble);
+  }
 })();

@@ -1,83 +1,291 @@
 {
-  "_note": "Prices in IDR. null = not on the banner yet: shows as [ADD: price] and the staff confirm it. Edit here, then node build.mjs. Day rates from the TAKE price list photo 2026-11-03 (XMAX 300K and ADV 175K are handwritten corrections). Week/month rates not given yet. Week rates from the owner on WhatsApp 2026-11-03; a 720K/week row had its label cut off (probably Vario): not set until confirmed.",
+  "_note": "Prices in IDR. null = not on the banner yet: shows as [ADD: price] and the staff confirm it. Edit here, then node build.mjs. Day rates from the TAKE price list photo 2026-11-03 (XMAX 300K and ADV 175K are handwritten corrections). Week/month rates not given yet. Week rates from the owner on WhatsApp 2026-11-03; Menu from the printed TAKE warung menu photo (2026-11-03), which replaces the older wall banner prices. Black Honey price unreadable on the photo.",
   "menu": [
     {
       "id": "easy-breakfast",
       "cat": "Breakfast",
       "name": "Easy Breakfast",
-      "price": 40000
+      "price": 45000,
+      "desc": "Two slices of white toast, sautéed potato wedges with onion and garlic, chicken sausage, two eggs (any style)"
+    },
+    {
+      "id": "simple-breakfast",
+      "cat": "Breakfast",
+      "name": "Simple Breakfast",
+      "price": 50000,
+      "desc": "Avocado, two slices of white toast, grilled chicken, two eggs (any style)"
+    },
+    {
+      "id": "2x2-breakfast",
+      "cat": "Breakfast",
+      "name": "2 x 2 Breakfast",
+      "price": 25000,
+      "desc": "Two slices of white toast, two eggs (any style)"
+    },
+    {
+      "id": "fruit-platter",
+      "cat": "Breakfast",
+      "name": "Fruit Platter",
+      "price": 40000,
+      "desc": "Papaya, pineapple, dragon fruit, watermelon"
     },
     {
       "id": "nasi-goreng",
-      "cat": "Indonesian",
-      "name": "Fried Rice / Nasi Goreng",
-      "price": 15000
+      "cat": "Local food",
+      "name": "Nasi Goreng",
+      "price": 20000,
+      "desc": "Rice, cabbage, carrot, green peas, egg",
+      "img": "menu/nasi-goreng.jpg"
     },
     {
-      "id": "mie-goreng",
-      "cat": "Indonesian",
-      "name": "Fried Noodles / Mie Goreng",
-      "price": 18000
+      "id": "nasi-goreng-chicken",
+      "cat": "Local food",
+      "name": "Nasi Goreng Chicken",
+      "price": 25000,
+      "desc": "Rice, cabbage, carrot, green peas, egg, with chicken"
+    },
+    {
+      "id": "mi-goreng",
+      "cat": "Local food",
+      "name": "Mi Goreng",
+      "price": 20000,
+      "desc": "Egg noodles, cabbage, carrot, egg"
+    },
+    {
+      "id": "mi-goreng-chicken",
+      "cat": "Local food",
+      "name": "Mi Goreng Chicken",
+      "price": 25000,
+      "desc": "Egg noodles, cabbage, carrot, egg, with chicken"
     },
     {
       "id": "sweet-sour-chicken",
-      "cat": "Indonesian",
-      "name": "Sweet and Sour Chicken / Koloke",
-      "price": 25000
+      "cat": "Local food",
+      "name": "Sweet & Sour Chicken",
+      "price": 25000,
+      "desc": "Fried chicken in sweet and sour sauce"
     },
     {
       "id": "fuyung-hai",
-      "cat": "Indonesian",
-      "name": "Omelette in Sweet Sauce / Fuyung Hai",
-      "price": 22000
+      "cat": "Local food",
+      "name": "Fuyung Hai",
+      "price": 20000,
+      "desc": "Egg omelette with chicken, cabbage and carrot, served with sweet and sour sauce"
     },
     {
       "id": "cap-cay",
-      "cat": "Indonesian",
+      "cat": "Local food",
       "name": "Cap Cay",
+      "price": 25000,
+      "desc": "Stir-fried mixed vegetables with chicken"
+    },
+    {
+      "id": "steamed-rice",
+      "cat": "Local food",
+      "name": "Steamed Rice",
+      "price": 6000
+    },
+    {
+      "id": "pizza-meat-lover",
+      "cat": "Pizza",
+      "name": "Meat Lover",
+      "price": 55000,
+      "desc": "Tomato sauce, pepperoni, smoked beef, chicken, chicken sausage, bell peppers, onion, mozzarella cheese"
+    },
+    {
+      "id": "pizza-hawai",
+      "cat": "Pizza",
+      "name": "Hawai",
+      "price": 50000,
+      "desc": "Tomato sauce, grilled chicken, pineapple, bell pepper, onion, mozzarella cheese"
+    },
+    {
+      "id": "pizza-vegetable",
+      "cat": "Pizza",
+      "name": "Vegetable",
+      "price": 45000,
+      "desc": "Tomato sauce, mixed bell peppers, onion, tomato, mozzarella cheese"
+    },
+    {
+      "id": "pizza-margherita",
+      "cat": "Pizza",
+      "name": "Margherita",
+      "price": 40000,
+      "desc": "Tomato sauce, fresh tomato, mozzarella cheese",
+      "img": "menu/margherita.jpg"
+    },
+    {
+      "id": "pasta-bolognese",
+      "cat": "Pasta",
+      "name": "Bolognese",
+      "price": 45000,
+      "desc": "Spaghetti with minced beef, tomato sauce and parmesan cheese"
+    },
+    {
+      "id": "pasta-carbonara",
+      "cat": "Pasta",
+      "name": "Carbonara",
+      "price": 50000,
+      "desc": "Spaghetti with chicken, creamy garlic sauce and parmesan cheese"
+    },
+    {
+      "id": "pasta-aglio-olio",
+      "cat": "Pasta",
+      "name": "Aglio Olio",
+      "price": 40000,
+      "desc": "Spaghetti with olive oil, garlic, fresh mushrooms, tomato, chili and parmesan cheese"
+    },
+    {
+      "id": "french-fries",
+      "cat": "Small bites",
+      "name": "French Fries",
       "price": 20000
     },
     {
-      "id": "pasta",
-      "cat": "Western",
-      "name": "Pasta",
-      "price": 30000
+      "id": "chicken-nuggets",
+      "cat": "Small bites",
+      "name": "Chicken Nuggets",
+      "price": 20000
     },
     {
-      "id": "pizza",
-      "cat": "Western",
-      "name": "Pizza",
-      "price": 30000
+      "id": "grilled-sausage",
+      "cat": "Small bites",
+      "name": "Grilled Sausage",
+      "price": 20000
     },
     {
-      "id": "burger",
-      "cat": "Western",
-      "name": "Burger",
-      "price": 25000
+      "id": "potato-wedges",
+      "cat": "Small bites",
+      "name": "Potato Wedges",
+      "price": 20000
     },
     {
-      "id": "coffee",
-      "cat": "Drinks",
-      "name": "Coffee",
+      "id": "fried-tempeh",
+      "cat": "Small bites",
+      "name": "Fried Tempeh",
+      "price": 20000
+    },
+    {
+      "id": "latte",
+      "cat": "Coffee & drinks",
+      "name": "Latte (hot or cold)",
+      "price": 20000,
+      "img": "menu/latte.jpg"
+    },
+    {
+      "id": "cappuccino",
+      "cat": "Coffee & drinks",
+      "name": "Cappuccino (hot or cold)",
+      "price": 20000
+    },
+    {
+      "id": "bali-coffee",
+      "cat": "Coffee & drinks",
+      "name": "Bali Coffee",
+      "price": 10000
+    },
+    {
+      "id": "nescafe",
+      "cat": "Coffee & drinks",
+      "name": "Nescafe",
+      "price": 10000
+    },
+    {
+      "id": "tea",
+      "cat": "Coffee & drinks",
+      "name": "Tea (hot or cold)",
+      "price": 8000
+    },
+    {
+      "id": "mineral-water",
+      "cat": "Coffee & drinks",
+      "name": "Mineral Water",
+      "price": 8000
+    },
+    {
+      "id": "sprite",
+      "cat": "Coffee & drinks",
+      "name": "Sprite",
+      "price": 10000
+    },
+    {
+      "id": "fanta",
+      "cat": "Coffee & drinks",
+      "name": "Fanta",
+      "price": 10000
+    },
+    {
+      "id": "coca-cola",
+      "cat": "Coffee & drinks",
+      "name": "Coca Cola",
+      "price": 10000
+    },
+    {
+      "id": "juice-avocado",
+      "cat": "Juices",
+      "name": "Avocado Juice",
+      "price": 20000
+    },
+    {
+      "id": "juice-dragon-fruit",
+      "cat": "Juices",
+      "name": "Dragon Fruit Juice",
+      "price": 20000
+    },
+    {
+      "id": "juice-watermelon",
+      "cat": "Juices",
+      "name": "Watermelon Juice",
+      "price": 15000
+    },
+    {
+      "id": "juice-pineapple",
+      "cat": "Juices",
+      "name": "Pineapple Juice",
+      "price": 15000
+    },
+    {
+      "id": "juice-orange",
+      "cat": "Juices",
+      "name": "Orange Juice",
+      "price": 15000
+    },
+    {
+      "id": "young-coconut",
+      "cat": "Juices",
+      "name": "Young Coconut",
+      "price": 20000,
+      "img": "menu/young-coconut.jpg"
+    },
+    {
+      "id": "jamu",
+      "cat": "Juices",
+      "name": "Traditional Jamu",
+      "price": 35000
+    },
+    {
+      "id": "black-honey",
+      "cat": "Juices",
+      "name": "Natural Black Honey",
       "price": null
     },
     {
-      "id": "juice",
-      "cat": "Drinks",
-      "name": "Fresh Juice",
-      "price": null
+      "id": "bintang-original",
+      "cat": "Beer",
+      "name": "Bintang Original",
+      "price": 35000
     },
     {
-      "id": "coconut",
-      "cat": "Drinks",
-      "name": "Coconut Water",
-      "price": null
+      "id": "bintang-radler",
+      "cat": "Beer",
+      "name": "Bintang Radler",
+      "price": 35000
     },
     {
-      "id": "beer",
-      "cat": "Drinks",
-      "name": "Beer",
-      "price": null
+      "id": "bintang-crystal",
+      "cat": "Beer",
+      "name": "Bintang Crystal",
+      "price": 35000
     }
   ],
   "bikes": [
@@ -123,7 +331,7 @@
       "cc": 125,
       "kind": "Automatic",
       "day": 120000,
-      "week": null,
+      "week": 720000,
       "month": null
     },
     {

@@ -1,0 +1,93 @@
+{
+  "_note": "Scooter photos from Wikimedia Commons, used under their licences with credit. Replace with photos of the TAKE fleet when the owner has them.",
+  "photos": {
+    "beat": {
+      "file": "bikes/beat.jpg",
+      "author": "オーバードライブ83",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2020_Honda_BeAT_CBS_110_(20200622).jpg",
+      "title": "2020 Honda BeAT CBS 110 (20200622).jpg"
+    },
+    "gear": {
+      "file": "bikes/gear.jpg",
+      "author": "オーバードライブ83",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2021_Yamaha_Mio_Gear_125_S_Version_(20220127).jpg",
+      "title": "2021 Yamaha Mio Gear 125 S Version (20220127).jpg"
+    },
+    "scoopy": {
+      "file": "bikes/scoopy.jpg",
+      "author": "MoCars",
+      "licence": "CC0",
+      "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_Scoopy_110.jpg",
+      "title": "2022 Honda Scoopy 110.jpg"
+    },
+    "fazzio": {
+      "file": "bikes/fazzio.jpg",
+      "author": "オーバードライブ83",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Yamaha_Fazzio_Neo_125_(20220405).jpg",
+      "title": "2022 Yamaha Fazzio Neo 125 (20220405).jpg"
+    },
+    "vario": {
+      "file": "bikes/vario.jpg",
+      "author": "オーバードライブ83",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_Vario_125_CBS-ISS_(20221105).jpg",
+      "title": "2022 Honda Vario 125 CBS-ISS (20221105).jpg"
+    },
+    "nmax": {
+      "file": "bikes/nmax.jpg",
+      "author": "AVMOTO",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Yamaha_NMAX_2025.jpg",
+      "title": "Yamaha NMAX 2025.jpg"
+    },
+    "pcx": {
+      "file": "bikes/pcx.jpg",
+      "author": "Ahri Boy",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_PCX_160_Gray_Black.jpg",
+      "title": "2022 Honda PCX 160 Gray Black.jpg"
+    },
+    "adv": {
+      "file": "bikes/adv.jpg",
+      "author": "Chanokchon",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_ADV160.png",
+      "title": "2022 Honda ADV160.png"
+    },
+    "xmax": {
+      "file": "bikes/xmax.jpg",
+      "author": "Cjp24",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Yamaha_XMAX,_2020.jpg",
+      "title": "Yamaha XMAX, 2020.jpg"
+    },
+    "genio": {
+      "file": "bikes/genio.jpg",
+      "author": "オーバードライブ83",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_Genio_CBS-ISS_110_(20221105).jpg",
+      "title": "2022 Honda Genio CBS-ISS 110 (20221105).jpg"
+    },
+    "xsr": {
+      "file": "bikes/xsr.jpg",
+      "author": "Bonel14",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Yamaha_XSR_155.jpg",
+      "title": "Yamaha XSR 155.jpg"
+    }
+  }
+}

@@ -168,6 +168,29 @@ button.btn-ghost { background: transparent; }
   .chat { right: 12px; left: 12px; width: auto; bottom: 80px; height: min(600px, calc(100vh - 100px)); }
 }
 
+/* ===================== chat button: the owner's photo in a circle, with a greeting bubble */
+.chat-buddy { position: fixed; right: 18px; bottom: 16px; z-index: 40; display: flex; align-items: flex-end; gap: 10px; pointer-events: none; }
+.chat-buddy > * { pointer-events: auto; }
+.chat-launch.buddy { position: static; display: flex; flex-direction: column; align-items: center; gap: 0; padding: 0; background: none; box-shadow: none; }
+.buddy-face { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 3px solid var(--green); box-shadow: 0 0 0 4px rgba(255, 90, 110, .25), 0 12px 28px -8px rgba(0, 0, 0, .7); background: #222; }
+.buddy-label { margin-top: -10px; padding: 4px 12px; border-radius: 999px; background: var(--green); color: var(--green-ink); font: 700 13px Inter, sans-serif; white-space: nowrap; box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .6); }
+.buddy-bubble { position: relative; max-width: 260px; margin-bottom: 26px; padding: 14px 16px 12px; border-radius: 16px; background: #fbf3ee; color: #241a1a; font: 500 14px/1.45 Inter, sans-serif; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .7); }
+.buddy-bubble::after { content: ""; position: absolute; right: -8px; bottom: 22px; border: 9px solid transparent; border-right: 0; border-left-color: #fbf3ee; }
+.buddy-ask { display: block; margin-top: 6px; padding: 0; border: 0; background: none; color: #c4243a; font: 700 14px Inter, sans-serif; cursor: pointer; text-decoration: underline; }
+.buddy-x { position: absolute; top: -12px; left: -12px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fbf3ee; background: #241a1a; color: #fbf3ee; font-size: 18px; line-height: 1; cursor: pointer; }
+.chat { bottom: 112px; }
+@media (max-width: 680px) { .buddy-face { width: 58px; height: 58px; } .buddy-bubble { max-width: 210px; font-size: 13px; } .chat { bottom: 104px; } }
+
+/* ===================== photos on menu and scooter cards */
+.dish.has-img { padding: 0; overflow: hidden; display: grid; grid-template-columns: 110px 1fr auto; align-items: center; gap: 14px; padding-right: 18px; }
+.dish-img { width: 110px; height: 100%; min-height: 110px; object-fit: cover; display: block; }
+.dish.has-img .dish-body { padding: 14px 0; }
+.dish-desc { font-size: 13px !important; color: var(--mute); margin: 4px 0 6px; line-height: 1.45; }
+.bike { position: relative; }
+.bike-img { width: calc(100% + 56px); max-width: none; margin: -28px -28px 14px; aspect-ratio: 16 / 10; object-fit: cover; display: block; border-radius: var(--r) var(--r) 0 0; background: #fff; }
+.bike-credit { position: absolute; top: 8px; right: 10px; max-width: 70%; font-size: 10px; color: rgba(255, 255, 255, .85); background: rgba(0, 0, 0, .55); padding: 2px 7px; border-radius: 6px; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bike-credit:hover { text-decoration: underline; }
+
 /* ===================== terms page */
 .terms { max-width: 860px; margin: 0 auto; padding: 34px; }
 .terms h2 { font-size: 24px; margin: 30px 0 10px; scroll-margin-top: 30px; }
