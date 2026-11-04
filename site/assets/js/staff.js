@@ -61,7 +61,7 @@
         var mode = { dine: 'Eat here' + (o.tbl ? ' · table ' + esc(o.tbl) : ''), pickup: 'Pick up', delivery: 'Delivery' }[o.mode];
         return '<div class="tk' + (c[0] === 'new' && ago(o.created).indexOf('h') > 0 ? ' late' : '') + '"><header><span>#' + o.id + ' ' + esc(o.name) + '</span><span>' + ago(o.created) + '</span></header>' +
           '<div class="meta">' + mode + (o.address ? ': ' + esc(o.address) : '') + '</div><ul>' + o.items.map(function (i) { return '<li><b>' + i.qty + '×</b> ' + esc(i.name) + '</li>'; }).join('') + '</ul>' +
-          (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total - (o.discount || 0)) + (o.discount ? ' (points used)' : '') + (o.paid ? ' · <b class="ok">paid' + (o.pay === 'online' ? ' online' : '') + '</b>' : o.pay === 'online' ? ' · <b class="wait">paying online...</b>' : ' · pay at counter') + (o.member_email ? ' · ★ member' : '') + '</div>' +
+          (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total - (o.discount || 0)) + (o.discount ? ' (points used)' : '') + (o.paid ? ' · <b class="ok">paid · ' + esc(o.pay || '') + '</b>' : o.pay_claimed ? ' · <b class="wait">customer says paid by ' + esc(o.pay) + ': check</b>' : o.pay === 'online' || o.pay === 'test' ? ' · <b class="wait">paying online...</b>' : ' · will pay by ' + esc(o.pay || 'cash')) + (o.member_email ? ' · ★ member' : '') + '</div>' +
           '<div class="acts">' + (next[o.status] ? '<button class="sb go" data-o="' + o.id + '" data-s="' + next[o.status][0] + '">' + next[o.status][1] + '</button>' : '') +
           (o.paid ? '' : '<button class="sb" data-o="' + o.id + '" data-paid="1">Paid</button>') +
           '<a class="sb" href="' + telWa(o.wa) + '" target="_blank" rel="noopener">WhatsApp</a>' +
@@ -70,7 +70,8 @@
     }).join('');
     $('#kitchen').querySelectorAll('[data-o]').forEach(function (b) {
       b.onclick = function () {
-        var body = b.dataset.paid ? { paid: true } : { status: b.dataset.s };
+        var body = b.dataset.paid ? { paid: true, method: askMethod() } : { status: b.dataset.s };
+        if (body.paid && !body.method) return;
         if (body.status === 'cancelled' && !confirm('Cancel this order?')) return;
         api('orders/' + b.dataset.o, 'PATCH', body).then(refresh);
       };
@@ -98,7 +99,7 @@
           '<div><b>' + what + '</b>' + (bike ? ' · ' + esc(bike.plate || 'bike ' + bike.id) : '') + '</div>' +
           '<div class="meta">' + esc(b.start) + (b.end ? ' → ' + esc(b.end) : '') + (b.people ? ' · ' + b.people + ' people' : '') + (late(b) ? ' · <b style="color:#ff8a96">OVERDUE</b>' : '') + '</div>' +
           (b.hotel ? '<div class="meta">' + esc(b.hotel) + '</div>' : '') + (b.note ? '<div class="meta">"' + esc(b.note) + '"</div>' : '') +
-          '<div class="meta">' + (b.price ? rp(b.price - (b.discount || 0)) : 'no price yet') + (b.deposit ? ' · deposit ' + rp(b.deposit) : '') + (b.paid ? ' · <b class="ok">paid' + (b.pay === 'online' ? ' online' : '') + '</b>' : b.status === 'pending' ? ' · <b class="wait">paying online...</b>' : b.price ? ' · <b class="wait">not paid</b>' : '') + (b.km_out != null ? ' · km out ' + b.km_out : '') + (b.km_in != null ? ' · in ' + b.km_in : '') + '</div>' +
+          '<div class="meta">' + (b.price ? rp(b.price - (b.discount || 0)) : 'no price yet') + (b.deposit ? ' · deposit ' + rp(b.deposit) : '') + (b.paid ? ' · <b class="ok">paid · ' + esc(b.pay || '') + '</b>' : b.pay_claimed ? ' · <b class="wait">customer says paid by ' + esc(b.pay) + ': check</b>' : b.status === 'pending' ? ' · <b class="wait">paying online...</b>' : b.price ? ' · <b class="wait">not paid · ' + esc(b.pay || 'cash') + '</b>' : '') + (b.km_out != null ? ' · km out ' + b.km_out : '') + (b.km_in != null ? ' · in ' + b.km_in : '') + '</div>' +
           (b.kind === 'rent' ? '<div class="meta">' + (b.member_email ? esc(b.member_email) + ' · ' : 'walk-in · ') + (b.docs.length ? b.docs.map(function (d) { return '<button type="button" class="sb" data-doc="' + d.id + '">' + (d.kind === 'passport' ? 'Passport' : 'Licence') + '</button>'; }).join(' ') : (b.member_email ? '<b class="wait">no documents</b>' : 'check documents at the desk')) + '</div>' : '') +
           '<div class="acts">' + acts(b) + '<a class="sb" href="' + telWa(b.wa) + '" target="_blank" rel="noopener">WhatsApp</a></div></div>';
       }).join('') + '</div>';
@@ -123,7 +124,7 @@
       });
     });
     if (act === 'cancel') { if (confirm('Cancel booking #' + id + '?')) api('bookings/' + id, 'PATCH', { status: 'cancelled' }).then(refresh); return; }
-    if (act === 'paid') return api('bookings/' + id, 'PATCH', { paid: true }).then(refresh);
+    if (act === 'paid') { var pm = askMethod(); if (!pm) return; return api('bookings/' + id, 'PATCH', { paid: true, method: pm }).then(refresh); }
     if (act === 'done') return api('bookings/' + id, 'PATCH', { action: 'checkin' }).then(refresh);
     if (act === 'extend') return dialog('Extend #' + id, [['end', 'New return date', 'date', b.end], ['price', 'New total price (Rp)', 'number', b.price]], function (v) { return api('bookings/' + id, 'PATCH', { end: v.end, price: v.price }); });
     if (act === 'track') { $('[data-tab=map]').click(); setTimeout(function () { track(id); }, 300); return; }
@@ -305,4 +306,9 @@
   }
 
   if (pin) api('login').then(start).catch(function () {});
+  // Which way did the money come? Kept per order, and summed in the takings.
+  function askMethod() {
+    var a = prompt('Paid how? Type 1, 2, 3 or 4\n1 Cash\n2 QRIS\n3 Bank transfer\n4 Card at the counter', '1');
+    return a == null ? null : ({ 1: 'cash', 2: 'qris', 3: 'transfer', 4: 'card' })[String(a).trim()] || 'cash';
+  }
 })();

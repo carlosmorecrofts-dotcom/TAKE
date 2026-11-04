@@ -294,6 +294,7 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 </div>
 <button class="cart-fab only-eat" id="cartFab" type="button" hidden>Order <b id="cartCount">0</b> · <span id="cartTotal"></span></button>
 <script src="/assets/js/data.js"></script>
+<script src="/assets/js/pay.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/member.js"></script>
 <script src="/assets/js/book.js"></script>

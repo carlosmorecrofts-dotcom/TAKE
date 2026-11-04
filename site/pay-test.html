@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Test payment · TAKE</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#120a0b;color:#f6ecea;font:16px/1.5 Inter,system-ui,sans-serif;padding:16px}
+.card{max-width:420px;width:100%;background:#1f1214;border:1px solid #3a2226;border-radius:20px;padding:26px}
+h1{font-size:22px;margin:0 0 4px}.amt{font-size:34px;font-weight:800;margin:14px 0}.warn{background:#3a2a07;color:#ffd58a;border-radius:12px;padding:10px 12px;font-size:14px}
+button{width:100%;margin-top:12px;padding:14px;border-radius:999px;border:0;font:700 16px Inter,sans-serif;cursor:pointer}
+.ok{background:#3ee08f;color:#06210f}.no{background:none;color:#f6ecea;border:1px solid #3a2226}p.msg{min-height:1.5em}
+</style></head><body><main class="card">
+<h1>TAKE test payment</h1><p class="warn">Test mode. No money moves. This page stands in for the real payment page (cards, e-wallets, QRIS) until TAKE's payment account is connected.</p>
+<div class="amt" id="amt"></div><p id="what"></p>
+<button class="ok" id="pay">Pay (test)</button><button class="no" id="fail">Payment fails (test)</button><p class="msg" id="msg"></p>
+</main><script>
+var q=new URLSearchParams(location.search),back=q.get('back')||'/';
+if(!/^https?:\/\/[^/]*take-canggu|^\//.test(back)&&back.indexOf(location.origin)!==0)back='/';
+document.getElementById('amt').textContent='Rp '+Number(q.get('amount')||0).toLocaleString('id-ID');
+document.getElementById('what').textContent=(q.get('kind')==='order'?'Food order #':'Booking #')+q.get('id');
+function go(result){var m=document.getElementById('msg');m.textContent='Processing...';
+fetch('/api/pay/test',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:q.get('kind'),id:q.get('id'),t:q.get('t'),result:result})})
+.then(function(r){return r.json()}).then(function(j){if(j.error){m.textContent=j.error;return}m.textContent=j.ok?'Paid. Taking you back...':'Payment failed. Taking you back...';setTimeout(function(){location.href=back},1200)})
+.catch(function(e){m.textContent=e.message})}
+document.getElementById('pay').onclick=function(){go('ok')};document.getElementById('fail').onclick=function(){go('fail')};
+</script></body></html>

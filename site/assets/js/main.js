@@ -102,7 +102,7 @@
     // pay online and points appear only when they can work
     document.addEventListener('take:member-ready', function () {
       var m = window.TAKE_MEMBER || {}, cfg = m.config || {}, me = m.data, L = T.loyalty;
-      var ps = $('#paySeg'); if (ps) ps.hidden = !cfg.pay;
+      if (window.TAKE_PAY) { TAKE_PAY.load(cfg); TAKE_PAY.picker($('#paySeg'), 'cash'); }
       var pr = $('#ptsRow');
       if (pr && me && me.points >= L.redeemPoints) { pr.hidden = false; pr.querySelector('span').textContent = 'Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.'; }
       if (me) { if (!of.name.value) of.name.value = me.member.name || ''; if (!of.wa.value) of.wa.value = me.member.wa || ''; }
@@ -114,7 +114,7 @@
       var d = Object.fromEntries(new FormData(of));
       d.items = Object.keys(cart).map(function (id) { return { id: id, qty: cart[id] }; });
       d.usePoints = !!(of.usePoints && of.usePoints.checked);
-      if (!d.pay) d.pay = 'counter';
+      d.pay = (window.TAKE_PAY && TAKE_PAY.chosen($('#paySeg'))) || 'cash';
       var label = { dine: 'Eat here' + (d.tbl ? ' (table ' + d.tbl + ')' : ''), pickup: 'Pick up', delivery: 'Delivery to: ' + d.address }[d.mode];
       var text = function (id) {
         return ['TAKE order' + (id ? ' #' + id : ''), Object.keys(cart).map(function (x) { return cart[x] + ' x ' + byId[x].name; }).join('\n'),
@@ -126,7 +126,7 @@
         try { localStorage.setItem('take_last_order', link); } catch (x) {}
         cart = {}; save(); renderMenu(); renderCart(); of.reset(); modeSync();
         if (r.pay_url) { location.href = r.pay_url; return; }   // the staff app shows it at once
-        wa(T.wa.eat, text(r.id) + '\nFollow: ' + link);
+        wa(T.wa.eat, text(r.id) + '\nPayment: ' + ((window.TAKE_PAY && TAKE_PAY.find(d.pay)) || { name: d.pay }).name + '\nFollow: ' + link);
         location.href = link;
       }).catch(function (err) {
         note.textContent = 'Could not reach our system (' + err.message + '). We opened WhatsApp instead: just press send.';
@@ -201,6 +201,8 @@
 
   // ---- status page
   var qs = new URLSearchParams(location.search);
+  function payCfg() { return (window.TAKE_MEMBER && window.TAKE_MEMBER.config) || {}; }
+  function payBox(o) { if (!window.TAKE_PAY) return ''; if (!TAKE_PAY.methods.length) TAKE_PAY.load(payCfg()); return TAKE_PAY.instructions(o); }
   function showStatus(html) { var s = $('#status'); s.hidden = false; $('#statusCard').innerHTML = html; s.scrollIntoView(); }
   function line(steps, at) { var i = steps.indexOf(at); return '<div class="steps-line">' + steps.map(function (s, j) { return '<span class="' + (j <= i ? 'on' : '') + '">' + s + '</span>'; }).join('') + '</div>'; }
   if (qs.get('order')) {
@@ -211,7 +213,7 @@
           (o.status === 'cancelled' ? '<p>The kitchen cancelled this order. WhatsApp us if this is a surprise.</p>' : line(['Received', 'Cooking', names.ready, 'Done'], names[o.status])) +
           '<ul class="list">' + o.items.map(function (i) { return '<li>' + i.qty + ' × ' + esc(i.name) + '<em>' + (i.price ? k(i.price * i.qty) : 'at counter') + '</em></li>'; }).join('') + '</ul>' +
           '<p class="cart-sum">Total <b>' + rp(o.total - (o.discount || 0)) + '</b>' + (o.discount ? ' <small class="mute">(' + rp(o.discount) + ' off with points)</small>' : '') + '</p>' +
-          (o.paid ? '<p class="chip-paid">Paid' + (o.pay === 'online' ? ' online' : '') + '</p>' : o.invoice_url ? '<a class="btn btn-green" href="' + esc(o.invoice_url) + '">Pay now</a>' : '') +
+          (o.status === 'cancelled' ? '' : payBox({ kind: 'order', id: o.id, t: qs.get('t'), amount: o.total - (o.discount || 0), pay: o.pay, paid: o.paid, claimed: o.claimed, invoice_url: o.invoice_url, canPay: payCfg().pay })) +
           '<p class="note">This page updates by itself. Keep it open or save the link.</p>');
         if (o.status !== 'done' && o.status !== 'cancelled') setTimeout(poll, 15000);
       }).catch(function () { showStatus('<h2>Order not found</h2><p>Check the link, or WhatsApp the kitchen.</p>'); });
@@ -230,7 +232,8 @@
           (b.price ? '<p class="cart-sum">' + (b.paid ? 'Paid ' : 'To pay ') + '<b>' + rp(b.price - (b.discount || 0)) + '</b></p>' : '') +
           (b.status === 'pending' && b.hold ? '<p class="note">We hold the scooter for you until ' + new Date(b.hold.replace(' ', 'T') + 'Z').toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Makassar' }) + ' Bali time. After that the dates may go to someone else.</p>' : '') +
           (b.status === 'pending' && !b.hold ? '<p class="note">The 30-minute hold ran out. Pay now and we check the scooter is still free.</p>' : '') +
-          (b.canPay ? '<button class="btn btn-green" type="button" id="payNow">Pay now</button><p class="form-note" id="payNote"></p>' : '') +
+          (b.price && ['cancelled', 'returned'].indexOf(b.status) < 0 && !(b.status === 'pending' && b.hold) ? payBox({ kind: 'booking', id: b.id, t: bt, amount: b.price - (b.discount || 0), pay: b.status === 'pending' ? 'online' : b.pay, paid: b.paid, claimed: b.claimed, canPay: b.canPay }) : '') +
+          (b.status === 'pending' && b.canPay ? '<button class="btn btn-green" type="button" id="payNow">Pay now</button><p class="form-note" id="payNote"></p>' : '') +
           (b.status === 'request' ? '<p class="note">We confirm on WhatsApp during opening times, 7am to 8pm.</p>' : '') +
           (b.status === 'confirmed' && b.kind === 'rent' ? '<p class="note">Pick it up at the shop between 7am and 8pm on ' + esc(b.start) + '. Bring your passport and driving licence.</p>' : '') +
           (b.status === 'out' && b.kind === 'rent' ? '<div class="card" style="margin-top:14px"><b>Broken down, flat tyre or lost?</b><p class="mute">Share your location so we know where you are, and WhatsApp us. It is only shared while sharing is on, and deleted when the bike is back.</p><div class="row" style="margin-top:12px"><button class="btn btn-green" id="shareLoc" type="button">' + (watching ? 'Sharing my location' : 'Share my location') + '</button><a class="btn btn-ghost" href="https://wa.me/' + T.wa.ride + '?text=' + encodeURIComponent('Help, booking #' + b.id + ' ' + name) + '" target="_blank" rel="noopener">WhatsApp help</a></div><p class="form-note" id="locNote"></p></div>' : ''));

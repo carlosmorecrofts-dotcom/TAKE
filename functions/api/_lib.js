@@ -155,3 +155,31 @@ export async function sendMail(env, to, subject, html) {
   });
   if (!r.ok) throw new Error('email could not be sent (' + r.status + ')');
 }
+
+// ---------------- passwords (PBKDF2-SHA256, 100k rounds: the most Workers allow)
+const hex = (u8) => [...u8].map((b) => b.toString(16).padStart(2, '0')).join('');
+export async function hashPassword(pw, saltHex) {
+  const salt = saltHex ? Uint8Array.from(saltHex.match(/../g).map((h) => parseInt(h, 16))) : crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256);
+  return { hash: hex(new Uint8Array(bits)), salt: hex(salt) };
+}
+
+// ---------------- how a customer can pay
+// cash / qris / transfer: paid at TAKE or with the customer's own app; the staff tick "paid".
+// online: Xendit page (cards, e-wallets, QRIS, virtual accounts), marked paid by itself.
+// test: a pretend payment page, only while TEST_PAY=1, so the whole flow can be tried.
+export function payMethods(env) {
+  const list = [
+    { id: 'cash', name: 'Cash', note: 'At the counter, to the driver on delivery, or when you pick up the scooter.' },
+    { id: 'qris', name: 'QRIS', note: 'Scan with any Indonesian bank or e-wallet app: GoPay, OVO, DANA, ShopeePay, BCA, Mandiri.' },
+    { id: 'transfer', name: 'Bank transfer', note: 'To the TAKE bank account, then send the receipt on WhatsApp.' },
+  ];
+  if (payOn(env)) list.push({ id: 'online', name: 'Card or e-wallet online', note: 'Visa, Mastercard, GoPay, OVO, DANA, QRIS or virtual account, on a secure payment page.', online: true });
+  if (env.TEST_PAY === '1') list.push({ id: 'test', name: 'Test payment', note: 'Pretend online payment for testing. No money moves.', online: true });
+  return list;
+}
+export const payDetails = (env) => ({
+  bank: env.BANK_ACCOUNT ? { bank: env.BANK_NAME || '', holder: env.BANK_HOLDER || '', account: env.BANK_ACCOUNT } : null,
+  qris: env.QRIS_IMAGE || null,
+});

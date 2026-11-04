@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS members (
   email TEXT NOT NULL UNIQUE,
   name TEXT, wa TEXT,
   terms_version TEXT, terms_at TEXT,       -- the terms they accepted, and when
+  pass_hash TEXT, pass_salt TEXT,          -- PBKDF2-SHA256 password (sign-in without email)
   created TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS login_tokens (   -- email sign-in links, stored hashed
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   status TEXT NOT NULL DEFAULT 'request', -- pending (awaiting payment) | request | confirmed | out | returned | cancelled
   hold_until TEXT,                   -- a pending booking holds a bike until then
   price INTEGER, discount INTEGER DEFAULT 0, points_used INTEGER DEFAULT 0,
-  deposit INTEGER, paid INTEGER DEFAULT 0, pay TEXT, invoice_id TEXT, invoice_url TEXT,
+  deposit INTEGER, paid INTEGER DEFAULT 0, pay TEXT, invoice_id TEXT, invoice_url TEXT, pay_claimed TEXT,
   km_out INTEGER, km_in INTEGER, fuel_out TEXT, fuel_in TEXT,
   note TEXT, staff_note TEXT,
   created TEXT NOT NULL DEFAULT (datetime('now')),
@@ -68,7 +69,7 @@ CREATE TABLE IF NOT EXISTS orders (
   items TEXT NOT NULL,       -- JSON [{id,name,price,qty}]
   total INTEGER NOT NULL, discount INTEGER DEFAULT 0, points_used INTEGER DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'new', -- new | cooking | ready | done | cancelled
-  paid INTEGER DEFAULT 0, pay TEXT, invoice_id TEXT, invoice_url TEXT,
+  paid INTEGER DEFAULT 0, pay TEXT, invoice_id TEXT, invoice_url TEXT, pay_claimed TEXT,
   note TEXT,
   created TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -85,3 +86,5 @@ CREATE TABLE IF NOT EXISTS maintenance (
   km INTEGER, what TEXT, cost INTEGER,
   at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS signin_fails (email TEXT NOT NULL, at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE INDEX IF NOT EXISTS signin_fails_e ON signin_fails(email, at);

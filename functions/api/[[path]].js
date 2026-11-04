@@ -5,7 +5,7 @@
 //
 // Public    GET config | GET bikes | GET availability?model=&from=&days=
 //           POST orders | GET orders/:id?t= | POST bookings | GET bookings/:id?t= | POST pay | POST ping
-// Members   POST member/login | GET member/verify?t= | GET member/me | PATCH member/me | POST member/logout
+// Members   POST member/register | POST member/signin | POST member/password | POST member/login (email link) | GET member/verify?t= | GET member/me | PATCH member/me | POST member/logout
 //           POST member/terms | POST member/docs | GET member/docs/:id | DELETE member/docs/:id
 // Xendit    POST pay/xendit (webhook, x-callback-token)
 // Staff     everything under staff/ with header x-staff-pin
@@ -13,7 +13,7 @@ import {
   J, bad, rnd, str, int, body, sha, same, isJson, today, addDays, days, isDate,
   member, startSession, endSession, balance, riderCheck, award,
   calendar, rangeFree, rentPrice, fleetSize,
-  payOn, createInvoice, invoiceStatus, markPaid, mailOn, sendMail,
+  payOn, createInvoice, invoiceStatus, markPaid, mailOn, sendMail, hashPassword, payMethods, payDetails,
   MENU, BIKES, LOYALTY, RENTAL,
 } from './_lib.js';
 
@@ -39,7 +39,8 @@ export async function onRequest(ctx) {
 // ===================================================================== public
 async function pub(request, env, db, p, m, url) {
   if (p[0] === 'config' && m === 'GET') {
-    return J({ pay: payOn(env), members: mailOn(env) || env.DEV_LOGIN_LINKS === '1', loyalty: LOYALTY, rental: RENTAL });
+    const methods = payMethods(env);
+    return J({ pay: methods.some((x) => x.online), methods, payDetails: payDetails(env), members: true, emailLinks: mailOn(env), loyalty: LOYALTY, rental: RENTAL });
   }
   if (p[0] === 'bikes' && m === 'GET') {
     const { results } = await db.prepare("SELECT model, SUM(status='available') AS free, SUM(status IN ('available','out')) AS total FROM bikes GROUP BY model").all();
@@ -67,21 +68,22 @@ async function pub(request, env, db, p, m, url) {
     const total = items.reduce((s, i) => s + (i.price || 0) * i.qty, 0);
     const unpriced = items.some((i) => !i.price);
     const red = me && b.usePoints ? await redeem(db, me, total) : { discount: 0, points: 0 };
-    const online = b.pay === 'online' && payOn(env) && !unpriced && total - red.discount > 0;
+    const method = pickMethod(env, b.pay);
+    const online = !!method.online && !unpriced && total - red.discount > 0;
     const t = rnd(12);
     const r = await db.prepare('INSERT INTO orders (token,member_id,name,wa,mode,address,tbl,items,total,discount,points_used,pay,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)')
-      .bind(t, me ? me.id : null, name, wa, mode, str(b.address, 300), str(b.tbl, 10), JSON.stringify(items), total, red.discount, red.points, online ? 'online' : 'counter', str(b.note, 500)).run();
+      .bind(t, me ? me.id : null, name, wa, mode, str(b.address, 300), str(b.tbl, 10), JSON.stringify(items), total, red.discount, red.points, online || !method.online ? method.id : 'cash', str(b.note, 500)).run();
     const id = r.meta.last_row_id;
     if (red.points) await db.prepare('INSERT INTO points_log (member_id, delta, reason, ref) VALUES (?,?,?,?)').bind(me.id, -red.points, 'Used on order #' + id, 'spend:order:' + id).run();
     let pay_url = null;
-    if (online) pay_url = await invoiceFor(env, db, 'order', id, t, total - red.discount, me, 'TAKE Coffee order #' + id, url.origin + '/?order=' + id + '&t=' + t);
+    if (online) pay_url = await invoiceFor(env, db, 'order', id, t, total - red.discount, me, 'TAKE Coffee order #' + id, url.origin + '/?order=' + id + '&t=' + t, method.id, url);
     return J({ id, token: t, total, discount: red.discount, items, pay_url });
   }
   if (p[0] === 'orders' && p[1] && m === 'GET') {
     let o = await db.prepare('SELECT * FROM orders WHERE id=? AND token=?').bind(int(p[1]), url.searchParams.get('t') || '').first();
     if (!o) return bad('not found', 404);
-    if (!o.paid && o.invoice_id && payOn(env)) o = (await recheck(env, db, 'order', o)) || o;
-    return J({ id: o.id, status: o.status, mode: o.mode, items: JSON.parse(o.items), total: o.total, discount: o.discount, paid: !!o.paid, pay: o.pay, invoice_url: o.paid ? null : o.invoice_url, created: o.created });
+    if (!o.paid && o.invoice_id && payOn(env) && !String(o.invoice_id).startsWith('test-')) o = (await recheck(env, db, 'order', o)) || o;
+    return J({ id: o.id, status: o.status, mode: o.mode, items: JSON.parse(o.items), total: o.total, discount: o.discount, paid: !!o.paid, pay: o.pay, claimed: o.pay_claimed, invoice_url: o.paid ? null : o.invoice_url, created: o.created });
   }
 
   if (p[0] === 'bookings' && m === 'POST' && !p[1]) {
@@ -91,17 +93,34 @@ async function pub(request, env, db, p, m, url) {
   if (p[0] === 'bookings' && p[1] && m === 'GET') {
     let o = await db.prepare('SELECT * FROM bookings WHERE id=? AND token=?').bind(int(p[1]), url.searchParams.get('t') || '').first();
     if (!o) return bad('not found', 404);
-    if (!o.paid && o.invoice_id && payOn(env)) o = (await recheck(env, db, 'booking', o)) || o;
+    if (!o.paid && o.invoice_id && payOn(env) && !String(o.invoice_id).startsWith('test-')) o = (await recheck(env, db, 'booking', o)) || o;
     const held = o.status === 'pending' && o.hold_until && o.hold_until > new Date().toISOString().replace('T', ' ').slice(0, 19);
     return J({ id: o.id, kind: o.kind, model: o.model, start: o.start, end: o.end, status: o.status, price: o.price, discount: o.discount,
-      paid: !!o.paid, hold: held ? o.hold_until : null, canPay: payOn(env) && !o.paid && !!o.price && ['pending', 'request', 'confirmed'].includes(o.status) });
+      paid: !!o.paid, pay: o.pay, claimed: o.pay_claimed, hold: held ? o.hold_until : null, canPay: payMethods(env).some((x) => x.online) && !o.paid && !!o.price && ['pending', 'request', 'confirmed'].includes(o.status) });
   }
 
   // Pay for something that exists already: a booking whose 30 minutes ran out,
   // a request the staff priced, or an order the guest now wants to pay online.
-  if (p[0] === 'pay' && m === 'POST') {
-    if (!payOn(env)) return bad('online payment is not switched on yet', 409);
+  // The customer says "I have paid" (QRIS or transfer): the staff see it and check.
+  if (p[0] === 'pay' && p[1] === 'claim' && m === 'POST') {
+    const b = await body(request), tbl = b.kind === 'order' ? 'orders' : 'bookings';
+    const r = await db.prepare(`UPDATE ${tbl} SET pay_claimed=datetime('now'), pay=COALESCE(?,pay) WHERE id=? AND token=? AND paid=0`)
+      .bind(['qris', 'transfer', 'cash'].includes(b.method) ? b.method : null, int(b.id), str(b.t, 40) || '').run();
+    return r.meta.changes ? J({ ok: true }) : bad('not found or already paid', 404);
+  }
+  // Test payments: only while TEST_PAY=1. Marks it paid exactly as a real payment would.
+  if (p[0] === 'pay' && p[1] === 'test' && m === 'POST') {
+    if (env.TEST_PAY !== '1') return bad('test payments are off', 404);
     const b = await body(request), kind = b.kind === 'order' ? 'order' : 'booking';
+    const o = await db.prepare(`SELECT id FROM ${kind === 'order' ? 'orders' : 'bookings'} WHERE id=? AND token=?`).bind(int(b.id), str(b.t, 40) || '').first();
+    if (!o) return bad('not found', 404);
+    if (b.result === 'fail') return J({ ok: false });
+    return J({ ok: await markPaid(db, kind, o.id, null, 'test') });
+  }
+  if (p[0] === 'pay' && m === 'POST' && !p[1]) {
+    const b = await body(request), method = pickMethod(env, b.method || (payOn(env) ? 'online' : 'test'));
+    if (!method.online) return bad('online payment is not switched on yet', 409);
+    const kind = b.kind === 'order' ? 'order' : 'booking';
     const o = await db.prepare(`SELECT * FROM ${kind === 'order' ? 'orders' : 'bookings'} WHERE id=? AND token=?`).bind(int(b.id), str(b.t, 40) || '').first();
     if (!o) return bad('not found', 404);
     if (o.paid) return bad('already paid', 409);
@@ -121,7 +140,7 @@ async function pub(request, env, db, p, m, url) {
     }
     const me = o.member_id ? await db.prepare('SELECT * FROM members WHERE id=?').bind(o.member_id).first() : null;
     const back = url.origin + (kind === 'order' ? '/?order=' : '/ride?booking=') + o.id + '&t=' + o.token;
-    return J({ pay_url: await invoiceFor(env, db, kind, o.id, o.token, amount, me, (kind === 'order' ? 'TAKE Coffee order #' : 'TAKE booking #') + o.id, back) });
+    return J({ pay_url: await invoiceFor(env, db, kind, o.id, o.token, amount, me, (kind === 'order' ? 'TAKE Coffee order #' : 'TAKE booking #') + o.id, back, method.id, url) });
   }
 
   // Live location from the renter's phone, only while the bike is out.
@@ -144,9 +163,16 @@ async function redeem(db, me, amount) {
   return { discount: Math.min(LOYALTY.redeemValue, amount), points: LOYALTY.redeemPoints };
 }
 
-async function invoiceFor(env, db, kind, id, token, amount, me, description, back) {
-  const inv = await createInvoice(env, { ref: `take-${kind}-${id}-${rnd(3)}`, amount, email: me && me.email, description, back });
-  await db.prepare(`UPDATE ${kind === 'order' ? 'orders' : 'bookings'} SET invoice_id=?, invoice_url=?, pay='online' WHERE id=?`).bind(inv.id, inv.url, id).run();
+function pickMethod(env, want) {
+  const all = payMethods(env);
+  return all.find((x) => x.id === want) || all[0];
+}
+
+async function invoiceFor(env, db, kind, id, token, amount, me, description, back, via, url) {
+  const inv = via === 'test'
+    ? { id: 'test-' + rnd(6), url: url.origin + '/pay-test?kind=' + kind + '&id=' + id + '&t=' + token + '&amount=' + amount + '&back=' + encodeURIComponent(back) }
+    : await createInvoice(env, { ref: `take-${kind}-${id}-${rnd(3)}`, amount, email: me && me.email, description, back });
+  await db.prepare(`UPDATE ${kind === 'order' ? 'orders' : 'bookings'} SET invoice_id=?, invoice_url=?, pay=? WHERE id=?`).bind(inv.id, inv.url, via || 'online', id).run();
   return inv.url;
 }
 
@@ -185,15 +211,17 @@ async function rentBooking(request, env, db, b, url) {
   if (!free.ok) return bad(free.total ? 'sorry, this scooter is fully booked on ' + free.fullOn : 'this scooter is not in the fleet right now', 409, { fullOn: free.fullOn });
   const price = rentPrice(model, n);
   const red = price && b.usePoints ? await redeem(db, me, price) : { discount: 0, points: 0 };
-  const online = payOn(env) && price && price - red.discount > 0;
+  const method = pickMethod(env, b.pay);
+  const online = !!method.online && price && price - red.discount > 0;
   const t = rnd(12);
   const r = await db.prepare(`INSERT INTO bookings (token,kind,member_id,name,wa,hotel,model,start,end,status,hold_until,price,discount,points_used,note)
     VALUES (?,?,?,?,?,?,?,?,?,?,${online ? "datetime('now', ?)" : '?'},?,?,?,?)`)
     .bind(t, 'rent', me.id, me.name, me.wa, str(b.hotel, 200), model, start, end, online ? 'pending' : 'request', online ? '+' + RENTAL.holdMinutes + ' minutes' : null, price, red.discount, red.points, str(b.note, 500)).run();
   const id = r.meta.last_row_id;
+  if (!online) await db.prepare('UPDATE bookings SET pay=? WHERE id=?').bind(method.online ? 'cash' : method.id, id).run();
   if (red.points) await db.prepare('INSERT INTO points_log (member_id, delta, reason, ref) VALUES (?,?,?,?)').bind(me.id, -red.points, 'Used on booking #' + id, 'spend:booking:' + id).run();
   let pay_url = null;
-  if (online) pay_url = await invoiceFor(env, db, 'booking', id, t, price - red.discount, me, `TAKE ${BIKES[model].name}, ${start} to ${end} (#${id})`, url.origin + '/ride?booking=' + id + '&t=' + t);
+  if (online) pay_url = await invoiceFor(env, db, 'booking', id, t, price - red.discount, me, `TAKE ${BIKES[model].name}, ${start} to ${end} (#${id})`, url.origin + '/ride?booking=' + id + '&t=' + t, method.id, url);
   return J({ id, token: t, price, discount: red.discount, days: n, pay_url, status: online ? 'pending' : 'request' });
 }
 
@@ -212,6 +240,27 @@ async function xenditHook(request, env, db) {
 // ===================================================================== members
 async function members(request, env, db, p, m, url) {
   const what = p[1];
+  if (what === 'register' && m === 'POST') {
+    const b = await body(request), email = (str(b.email, 120) || '').toLowerCase(), pw = String(b.password || '');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return bad('please enter a valid email');
+    if (pw.length < 8) return bad('the password needs at least 8 characters');
+    const old = await db.prepare('SELECT id, pass_hash FROM members WHERE email=?').bind(email).first();
+    if (old && old.pass_hash) return bad('this email already has an account: sign in instead', 409);
+    const h = await hashPassword(pw);
+    if (old) await db.prepare('UPDATE members SET pass_hash=?, pass_salt=?, name=COALESCE(?,name), wa=COALESCE(?,wa) WHERE id=?').bind(h.hash, h.salt, str(b.name, 80), str(b.wa, 30), old.id).run();
+    else await db.prepare('INSERT INTO members (email, name, wa, pass_hash, pass_salt) VALUES (?,?,?,?,?)').bind(email, str(b.name, 80), str(b.wa, 30), h.hash, h.salt).run();
+    const mem = await db.prepare('SELECT id FROM members WHERE email=?').bind(email).first();
+    return J({ ok: true }, 200, { 'Set-Cookie': await startSession(db, mem.id) });
+  }
+  if (what === 'signin' && m === 'POST') {
+    const b = await body(request), email = (str(b.email, 120) || '').toLowerCase();
+    const fails = await db.prepare("SELECT COUNT(*) n FROM signin_fails WHERE email=? AND at > datetime('now','-15 minutes')").bind(email).first();
+    if (fails.n >= 8) return bad('too many tries: please wait 15 minutes', 429);
+    const mem = await db.prepare('SELECT id, pass_hash, pass_salt FROM members WHERE email=?').bind(email).first();
+    const ok = mem && mem.pass_hash && same((await hashPassword(String(b.password || ''), mem.pass_salt)).hash, mem.pass_hash);
+    if (!ok) { await db.prepare('INSERT INTO signin_fails (email) VALUES (?)').bind(email).run(); return bad('wrong email or password', 401); }
+    return J({ ok: true }, 200, { 'Set-Cookie': await startSession(db, mem.id) });
+  }
   if (what === 'login' && m === 'POST') {
     const b = await body(request);
     const email = (str(b.email, 120) || '').toLowerCase();
@@ -253,12 +302,20 @@ async function members(request, env, db, p, m, url) {
       balance(db, me.id),
       db.prepare('SELECT delta, reason, at FROM points_log WHERE member_id=? ORDER BY id DESC LIMIT 30').bind(me.id).all(),
       db.prepare('SELECT id, kind, mime, created FROM documents WHERE member_id=?').bind(me.id).all(),
-      db.prepare('SELECT id, token, status, total, discount, paid, created FROM orders WHERE member_id=? ORDER BY id DESC LIMIT 20').bind(me.id).all(),
-      db.prepare('SELECT id, token, kind, model, start, end, status, price, discount, paid FROM bookings WHERE member_id=? ORDER BY start DESC LIMIT 20').bind(me.id).all(),
+      db.prepare('SELECT id, token, status, total, discount, paid, pay, created FROM orders WHERE member_id=? ORDER BY id DESC LIMIT 20').bind(me.id).all(),
+      db.prepare('SELECT id, token, kind, model, start, end, status, price, discount, paid, pay FROM bookings WHERE member_id=? ORDER BY start DESC LIMIT 20').bind(me.id).all(),
       riderCheck(db, me),
     ]);
-    return J({ member: { email: me.email, name: me.name, wa: me.wa, terms_version: me.terms_version, terms_at: me.terms_at },
+    return J({ member: { id: me.id, email: me.email, name: me.name, wa: me.wa, terms_version: me.terms_version, terms_at: me.terms_at, created: me.created, hasPassword: !!me.pass_hash },
       points: pts, history: hist.results, docs: docs.results, orders: orders.results, bookings: bookings.results, check: chk, loyalty: LOYALTY, rental: RENTAL });
+  }
+  if (what === 'password' && m === 'POST') {
+    const b = await body(request), pw = String(b.password || '');
+    if (me.pass_hash && !same((await hashPassword(String(b.old || ''), me.pass_salt)).hash, me.pass_hash)) return bad('the current password is wrong', 401);
+    if (pw.length < 8) return bad('the new password needs at least 8 characters');
+    const h = await hashPassword(pw);
+    await db.prepare('UPDATE members SET pass_hash=?, pass_salt=? WHERE id=?').bind(h.hash, h.salt, me.id).run();
+    return J({ ok: true });
   }
   if (what === 'me' && m === 'PATCH') {
     const b = await body(request);
@@ -338,7 +395,8 @@ async function staff(request, env, db, p, m, url) {
     const f = await db.prepare("SELECT COUNT(*) n, COALESCE(SUM(total - discount),0) s FROM orders WHERE status!='cancelled' AND date(created)=?").bind(day).first();
     const r = await db.prepare("SELECT COUNT(*) n, COALESCE(SUM(price - discount),0) s FROM bookings WHERE status IN ('out','returned') AND date(out_at)=?").bind(day).first();
     const on = await db.prepare("SELECT COALESCE(SUM(total - discount),0) s FROM orders WHERE paid=1 AND pay='online' AND date(created)=?").bind(day).first();
-    return J({ day, food: f, rentals: r, online: on.s });
+    const by = await db.prepare("SELECT pay, COUNT(*) n, SUM(s) s FROM (SELECT pay, total - discount s FROM orders WHERE paid=1 AND date(created)=? UNION ALL SELECT pay, price - discount s FROM bookings WHERE paid=1 AND date(COALESCE(out_at, created))=?) GROUP BY pay").bind(day, day).all();
+    return J({ day, food: f, rentals: r, online: on.s, byMethod: by.results });
   }
 
   if (what === 'orders' && id && m === 'PATCH') {
@@ -348,7 +406,7 @@ async function staff(request, env, db, p, m, url) {
     const st = ['new', 'cooking', 'ready', 'done', 'cancelled'].includes(b.status) ? b.status : null;
     if (st) await db.prepare('UPDATE orders SET status=? WHERE id=?').bind(st, id).run();
     if (st === 'cancelled' && o.points_used) await refundPoints(db, o.member_id, o.points_used, 'order', id);
-    if (b.paid) await markPaid(db, 'order', id, null, 'counter');
+    if (b.paid) await markPaid(db, 'order', id, null, ['cash', 'qris', 'transfer', 'card', 'online'].includes(b.method) ? b.method : 'cash');
     return J({ ok: true });
   }
 
@@ -397,7 +455,7 @@ async function staff(request, env, db, p, m, url) {
     await db.prepare('UPDATE bookings SET status=COALESCE(?,status), price=COALESCE(?,price), deposit=COALESCE(?,deposit), end=COALESCE(?,end), staff_note=COALESCE(?,staff_note) WHERE id=?')
       .bind(st, int(b.price), int(b.deposit), str(b.end, 20), str(b.staff_note, 500), id).run();
     if (st === 'cancelled' && bk.points_used) await refundPoints(db, bk.member_id, bk.points_used, 'booking', id);
-    if (b.paid) await markPaid(db, 'booking', id, null, 'counter');
+    if (b.paid) await markPaid(db, 'booking', id, null, ['cash', 'qris', 'transfer', 'card', 'online'].includes(b.method) ? b.method : 'cash');
     return J({ ok: true });
   }
 

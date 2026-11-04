@@ -15,7 +15,7 @@
   var nights = function (a, b) { return Math.round((parse(b) - parse(a)) / DAY); };
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  var S = { model: (T.bikes.filter(function (b) { return b.day; })[0] || T.bikes[0]).id, month: null, avail: {}, total: null, start: null, end: null, msg: '', busy: false, usePoints: false };
+  var S = { pay: 'cash', model: (T.bikes.filter(function (b) { return b.day; })[0] || T.bikes[0]).id, month: null, avail: {}, total: null, start: null, end: null, msg: '', busy: false, usePoints: false };
   var now = new Date(); S.month = new Date(now.getFullYear(), now.getMonth(), 1);
   var two = function () { return window.innerWidth >= 900; };
 
@@ -88,14 +88,20 @@
         '<div class="bk-price">' + (p ? rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : n ? 'Price on WhatsApp' : '') + '</div>' +
       '</div>' +
       (canPts && S.end ? '<label class="m-agree"><input type="checkbox" id="bkPts"' + (S.usePoints ? ' checked' : '') + '> Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.</label>' : '') +
-      (S.end ? '<label class="bk-field">Where are you staying? (optional)<input id="bkHotel" placeholder="Villa name or area"></label>' : '') +
+      (S.end ? '<label class="bk-field">Where are you staying? (optional)<input id="bkHotel" placeholder="Villa name or area"></label><div class="pay-pick" id="bkPay"></div>' : '') +
       '<button type="button" class="btn btn-green bk-go" id="bkGo"' + (S.end && !S.busy ? '' : ' disabled') + '>' +
-        (S.busy ? 'One moment...' : !me ? 'Sign in to book' : !M().ready() ? 'Add rider details to book' : cfg.pay && p ? 'Book and pay ' + rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : 'Send booking request') + '</button>' +
-      '<p class="form-note">' + (cfg.pay ? 'We hold the scooter for 30 minutes while you pay. ' : 'Online payment opens soon: for now we confirm on WhatsApp and you pay at the shop. ') + '<a href="/terms">Rental terms</a></p>';
+        (S.busy ? 'One moment...' : !me ? 'Sign in to book' : !M().ready() ? 'Add rider details to book' : S.payOnline && p ? 'Book and pay ' + rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : 'Send booking request') + '</button>' +
+      '<p class="form-note">' + (S.payOnline ? 'We hold the scooter for 30 minutes while you pay. ' : 'We confirm on WhatsApp; you pay as you chose above. ') + '<a href="/terms">Rental terms</a></p>';
     host.querySelectorAll('[data-m]').forEach(function (x) { x.onclick = function () { S.model = x.dataset.m; S.start = S.end = null; S.msg = ''; load(); }; });
     host.querySelectorAll('[data-nav]').forEach(function (x) { x.onclick = function () { S.month = new Date(S.month.getFullYear(), S.month.getMonth() + +x.dataset.nav, 1); load(); }; });
     host.querySelectorAll('[data-d]').forEach(function (x) { x.onclick = function () { pick(x.dataset.d); }; });
     var pts = $('#bkPts'); if (pts) pts.onchange = function () { S.usePoints = pts.checked; draw(); };
+    var bp = $('#bkPay');
+    if (bp && window.TAKE_PAY) {
+      if (!TAKE_PAY.methods.length) TAKE_PAY.load(cfg);
+      TAKE_PAY.picker(bp, S.pay);
+      bp.onchange = function () { S.pay = TAKE_PAY.chosen(bp); var m = TAKE_PAY.find(S.pay); S.payOnline = !!(m && m.online); draw(); };
+    }
     $('#bkGo').onclick = go;
   }
 
@@ -117,7 +123,7 @@
     S.busy = true; draw();
     var hotel = $('#bkHotel') ? $('#bkHotel').value : '';
     fetch('/api/bookings', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ kind: 'rent', model: S.model, start: S.start, end: S.end, hotel: hotel, usePoints: S.usePoints }) })
+      body: JSON.stringify({ kind: 'rent', model: S.model, start: S.start, end: S.end, hotel: hotel, usePoints: S.usePoints, pay: S.pay }) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (x) {
         S.busy = false;

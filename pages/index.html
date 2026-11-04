@@ -94,10 +94,7 @@
       <label class="if-dine">Table (optional)<input name="tbl"></label>
       <label class="if-delivery" hidden>Where to deliver (villa, street, Google Maps link)<textarea name="address" rows="2"></textarea></label>
       <label>Note for the kitchen<input name="note" placeholder="No chilli, extra egg..."></label>
-      <div class="seg pay-seg" id="paySeg" role="radiogroup" aria-label="Payment" hidden>
-        <label><input type="radio" name="pay" value="online" checked><span>Pay now online</span></label>
-        <label><input type="radio" name="pay" value="counter"><span>Pay at the counter</span></label>
-      </div>
+      <div class="pay-pick" id="paySeg" role="radiogroup" aria-label="Payment" hidden></div>
       <label class="m-agree" id="ptsRow" hidden><input type="checkbox" name="usePoints"> <span></span></label>
       <button class="btn btn-green" type="submit">Place order</button>
       <p class="form-note" id="orderNote">You get a link to follow your order. We also open WhatsApp so the kitchen sees it at once.</p>

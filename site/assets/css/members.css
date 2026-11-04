@@ -256,3 +256,28 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 @media (max-width: 680px) { .logo.logo-neon img[src*="logo-word"] { width: 112px; } }
 /* the signs carry the name on both pages: hide the hero title everywhere (kept for search engines and screen readers) */
 .hero.only-eat h1, .hero.only-eat .h1, .hero.only-eat .kicker, .hero.only-ride h1, .hero.only-ride .h1, .hero.only-ride .kicker { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; margin: 0 !important; padding: 0 !important; }
+
+/* payment choice and instructions (pay.js) */
+.pay-pick { display: grid; gap: 8px; margin: 6px 0 4px; }
+.pay-pick .label { margin: 0 0 2px; }
+.pay-opt { display: block; position: relative; cursor: pointer; }
+.pay-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.pay-opt > span { display: block; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(12, 10, 10, .45); }
+.pay-opt b { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+.pay-opt b i { font-style: normal; width: 22px; text-align: center; }
+.pay-opt small { display: block; margin: 4px 0 0 32px; color: var(--mute, #b9aaa6); font-size: 13px; line-height: 1.4; }
+.pay-opt input:checked + span { border-color: var(--green); box-shadow: 0 0 0 2px var(--green) inset; }
+.pay-opt input:focus-visible + span { outline: 2px solid var(--green); outline-offset: 2px; }
+.pay-box { margin: 16px 0; padding: 16px; border-radius: 16px; border: 1px solid var(--line); background: rgba(12, 10, 10, .45); display: grid; gap: 10px; }
+.pay-qr { width: 100%; max-width: 260px; height: auto; background: #fff; border-radius: 12px; padding: 10px; }
+/* member card */
+.m-card { position: relative; overflow: hidden; border-radius: 20px; padding: 20px 22px; margin-bottom: 14px; color: #fff;
+  background: linear-gradient(135deg, #2a0710 0%, #7a0f24 55%, #ff5a2e 130%); box-shadow: 0 10px 30px rgba(255, 60, 90, .25), inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.m-card::after { content: ''; position: absolute; inset: -40% -20% auto auto; width: 70%; height: 140%; background: linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, .14) 50%, transparent 60%); pointer-events: none; }
+.m-card-top { display: flex; justify-content: space-between; align-items: center; font: 800 20px Oswald, Inter, sans-serif; letter-spacing: .08em; }
+.m-card-top span { font: 700 12px Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .3); }
+.m-card-name { font: 700 22px Inter, sans-serif; margin: 26px 0 4px; }
+.m-card-num { font: 600 16px 'DM Mono', ui-monospace, monospace; letter-spacing: .12em; opacity: .9; }
+.m-card-pts { margin-top: 12px; font-size: 14px; opacity: .9; }
+.m-card-pts b { font-size: 20px; }
+[data-theme="light"] .pay-opt > span, [data-theme="light"] .pay-box { background: rgba(255, 255, 255, .7); }
