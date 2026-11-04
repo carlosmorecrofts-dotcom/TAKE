@@ -230,3 +230,21 @@ main img:not(.hero-logo) { cursor: zoom-in; }
 .hero-logo.hero-sign { width: min(720px, 94vw); border-radius: 18px; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); margin-bottom: 0; }
 @media (max-width: 680px) { .hero-logo.hero-sign { width: 96vw; } }
 .foot-sign img { width: 220px; height: auto; border-radius: 14px; }
+
+/* the neon sign fills the whole hero, edge to edge (the img stays as an invisible spacer and for alt text) */
+.hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
+.hero.only-ride { --hero: url(/assets/img/logo-ride.jpg); }
+.hero::before { background-color: #000 !important; background-position: center 22% !important; filter: none !important; }
+.hero.only-eat::after, .hero.only-ride::after { background: linear-gradient(180deg, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .55) 68%, rgba(0, 0, 0, .9) 100%) !important; }
+.hero-logo.hero-sign { opacity: 0; mix-blend-mode: normal; -webkit-mask-image: none; mask-image: none; }
+html[data-v="ride"] .hero.only-ride, html .hero.only-ride { --hero: url(/assets/img/logo-ride.jpg); }
+html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
+/* the sign IS the heading: title and kicker stay for search engines and screen readers, hidden on screen */
+.hero.only-eat > div:first-child .kicker, .hero.only-eat > div:first-child h1,
+.hero.only-ride > div:first-child .kicker, .hero.only-ride > div:first-child h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero-logo.hero-sign { display: none; }
+.hero::before { background-position: center 38% !important; -webkit-mask-image: none !important; mask-image: none !important; }
+@media (max-width: 680px) { .hero::before { background-size: 170% auto !important; background-position: center 30% !important; } }
+.hero::before { background-size: auto 100% !important; background-position: center top !important; }
+@media (max-aspect-ratio: 3/2) { .hero::before { background-size: cover !important; } }
+@media (max-width: 680px) { .hero::before { background-size: 160% auto !important; background-position: center 18% !important; } }
