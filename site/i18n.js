@@ -9,32 +9,32 @@
   // Ordered most-used first. No flag emoji: Windows draws them as two letters,
   // and a flag is a country, not a language.
   var LANGUAGES = [
-    { code: 'en', label: 'English',    native: 'English',    rtl: false },
-    { code: 'es', label: 'Spanish',    native: 'Español',    rtl: false },
-    { code: 'pt', label: 'Portuguese', native: 'Português',  rtl: false },
-    { code: 'fr', label: 'French',     native: 'Français',   rtl: false },
-    { code: 'de', label: 'German',     native: 'Deutsch',    rtl: false },
-    { code: 'it', label: 'Italian',    native: 'Italiano',   rtl: false },
-    { code: 'nl', label: 'Dutch',      native: 'Nederlands', rtl: false },
-    { code: 'pl', label: 'Polish',     native: 'Polski',     rtl: false },
-    { code: 'sv', label: 'Swedish',    native: 'Svenska',    rtl: false },
-    { code: 'da', label: 'Danish',     native: 'Dansk',      rtl: false },
-    { code: 'no', label: 'Norwegian',  native: 'Norsk',      rtl: false },
-    { code: 'fi', label: 'Finnish',    native: 'Suomi',      rtl: false },
-    { code: 'cs', label: 'Czech',      native: 'Čeština',    rtl: false },
-    { code: 'ro', label: 'Romanian',   native: 'Română',     rtl: false },
-    { code: 'el', label: 'Greek',      native: 'Ελληνικά',   rtl: false },
-    { code: 'tr', label: 'Turkish',    native: 'Türkçe',     rtl: false },
-    { code: 'ru', label: 'Russian',    native: 'Русский',    rtl: false },
-    { code: 'uk', label: 'Ukrainian',  native: 'Українська', rtl: false },
-    { code: 'ar', label: 'Arabic',     native: 'العربية',    rtl: true  },
-    { code: 'he', label: 'Hebrew',     native: 'עברית',      rtl: true  },
-    { code: 'hi', label: 'Hindi',      native: 'हिन्दी',       rtl: false },
-    { code: 'ja', label: 'Japanese',   native: '日本語',      rtl: false },
-    { code: 'ko', label: 'Korean',     native: '한국어',       rtl: false },
-    { code: 'zh', label: 'Chinese',    native: '中文',         rtl: false },
-    { code: 'id', label: 'Indonesian', native: 'Bahasa Indonesia', rtl: false },
-    { code: 'ms', label: 'Malay',      native: 'Bahasa Melayu', rtl: false }
+    { code: 'en', label: 'English', country: 'United Kingdom & USA',    native: 'English',    rtl: false },
+    { code: 'es', label: 'Spanish', country: 'Spain',    native: 'Español',    rtl: false },
+    { code: 'pt', label: 'Portuguese', country: 'Portugal & Brazil', native: 'Português',  rtl: false },
+    { code: 'fr', label: 'French', country: 'France',     native: 'Français',   rtl: false },
+    { code: 'de', label: 'German', country: 'Germany',     native: 'Deutsch',    rtl: false },
+    { code: 'it', label: 'Italian', country: 'Italy',    native: 'Italiano',   rtl: false },
+    { code: 'nl', label: 'Dutch', country: 'Netherlands',      native: 'Nederlands', rtl: false },
+    { code: 'pl', label: 'Polish', country: 'Poland',     native: 'Polski',     rtl: false },
+    { code: 'sv', label: 'Swedish', country: 'Sweden',    native: 'Svenska',    rtl: false },
+    { code: 'da', label: 'Danish', country: 'Denmark',     native: 'Dansk',      rtl: false },
+    { code: 'no', label: 'Norwegian', country: 'Norway',  native: 'Norsk',      rtl: false },
+    { code: 'fi', label: 'Finnish', country: 'Finland',    native: 'Suomi',      rtl: false },
+    { code: 'cs', label: 'Czech', country: 'Czech Republic',      native: 'Čeština',    rtl: false },
+    { code: 'ro', label: 'Romanian', country: 'Romania',   native: 'Română',     rtl: false },
+    { code: 'el', label: 'Greek', country: 'Greece',      native: 'Ελληνικά',   rtl: false },
+    { code: 'tr', label: 'Turkish', country: 'Turkey',    native: 'Türkçe',     rtl: false },
+    { code: 'ru', label: 'Russian', country: 'Russia',    native: 'Русский',    rtl: false },
+    { code: 'uk', label: 'Ukrainian', country: 'Ukraine',  native: 'Українська', rtl: false },
+    { code: 'ar', label: 'Arabic', country: 'Arab countries',     native: 'العربية',    rtl: true  },
+    { code: 'he', label: 'Hebrew', country: 'Israel',     native: 'עברית',      rtl: true  },
+    { code: 'hi', label: 'Hindi', country: 'India',      native: 'हिन्दी',       rtl: false },
+    { code: 'ja', label: 'Japanese', country: 'Japan',   native: '日本語',      rtl: false },
+    { code: 'ko', label: 'Korean', country: 'South Korea',     native: '한국어',       rtl: false },
+    { code: 'zh', label: 'Chinese', country: 'China',    native: '中文',         rtl: false },
+    { code: 'id', label: 'Indonesian', country: 'Indonesia', native: 'Bahasa Indonesia', rtl: false },
+    { code: 'ms', label: 'Malay', country: 'Malaysia',      native: 'Bahasa Melayu', rtl: false }
   ];
 
   // <<< I18N-CORE:BEGIN
@@ -527,7 +527,8 @@
     menu.setAttribute('role', 'menu');
     menu.setAttribute('translate', 'no');
     menu.setAttribute('data-i18n-skip', '');
-    LANGUAGES.forEach(function(L){
+    // The menu lists countries A to Z; LANGUAGES itself keeps English first (the fallback).
+    LANGUAGES.slice().sort(function(a, b){ return a.country.localeCompare(b.country); }).forEach(function(L){
       var it = doc.createElement('button');
       it.type = 'button';
       it.className = 'dj-lang-item';
@@ -538,7 +539,7 @@
       it.innerHTML = '<span class="dj-lang-code"></span><span class="dj-lang-native"></span><span class="dj-lang-en"></span>';
       it.children[0].textContent = L.code;
       it.children[1].textContent = L.native;
-      it.children[2].textContent = L.code === 'en' ? '' : L.label;
+      it.children[2].textContent = L.country;
       it.addEventListener('click', function(ev){
         ev.preventDefault(); ev.stopPropagation();
         closeMenu();
