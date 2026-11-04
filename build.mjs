@@ -13,8 +13,8 @@ const CONFIG = {
   name: 'TAKE Canggu',
   site: 'https://take-canggu.pages.dev',
   waEat: '6282191337592',          // delivery number on the eatery banner
-  waRide: '6282145954191',         // first number on the rental banner
-  ridePhones: ['0821 4595 4191', '0822 4016 0894', '0821 9133 7592'],
+  waRide: '6282240160894',         // rental WhatsApp, set by TAKE 2026-11-04
+  ridePhones: ['0822 4016 0894', '0821 4595 4191', '0821 9133 7592'],
   street: 'Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, off Jl. Pantai Berawa',
   locality: 'Tibubeneng, Canggu', region: 'Bali', country: 'ID',
   address: 'Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, off Jl. Pantai Berawa, Tibubeneng, Canggu, Bali',
@@ -227,6 +227,8 @@ ${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
 <link rel="stylesheet" href="/assets/css/fx.css">
 <link rel="stylesheet" href="/assets/css/app.css">
 <link rel="stylesheet" href="/assets/css/members.css">
+<link rel="stylesheet" href="/assets/css/light.css">
+<script>try{var q=new URLSearchParams(location.search).get('theme');if(q)localStorage.setItem('take_theme',q);if(localStorage.getItem('take_theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
 <script type="application/ld+json">${JSON.stringify(structured(v)).replace(/</g, '\\u003c')}</script>
 </head>
 <body class="page-${v}">
@@ -242,6 +244,7 @@ ${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
     <a href="${pre}#points">Points</a><a href="${pre}#faq">Questions</a><a href="${pre}#find">Find us</a><a href="/terms" class="only-ride">Terms</a>
   </nav>
   <span class="lang-slot" data-lang-slot></span>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Light or dark theme" aria-pressed="false"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   <button class="member-btn" id="memberBtn" type="button" aria-haspopup="dialog" aria-controls="memberDrawer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Member</span></button>
   <button class="burger" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
@@ -294,6 +297,7 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 <script src="/assets/js/book.js"></script>
 <script src="/assets/js/chat.js"></script>
 <script src="/assets/js/zoom.js"></script>
+<script src="/assets/js/theme.js"></script>
 <script src="/i18n.js" defer></script>
 <script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>

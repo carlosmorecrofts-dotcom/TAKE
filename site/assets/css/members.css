@@ -227,6 +227,6 @@ main img:not(.hero-logo) { cursor: zoom-in; }
 .zoom-n { right: 10px; top: 50%; transform: translateY(-50%); }
 
 /* the neon signs: café and rental in their heroes (the shop photo stays behind), TAKE Canggu in the footer */
-.hero-logo.hero-sign { width: min(720px, 94vw); border-radius: 18px; -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); margin-bottom: 0; }
+.hero-logo.hero-sign { width: min(720px, 94vw); border-radius: 18px; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 62%, transparent 100%); margin-bottom: 0; }
 @media (max-width: 680px) { .hero-logo.hero-sign { width: 96vw; } }
 .foot-sign img { width: 220px; height: auto; border-radius: 14px; }

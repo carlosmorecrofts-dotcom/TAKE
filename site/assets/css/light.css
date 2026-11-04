@@ -1,0 +1,35 @@
+/* Light theme: html[data-theme="light"], set by the sun/moon button (theme.js).
+   The heroes stay dark on purpose, so the neon signs keep their glow. */
+html[data-theme="light"] {
+  --deep: #faf6f2; --navy: #ffffff; --navy-2: #f1e8e2;
+  --green: #e0243f; --green-ink: #ffffff; --gold: #9a6a00;
+  --txt: #241a1a; --mute: #6b5b57;
+  --line: rgba(224, 36, 63, .22);
+  --glass: linear-gradient(160deg, rgba(255, 255, 255, .96), rgba(250, 244, 240, .98));
+  color-scheme: light;
+}
+html[data-theme="light"] body { background: var(--deep); color: var(--txt); }
+html[data-theme="light"] .add { background: rgba(154, 106, 0, .1); border-color: rgba(154, 106, 0, .5); }
+html[data-theme="light"] .card, html[data-theme="light"] .facts > div, html[data-theme="light"] .list li,
+html[data-theme="light"] .review-sum div { background: rgba(255, 255, 255, .92); box-shadow: 0 6px 22px rgba(80, 30, 30, .08); }
+html[data-theme="light"] .band { background: linear-gradient(180deg, transparent, rgba(241, 232, 226, .7) 50%, transparent); }
+html[data-theme="light"] .vswitch, html[data-theme="light"] .burger, html[data-theme="light"] .member-btn { background: rgba(255, 255, 255, .85); color: var(--txt); }
+html[data-theme="light"] .nav { background: rgba(250, 246, 242, .9); backdrop-filter: blur(10px); }
+html[data-theme="light"] .nav.open nav { background: #fff; }
+html[data-theme="light"] .seg, html[data-theme="light"] .m-terms, html[data-theme="light"] .bk-models button,
+html[data-theme="light"] .bk-field input, html[data-theme="light"] .form input, html[data-theme="light"] .form select,
+html[data-theme="light"] .form textarea, html[data-theme="light"] .chat-form input { background: #fff; color: var(--txt); }
+html[data-theme="light"] .drawer-panel, html[data-theme="light"] .chat, html[data-theme="light"] .toast { background: #fff; color: var(--txt); }
+html[data-theme="light"] .gal figure { background: #fff; }
+html[data-theme="light"] .st-top { background: rgba(250, 246, 242, .96); }
+html[data-theme="light"] .gantt th:first-child { background: #fff; }
+html[data-theme="light"] #space, html[data-theme="light"] canvas.space { opacity: .35; }
+/* the heroes keep the dark look */
+html[data-theme="light"] .hero { --txt: #fbf3ee; --mute: #c9b8b4; --gold: #f2c14e; --green: #ff5a6e; --green-ink: #2a0308; color: #fbf3ee; }
+html[data-theme="light"] .hero .btn-ghost { color: #fbf3ee; }
+/* the switch */
+.theme-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--txt); cursor: pointer; margin-inline-start: 6px; }
+.theme-btn svg { width: 20px; height: 20px; }
+.theme-btn .sun { display: none; }
+html[data-theme="light"] .theme-btn .sun { display: block; }
+html[data-theme="light"] .theme-btn .moon { display: none; }

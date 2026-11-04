@@ -53,7 +53,7 @@
       a: 'Sign in as a member with your email. You get 1 point for every Rp ' + k(L.perIDR) + ' you pay on food and scooters, and ' + L.redeemPoints + ' points take Rp ' + k(L.redeemValue) + ' off your next order or rental.',
       k: ['point', 'loyal', 'member', 'reward', 'discount', 'poin', 'diskon', 'anggota'] },
     { id: 'help', area: 'ride', q: 'My scooter broke down. What do I do?',
-      a: 'Stay safe, open your booking page and press "Share my location", then WhatsApp us on 0821 4595 4191 so we know where you are.',
+      a: 'Stay safe, open your booking page and press "Share my location", then WhatsApp us on 0822 4016 0894 so we know where you are.',
       k: ['broke', 'broken', 'break down', 'flat', 'tyre', 'tire', 'accident', 'help', 'stuck', 'mogok', 'ban', 'kecelakaan', 'bantuan'] }
   ];
   var TEXT = {
