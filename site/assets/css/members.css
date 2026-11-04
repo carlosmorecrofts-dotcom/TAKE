@@ -248,3 +248,6 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 .hero::before { background-size: auto 100% !important; background-position: center top !important; }
 @media (max-aspect-ratio: 3/2) { .hero::before { background-size: cover !important; } }
 @media (max-width: 680px) { .hero::before { background-size: 160% auto !important; background-position: center 18% !important; } }
+/* the sign stays still while the words scroll up over it (fixed layer, clipped to the hero) */
+.hero.only-eat, .hero.only-ride { clip-path: inset(0); }
+.hero.only-eat::before, .hero.only-ride::before { position: fixed !important; inset: 0 !important; transform: none !important; }
