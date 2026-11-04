@@ -62,6 +62,7 @@
     unsure: 'Good question. Someone from TAKE can answer that best. Tap "Talk to a person" and we reply on WhatsApp.'
   };
   // this page's questions first
+  window.__takeChat = [].concat.apply([], QA.map(function (x) { return [x.q, x.a]; })).concat([TEXT.hello, TEXT.unsure, 'Hi! I am the TAKE assistant. Ask me about scooters, prices and booking, or tap a question below.', 'Hi! I am the TAKE assistant. Ask me about the menu, delivery or our scooters, or tap a question below.', 'Hi, welcome to TAKE! Questions about scooters, prices or booking?', 'Hi, welcome to TAKE! Questions about the menu, delivery or our scooters?']);
   var here = isRide ? 'ride' : 'eat';
   QA.sort(function (a, b) { var r = function (x) { return x.area === here ? 0 : x.area === 'both' ? 1 : 2; }; return r(a) - r(b); });
 
@@ -144,3 +145,5 @@
     launch.addEventListener('click', hideBubble);
   }
 })();
+// every sentence the chat can say, for the language files (i18n-tools/extract.cjs)
+window.TAKE_CHAT_STRINGS = function () { return window.__takeChat || []; };

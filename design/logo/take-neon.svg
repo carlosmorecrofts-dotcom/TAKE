@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" width="1000" height="760">
+<defs>
+ <linearGradient id="face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff4f8b"/><stop offset=".55" stop-color="#ff2d55"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient>
+ <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#c9ccd6"/><stop offset=".55" stop-color="#7d8190"/><stop offset="1" stop-color="#e8eaf0"/></linearGradient>
+ <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <mask id="fade"><rect x="0" y="560" width="1000" height="200" fill="url(#floor)"/></mask>
+ <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
+ <g id="sign">
+  <!-- scooter swoosh -->
+  <g fill="none" stroke="#2ee6ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+   <path d="M150 210 C 300 120, 640 95, 840 170"/>
+   <circle cx="395" cy="185" r="34"/><circle cx="615" cy="185" r="34"/>
+   <path d="M429 185 H 520 L 560 120 H 600 M560 120 L 615 185 M520 185 L 470 135 H 420 L 395 150"/>
+   <path d="M590 120 l 18 -22"/>
+  </g>
+  <path d="M845 120 l7 22 22 7 -22 7 -7 22 -7 -22 -22 -7 22 -7z" fill="#fff" filter="url(#glow)"/>
+  <!-- TAKE: 3D extrusion -->
+  <g font-family="Arial Black, Impact, sans-serif" font-weight="900" font-style="italic" font-size="230" text-anchor="middle">
+   <text x="512" y="440" fill="#3a0612">TAKE</text>
+   <text x="508" y="436" fill="#5c0a1d">TAKE</text>
+   <text x="504" y="432" fill="#7e1028">TAKE</text>
+   <text x="500" y="428" fill="url(#face)" stroke="url(#chrome)" stroke-width="5" filter="url(#glow)">TAKE</text>
+   <text x="500" y="428" fill="none" stroke="#fff" stroke-width="2" stroke-opacity=".8">TAKE</text>
+  </g>
+  <g font-family="Arial Black, Impact, sans-serif" font-weight="900" font-style="italic" font-size="92" text-anchor="middle" letter-spacing="10">
+   <text x="503" y="533" fill="#5a2a00">CANGGU</text>
+   <text x="500" y="530" fill="#ff9a3c" stroke="url(#chrome)" stroke-width="2.5" filter="url(#glow)">CANGGU</text>
+  </g>
+  <g filter="url(#glow)"><rect x="110" y="566" width="170" height="6" rx="3" fill="#2ee6ff"/><rect x="720" y="566" width="170" height="6" rx="3" fill="#ff2d55"/></g>
+  <text x="500" y="580" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="34" letter-spacing="6" text-anchor="middle" fill="url(#chrome)">COFFEE · SCOOTERS</text>
+ </g>
+</defs>
+<rect width="1000" height="760" fill="#05040a"/>
+<ellipse cx="500" cy="380" rx="420" ry="260" fill="#ff2d55" opacity=".09" filter="url(#soft)"/>
+<use href="#sign"/>
+<g mask="url(#fade)"><use href="#sign" transform="translate(0 1180) scale(1 -1)" opacity=".5" filter="url(#soft)"/></g>
+</svg>

@@ -205,6 +205,7 @@ function layout(v, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${V.title}</title>
 <meta name="description" content="${esc(V.description)}">
+${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${CONFIG.name}">
@@ -240,6 +241,7 @@ function layout(v, body) {
     <a class="only-ride" href="${pre}#fleet">Scooters</a><a class="only-ride" href="${pre}#book">Book</a><a class="only-ride" href="${pre}#transport">Transport</a>
     <a href="${pre}#points">Points</a><a href="${pre}#faq">Questions</a><a href="${pre}#find">Find us</a><a href="/terms" class="only-ride">Terms</a>
   </nav>
+  <span class="lang-slot" data-lang-slot></span>
   <button class="member-btn" id="memberBtn" type="button" aria-haspopup="dialog" aria-controls="memberDrawer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Member</span></button>
   <button class="burger" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
@@ -249,7 +251,7 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 <footer class="foot">
   <div class="wrap foot-grid">
     <div>
-      <a class="logo" href="/"><img src="/assets/img/icon.svg" alt="" width="52" height="52"><span>TAKE <b>Canggu</b></span></a>
+      <a class="logo foot-sign" href="/"><img src="/assets/img/logo-take.jpg" alt="TAKE Canggu, coffee and scooters" width="900" height="900"></a>
       <p class="mute">Coffee, food, scooters and drivers from one small house in Berawa, Canggu. ${CONFIG.hours}.</p>
       <p class="mute" style="font-size:14px">${CONFIG.address}</p>
     </div>
@@ -292,6 +294,7 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 <script src="/assets/js/book.js"></script>
 <script src="/assets/js/chat.js"></script>
 <script src="/assets/js/zoom.js"></script>
+<script src="/i18n.js" defer></script>
 <script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>
 </body>

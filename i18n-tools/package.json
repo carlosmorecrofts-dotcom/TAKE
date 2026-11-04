@@ -1,0 +1,5 @@
+{
+  "name": "take-i18n-tools",
+  "private": true,
+  "main": "extract.cjs"
+}

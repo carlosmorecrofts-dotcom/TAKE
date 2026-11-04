@@ -1,0 +1,102 @@
+{
+ "es": {
+  "i18n.notice.english": "Esta página todavía no está disponible en español. Se muestra en inglés.",
+  "i18n.notice.legal": "Los textos legales se ofrecen en inglés, que es la versión que tiene validez."
+ },
+ "pt": {
+  "i18n.notice.english": "Esta página ainda não está disponível em português. É apresentada em inglês.",
+  "i18n.notice.legal": "Os textos legais são apresentados em inglês, que é a versão que tem validade."
+ },
+ "fr": {
+  "i18n.notice.english": "Cette page n'est pas encore disponible en français. Elle est affichée en anglais.",
+  "i18n.notice.legal": "Les textes juridiques sont fournis en anglais, qui est la version faisant foi."
+ },
+ "de": {
+  "i18n.notice.english": "Diese Seite ist noch nicht auf Deutsch verfügbar. Sie wird auf Englisch angezeigt.",
+  "i18n.notice.legal": "Die Rechtstexte liegen auf Englisch vor; maßgeblich ist die englische Fassung."
+ },
+ "it": {
+  "i18n.notice.english": "Questa pagina non è ancora disponibile in italiano. Viene mostrata in inglese.",
+  "i18n.notice.legal": "I testi legali sono forniti in inglese, che è la versione che fa fede."
+ },
+ "nl": {
+  "i18n.notice.english": "Deze pagina is nog niet beschikbaar in het Nederlands. Ze wordt in het Engels getoond.",
+  "i18n.notice.legal": "De juridische teksten zijn in het Engels; de Engelse versie is de geldende."
+ },
+ "pl": {
+  "i18n.notice.english": "Ta strona nie jest jeszcze dostępna po polsku. Wyświetlamy ją po angielsku.",
+  "i18n.notice.legal": "Teksty prawne są dostępne po angielsku i to wersja angielska jest wiążąca."
+ },
+ "sv": {
+  "i18n.notice.english": "Den här sidan finns ännu inte på svenska. Den visas på engelska.",
+  "i18n.notice.legal": "De juridiska texterna finns på engelska, och det är den engelska versionen som gäller."
+ },
+ "da": {
+  "i18n.notice.english": "Denne side findes endnu ikke på dansk. Den vises på engelsk.",
+  "i18n.notice.legal": "De juridiske tekster er på engelsk, og det er den engelske version, der gælder."
+ },
+ "no": {
+  "i18n.notice.english": "Denne siden finnes ennå ikke på norsk. Den vises på engelsk.",
+  "i18n.notice.legal": "De juridiske tekstene er på engelsk, og det er den engelske versjonen som gjelder."
+ },
+ "fi": {
+  "i18n.notice.english": "Tämä sivu ei ole vielä saatavilla suomeksi. Se näytetään englanniksi.",
+  "i18n.notice.legal": "Oikeudelliset tekstit ovat englanniksi, ja englanninkielinen versio on sitova."
+ },
+ "cs": {
+  "i18n.notice.english": "Tato stránka zatím není k dispozici v češtině. Zobrazuje se v angličtině.",
+  "i18n.notice.legal": "Právní texty jsou v angličtině a závazná je anglická verze."
+ },
+ "ro": {
+  "i18n.notice.english": "Această pagină nu este încă disponibilă în română. Este afișată în engleză.",
+  "i18n.notice.legal": "Textele juridice sunt în engleză, iar versiunea în engleză este cea valabilă."
+ },
+ "el": {
+  "i18n.notice.english": "Αυτή η σελίδα δεν είναι ακόμη διαθέσιμη στα ελληνικά. Εμφανίζεται στα αγγλικά.",
+  "i18n.notice.legal": "Τα νομικά κείμενα παρέχονται στα αγγλικά και ισχύει η αγγλική έκδοση."
+ },
+ "tr": {
+  "i18n.notice.english": "Bu sayfa henüz Türkçe olarak mevcut değil. İngilizce gösteriliyor.",
+  "i18n.notice.legal": "Hukuki metinler İngilizce sunulmaktadır ve geçerli olan İngilizce sürümdür."
+ },
+ "ru": {
+  "i18n.notice.english": "Эта страница пока недоступна на русском языке. Она показана на английском.",
+  "i18n.notice.legal": "Юридические тексты представлены на английском языке; силу имеет английская версия."
+ },
+ "uk": {
+  "i18n.notice.english": "Ця сторінка ще недоступна українською. Вона показана англійською.",
+  "i18n.notice.legal": "Юридичні тексти подано англійською мовою; чинною є англійська версія."
+ },
+ "ar": {
+  "i18n.notice.english": "هذه الصفحة غير متوفرة بالعربية بعد. تُعرض بالإنجليزية.",
+  "i18n.notice.legal": "النصوص القانونية متوفرة بالإنجليزية، والنسخة الإنجليزية هي المعتمدة."
+ },
+ "he": {
+  "i18n.notice.english": "הדף הזה עדיין לא זמין בעברית. הוא מוצג באנגלית.",
+  "i18n.notice.legal": "הטקסטים המשפטיים מוצגים באנגלית, והגרסה האנגלית היא המחייבת."
+ },
+ "hi": {
+  "i18n.notice.english": "यह पृष्ठ अभी हिन्दी में उपलब्ध नहीं है। इसे अंग्रेज़ी में दिखाया जा रहा है।",
+  "i18n.notice.legal": "कानूनी पाठ अंग्रेज़ी में दिए गए हैं और अंग्रेज़ी संस्करण ही मान्य है।"
+ },
+ "ja": {
+  "i18n.notice.english": "このページはまだ日本語に対応していません。英語で表示しています。",
+  "i18n.notice.legal": "法的文書は英語で提供しており、英語版が正式な内容です。"
+ },
+ "ko": {
+  "i18n.notice.english": "이 페이지는 아직 한국어로 제공되지 않습니다. 영어로 표시됩니다.",
+  "i18n.notice.legal": "법적 문서는 영어로 제공되며, 영어 버전이 효력을 가집니다."
+ },
+ "zh": {
+  "i18n.notice.english": "此页面暂未提供中文版本，目前以英文显示。",
+  "i18n.notice.legal": "法律文本以英文提供，并以英文版本为准。"
+ },
+ "id": {
+  "i18n.notice.english": "Halaman ini belum tersedia dalam bahasa Indonesia. Ditampilkan dalam bahasa Inggris.",
+  "i18n.notice.legal": "Teks hukum disediakan dalam bahasa Inggris, dan versi bahasa Inggris yang berlaku."
+ },
+ "ms": {
+  "i18n.notice.english": "Halaman ini belum tersedia dalam bahasa Melayu. Ia dipaparkan dalam bahasa Inggeris.",
+  "i18n.notice.legal": "Teks undang-undang disediakan dalam bahasa Inggeris, iaitu versi yang sah."
+ }
+}
