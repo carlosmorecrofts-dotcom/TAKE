@@ -291,6 +291,7 @@ ${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
 <script src="/assets/js/member.js"></script>
 <script src="/assets/js/book.js"></script>
 <script src="/assets/js/chat.js"></script>
+<script src="/assets/js/zoom.js"></script>
 <script src="/assets/js/space.js"></script>
 <script src="/assets/js/fx.js"></script>
 </body>
