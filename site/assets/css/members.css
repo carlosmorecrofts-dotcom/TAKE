@@ -254,3 +254,5 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 /* menu bar: the 3D neon TAKE word mark (black drops out on the dark header) */
 .logo.logo-neon img[src*="logo-word"] { width: 150px; height: auto; mix-blend-mode: screen; }
 @media (max-width: 680px) { .logo.logo-neon img[src*="logo-word"] { width: 112px; } }
+/* the signs carry the name on both pages: hide the hero title everywhere (kept for search engines and screen readers) */
+.hero.only-eat h1, .hero.only-eat .h1, .hero.only-eat .kicker, .hero.only-ride h1, .hero.only-ride .h1, .hero.only-ride .kicker { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; margin: 0 !important; padding: 0 !important; }
