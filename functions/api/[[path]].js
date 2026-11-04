@@ -5,7 +5,7 @@
 //
 // Public    GET config | GET bikes | GET availability?model=&from=&days=
 //           POST orders | GET orders/:id?t= | POST bookings | GET bookings/:id?t= | POST pay | POST ping
-// Members   POST member/register | POST member/signin | POST member/password | POST member/login (email link) | GET member/verify?t= | GET member/me | PATCH member/me | POST member/logout
+// Members   GET member/google (start) | GET member/google/back (Google returns here) | POST member/register | POST member/signin | POST member/password | POST member/login (email link) | GET member/verify?t= | GET member/me | PATCH member/me | POST member/logout
 //           POST member/terms | POST member/docs | GET member/docs/:id | DELETE member/docs/:id
 // Xendit    POST pay/xendit (webhook, x-callback-token)
 // Staff     everything under staff/ with header x-staff-pin
@@ -40,7 +40,7 @@ export async function onRequest(ctx) {
 async function pub(request, env, db, p, m, url) {
   if (p[0] === 'config' && m === 'GET') {
     const methods = payMethods(env);
-    return J({ pay: methods.some((x) => x.online), methods, payDetails: payDetails(env), members: true, emailLinks: mailOn(env), loyalty: LOYALTY, rental: RENTAL });
+    return J({ pay: methods.some((x) => x.online), methods, payDetails: payDetails(env), members: true, emailLinks: mailOn(env), google: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET), loyalty: LOYALTY, rental: RENTAL });
   }
   if (p[0] === 'bikes' && m === 'GET') {
     const { results } = await db.prepare("SELECT model, SUM(status='available') AS free, SUM(status IN ('available','out')) AS total FROM bikes GROUP BY model").all();
@@ -240,6 +240,37 @@ async function xenditHook(request, env, db) {
 // ===================================================================== members
 async function members(request, env, db, p, m, url) {
   const what = p[1];
+  // Sign in with Google (OpenID Connect, code flow). Needs GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET,
+  // with https://<site>/api/member/google/back as an authorised redirect URI in Google Cloud.
+  if (what === 'google' && m === 'GET') {
+    if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) return bad('Google sign-in is not switched on yet', 409);
+    const back = url.origin + '/api/member/google/back';
+    if (p[2] !== 'back') {
+      const state = rnd(16), next = /^\/(ride)?$/.test(url.searchParams.get('next') || '') ? url.searchParams.get('next') : '/';
+      const q = new URLSearchParams({ client_id: env.GOOGLE_CLIENT_ID, redirect_uri: back, response_type: 'code', scope: 'openid email profile', state, prompt: 'select_account' });
+      return new Response(null, { status: 302, headers: { Location: 'https://accounts.google.com/o/oauth2/v2/auth?' + q,
+        'Set-Cookie': 'take_g=' + state + '.' + encodeURIComponent(next) + '; Path=/api/member/google; HttpOnly; Secure; SameSite=Lax; Max-Age=600' } });
+    }
+    const ck = (request.headers.get('cookie') || '').match(/(?:^|;\s*)take_g=([a-f0-9]{32})\.([^;]*)/);
+    const fail = () => Response.redirect(url.origin + '/?signin=google-failed', 302);
+    if (!ck || !same(ck[1], url.searchParams.get('state') || '') || !url.searchParams.get('code')) return fail();
+    const tr = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ code: url.searchParams.get('code'), client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: back, grant_type: 'authorization_code' }) });
+    const tok = await tr.json().catch(() => ({}));
+    if (!tr.ok || !tok.access_token) return fail();
+    const ur = await fetch('https://openidconnect.googleapis.com/v1/userinfo', { headers: { Authorization: 'Bearer ' + tok.access_token } });
+    const g = await ur.json().catch(() => ({}));
+    if (!ur.ok || !g.email || g.email_verified === false) return fail();
+    const email = String(g.email).toLowerCase();
+    await db.prepare('INSERT OR IGNORE INTO members (email, name) VALUES (?, ?)').bind(email, str(g.name, 80)).run();
+    await db.prepare('UPDATE members SET name = COALESCE(name, ?) WHERE email = ?').bind(str(g.name, 80), email).run();
+    const mem = await db.prepare('SELECT id FROM members WHERE email=?').bind(email).first();
+    const next = decodeURIComponent(ck[2] || '/');
+    const h = new Headers({ Location: url.origin + (/^\/(ride)?$/.test(next) ? next : '/') + '?member=1' });
+    h.append('Set-Cookie', await startSession(db, mem.id));
+    h.append('Set-Cookie', 'take_g=; Path=/api/member/google; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
+    return new Response(null, { status: 302, headers: h });
+  }
   if (what === 'register' && m === 'POST') {
     const b = await body(request), email = (str(b.email, 120) || '').toLowerCase(), pw = String(b.password || '');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return bad('please enter a valid email');

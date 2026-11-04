@@ -281,3 +281,9 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 .m-card-pts { margin-top: 12px; font-size: 14px; opacity: .9; }
 .m-card-pts b { font-size: 20px; }
 [data-theme="light"] .pay-opt > span, [data-theme="light"] .pay-box { background: rgba(255, 255, 255, .7); }
+
+/* Continue with Google */
+.btn-google { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #fff; color: #1f1f1f; border: 1px solid #dadce0; font-weight: 600; margin: 4px 0 2px; }
+.btn-google:hover { background: #f7f8f8; }
+.m-or { display: flex; align-items: center; gap: 10px; color: var(--mute, #b9aaa6); font-size: 13px; margin: 14px 0 6px; }
+.m-or::before, .m-or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
