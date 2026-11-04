@@ -222,6 +222,24 @@
    "author": "Bahnfrend",
    "licence": "CC BY-SA 4.0",
    "source": "https://commons.wikimedia.org/wiki/File:Bintang_can_with_beer_glass,_Dili,_2023_(02).jpg"
+  },
+  "fruit-platter": {
+   "file": "menu/ex/fruit-platter.jpg",
+   "author": "AI-generated example (Figma)",
+   "licence": "not a TAKE photo",
+   "source": ""
+  },
+  "mineral-water": {
+   "file": "menu/ex/mineral-water.jpg",
+   "author": "AI-generated example (Figma)",
+   "licence": "not a TAKE photo",
+   "source": ""
+  },
+  "sprite": {
+   "file": "menu/ex/sprite.jpg",
+   "author": "AI-generated example (Figma)",
+   "licence": "not a TAKE photo",
+   "source": ""
   }
  }
 }

@@ -4,7 +4,7 @@
 (function(){
   'use strict';
 
-  var BUILD = '4cc208c711';
+  var BUILD = 'eefd19e440';
 
   // Ordered most-used first. No flag emoji: Windows draws them as two letters,
   // and a flag is a country, not a language.
