@@ -50,6 +50,10 @@ var THEME = {
   document.body.insertBefore(cv, document.body.firstChild);
   var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, dust = [], blobs = [];
   var P = {}; for (var k in THEME.paths) P[k] = new Path2D(THEME.paths[k]);
+  // light theme: the same drawing in dark ink, so it shows on the pale page
+  function isLight() { return document.documentElement.dataset.theme === 'light'; }
+  function ink(rgb) { if (!isLight()) return rgb; return rgb.split(',').map(function (v) { return Math.round(+v * .28); }).join(','); }
+  function boost(a) { return isLight() ? Math.min(1, a * 2.6) : a; }
 
   // soft shapes: drawn once into their own canvas with blur, then just moved
   function shapeCanvas(kind, s, rgb) {
@@ -107,7 +111,7 @@ var THEME = {
     for (var j = 0; j < dust.length; j++) {
       var d = dust[j];
       var dx = ((d.x - sec * 6 * (.2 + d.z)) % W + W) % W, dy = ((d.y - sy * (.05 + d.z * .25)) % H + H) % H;
-      ctx.globalAlpha = .2 + d.z * .6; ctx.fillStyle = 'rgb(' + d.c + ')';
+      ctx.globalAlpha = boost(.2 + d.z * .6); ctx.fillStyle = 'rgb(' + ink(d.c) + ')';
       ctx.beginPath(); ctx.arc(dx, dy, d.r, 0, 6.2832); ctx.fill();
     }
     ctx.globalAlpha = 1; ctx.lineCap = ctx.lineJoin = 'round';
@@ -124,7 +128,7 @@ var THEME = {
       var ang = Math.atan2((m[2][1] - m[1][1]) * H, (m[2][0] - m[1][0]) * W), back = 220;
       var tx = x - Math.cos(ang) * back, ty = y - Math.sin(ang) * back;
       var g = ctx.createLinearGradient(x, y, tx, ty);
-      g.addColorStop(0, 'rgba(' + m[5] + ',.45)'); g.addColorStop(1, 'rgba(' + m[5] + ',0)');
+      g.addColorStop(0, 'rgba(' + ink(m[5]) + ',' + boost(.45) + ')'); g.addColorStop(1, 'rgba(' + ink(m[5]) + ',0)');
       ctx.strokeStyle = g; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke();
       var flip = Math.cos(ang) < 0;
       stroke(m[0], x, y, m[4], flip ? 0 : ang * .3, m[5], .7, flip);
@@ -132,8 +136,8 @@ var THEME = {
   }
   function stroke(name, x, y, sz, rot, rgb, a, flip) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale((flip ? -1 : 1) * sz / 24, sz / 24); ctx.translate(-12, -12);
-    ctx.strokeStyle = 'rgba(' + rgb + ',' + a + ')'; ctx.lineWidth = 1.5 * 24 / sz * (sz / 30);
-    ctx.shadowColor = 'rgba(' + rgb + ',.6)'; ctx.shadowBlur = 8;
+    ctx.strokeStyle = 'rgba(' + ink(rgb) + ',' + boost(a) + ')'; ctx.lineWidth = (isLight() ? 2.2 : 1.5) * 24 / sz * (sz / 30);
+    ctx.shadowColor = isLight() ? 'rgba(0,0,0,0)' : 'rgba(' + rgb + ',.6)'; ctx.shadowBlur = 8;
     ctx.stroke(P[name]); ctx.restore();
   }
 

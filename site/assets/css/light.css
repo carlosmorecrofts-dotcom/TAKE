@@ -23,7 +23,7 @@ html[data-theme="light"] .drawer-panel, html[data-theme="light"] .chat, html[dat
 html[data-theme="light"] .gal figure { background: #fff; }
 html[data-theme="light"] .st-top { background: rgba(250, 246, 242, .96); }
 html[data-theme="light"] .gantt th:first-child { background: #fff; }
-html[data-theme="light"] #space, html[data-theme="light"] canvas.space { opacity: .35; }
+/* the backdrop draws itself in dark ink on the light theme (space.js ink()) */
 /* the heroes keep the dark look */
 html[data-theme="light"] .hero { --txt: #fbf3ee; --mute: #c9b8b4; --gold: #f2c14e; --green: #ff5a6e; --green-ink: #2a0308; color: #fbf3ee; }
 html[data-theme="light"] .hero .btn-ghost { color: #fbf3ee; }
@@ -33,3 +33,5 @@ html[data-theme="light"] .hero .btn-ghost { color: #fbf3ee; }
 .theme-btn .sun { display: none; }
 html[data-theme="light"] .theme-btn .sun { display: block; }
 html[data-theme="light"] .theme-btn .moon { display: none; }
+/* the veil behind each block turns pale on the light theme, so dark text sits on light */
+html[data-theme="light"] .section > .wrap::before { background: radial-gradient(120% 90% at 50% 50%, rgba(250, 246, 242, .72), rgba(250, 246, 242, .35) 70%, rgba(250, 246, 242, 0)); }
