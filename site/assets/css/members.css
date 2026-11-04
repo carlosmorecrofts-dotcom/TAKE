@@ -251,3 +251,6 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 /* the sign stays still while the words scroll up over it (fixed layer, clipped to the hero) */
 .hero.only-eat, .hero.only-ride { clip-path: inset(0); }
 .hero.only-eat::before, .hero.only-ride::before { position: fixed !important; inset: 0 !important; transform: none !important; }
+/* menu bar: the 3D neon TAKE word mark (black drops out on the dark header) */
+.logo.logo-neon img[src*="logo-word"] { width: 150px; height: auto; mix-blend-mode: screen; }
+@media (max-width: 680px) { .logo.logo-neon img[src*="logo-word"] { width: 112px; } }

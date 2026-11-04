@@ -176,7 +176,9 @@ function staffLayout(meta, body) {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${meta.title}</title><meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0c0a0a"><link rel="manifest" href="/staff.webmanifest"><link rel="icon" href="/assets/img/icon.svg">
+<meta name="theme-color" content="#0c0a0a"><link rel="manifest" href="/staff.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/tc-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/tc-192.png">
+<link rel="apple-touch-icon" href="/assets/img/tc-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="/assets/css/app.css">
@@ -218,7 +220,7 @@ ${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="ID-BA"><meta name="geo.placename" content="Canggu, Bali"><meta name="geo.position" content="${P.lat};${P.lng}"><meta name="ICBM" content="${P.lat}, ${P.lng}">
 <meta name="theme-color" content="#0c0a0a">
-<link rel="icon" href="/assets/img/icon.svg">
+<link rel="icon" type="image/png" href="/assets/img/tc-32.png"><link rel="apple-touch-icon" href="/assets/img/tc-180.png">
 <link rel="preload" as="image" href="${V.hero}" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -233,7 +235,7 @@ ${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
 </head>
 <body class="page-${v}">
 <header class="nav">
-  <a class="logo logo-neon" href="/" aria-label="TAKE Canggu, home"><img src="/assets/img/logo-neon.svg" alt="TAKE" width="140" height="58"><span><b>Canggu</b></span></a>
+  <a class="logo logo-neon" href="/" aria-label="TAKE Canggu, home"><img src="/assets/img/logo-word.png" alt="TAKE" width="150" height="50"><span><b>Canggu</b></span></a>
   <nav class="vswitch" aria-label="Coffee or scooters">
     <a data-to="eat" data-title="${esc(VARIANTS.eat.title)}" href="/"${v === 'eat' ? ' aria-current="page"' : ''}>Coffee &amp; Eatery</a>
     <a data-to="ride" data-title="${esc(VARIANTS.ride.title)}" href="/ride"${v === 'ride' ? ' aria-current="page"' : ''}>Scooters &amp; Transport</a>
