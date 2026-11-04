@@ -12,9 +12,9 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-
 const CONFIG = {
   name: 'TAKE Canggu',
   site: 'https://take-canggu.pages.dev',
-  waEat: '6282191337592',          // delivery number on the eatery banner
+  waEat: '6282240160894',          // delivery number on the eatery banner
   waRide: '6282240160894',         // rental WhatsApp, set by TAKE 2026-11-04
-  ridePhones: ['0822 4016 0894', '0821 4595 4191', '0821 9133 7592'],
+  ridePhones: ['0822 4016 0894'],
   street: 'Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, off Jl. Pantai Berawa',
   locality: 'Tibubeneng, Canggu', region: 'Bali', country: 'ID',
   address: 'Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, off Jl. Pantai Berawa, Tibubeneng, Canggu, Bali',
@@ -81,7 +81,7 @@ const reviewMore = REVIEWS.length > SHOW ? `<button class="btn btn-ghost review-
 const FAQ = [
   ['Where is TAKE in Canggu?', `In Perum Prapta Canggu Asri, Blok D No.1, on Jl. Krisnantara 1, a quiet lane off Jalan Pantai Berawa in Tibubeneng. TAKE Coffee and TAKE Scooter Rental share the white house with the two signs.`],
   ['What are the opening hours?', 'Every day from 7am to 8pm, for the kitchen and the rental desk.'],
-  ['Do you deliver food?', `Yes. Order on this page and choose delivery, or WhatsApp the kitchen on 0821 9133 7592.`],
+  ['Do you deliver food?', `Yes. Order on this page and choose delivery, or WhatsApp the kitchen on 0822 4016 0894.`],
   ['How much is a scooter a day?', `From Rp ${k(minDay)} a day: ${priced.map((b) => `${b.name} ${k(b.day)}`).join(', ')}.`],
   ['How do I book a scooter?', 'Choose a model and your dates on the scooter page and send the request. We confirm the bike and the price on WhatsApp, then you pick it up at the shop.'],
   ['How do I pay?', CONFIG.payLive ? 'Scooter rentals are paid in advance online when you book. Food can be paid online when you order, or at the counter. Online payment is by QRIS, e-wallets, bank transfer or card through Xendit.' : 'Online payment is coming soon. For now we confirm your scooter booking on WhatsApp and you pay at the shop; food is paid at the counter.'],

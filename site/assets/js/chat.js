@@ -41,7 +41,7 @@
       a: 'Local and western food, Bali style. Breakfasts, nasi goreng and mi goreng, sweet and sour chicken, fuyung hai, cap cay, four pizzas, spaghetti bolognese, carbonara and aglio olio, small bites, coffee, fresh juices, young coconut and Bintang. Everything with prices is in the Menu section.',
       k: ['menu', 'food', 'eat', 'breakfast', 'lunch', 'dinner', 'nasi', 'mie', 'pizza', 'burger', 'pasta', 'makan', 'makanan', 'sarapan'] },
     { id: 'delivery', area: 'eat', q: 'Do you deliver food?',
-      a: 'Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0821 9133 7592.',
+      a: 'Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0822 4016 0894.',
       k: ['deliver', 'delivery', 'bring', 'villa', 'antar', 'kirim', 'pesan antar'] },
     { id: 'coffee', area: 'eat', q: 'Do you serve coffee?',
       a: 'Yes, from 7am: latte or cappuccino hot or cold 20K, Bali coffee 10K. Also fresh juices from 15K, young coconut 20K, traditional jamu and Bintang 35K.',
