@@ -143,7 +143,7 @@
       var f = free[b.id], av = f == null ? '' : f.free > 0 ? '<span class="avail ok">' + f.free + ' free now</span>' : '<span class="avail no">All out right now: book ahead</span>';
       var r = function (n, w) { return '<div><b>' + (n ? k(n) : '?') + '</b>' + w + '</div>'; };
       var ph = (T.bikePhotos || {})[b.id];
-      return '<div class="card bike">' + (ph ? '<img class="bike-img" src="/assets/img/' + ph.file + '" alt="" loading="lazy"><a class="bike-credit" href="' + ph.source + '" target="_blank" rel="noopener" title="' + esc(ph.title) + '">Photo: ' + esc(ph.author) + ', ' + esc(ph.licence) + '</a>' : '') +
+      return '<div class="card bike">' + (ph ? '<img class="bike-img" src="/assets/img/' + ph.file + '" alt="" loading="lazy">' + (ph.source ? '<a class="bike-credit" href="' + ph.source + '" target="_blank" rel="noopener" title="' + esc(ph.title) + '">Photo: ' + esc(ph.author) + ', ' + esc(ph.licence) + '</a>' : '') : '') +
         '<span class="label">' + b.cc + 'cc · ' + b.kind + '</span><h3>' + esc(b.name) + '</h3>' + av +
         '<div class="rates">' + r(b.day, 'day') + r(b.week, 'week') + r(b.month, 'month') + '</div>' +
         (b.day ? '' : '<p class="mute" style="font-size:13px">' + addTag('day, week, month price') + '</p>') +

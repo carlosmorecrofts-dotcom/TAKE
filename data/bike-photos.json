@@ -83,11 +83,10 @@
     },
     "xsr": {
       "file": "bikes/xsr.jpg",
-      "author": "Bonel14",
-      "licence": "CC BY-SA 4.0",
-      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Yamaha_XSR_155.jpg",
-      "title": "Yamaha XSR 155.jpg"
+      "author": "",
+      "licence": "",
+      "source": "",
+      "title": "XSR 155 Metallic Black, supplied by TAKE"
     }
   }
 }
