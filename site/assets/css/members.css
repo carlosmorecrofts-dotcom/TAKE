@@ -208,3 +208,8 @@ button.btn-ghost { background: transparent; }
   .member-btn { padding: 10px; }
   .terms { padding: 20px; }
 }
+
+/* menu photo cell; "Example photo" marks a Commons photo, not TAKE's own plate */
+.dish-pic { position: relative; align-self: stretch; }
+.dish-pic .dish-img { height: 100%; }
+.ex-tag { position: absolute; left: 4px; bottom: 4px; font: 600 9px Inter, sans-serif; color: #fff; background: rgba(0, 0, 0, .6); padding: 2px 5px; border-radius: 5px; text-decoration: none; }

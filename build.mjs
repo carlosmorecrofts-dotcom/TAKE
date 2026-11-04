@@ -55,6 +55,9 @@ const VARIANTS = {
 const add = (what) => `<span class="add">[ADD: ${what}]</span>`;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 const cat = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'catalogue.json'), 'utf8'));
+// dishes without a TAKE photo get a credited example photo (data/menu-photos.json)
+const menuPhotos = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'menu-photos.json'), 'utf8')).photos;
+cat.menu.forEach((i) => { const p = menuPhotos[i.id]; if (!i.img && p) { i.img = p.file; i.ex = { author: p.author, licence: p.licence, source: p.source }; } });
 const k = (n) => (n == null ? null : (n / 1000) + 'K');
 const priced = cat.bikes.filter((b) => b.day);
 const minDay = Math.min(...priced.map((b) => b.day));
@@ -89,7 +92,7 @@ const faqHtml = FAQ.map(([q, a]) => `<details class="card faq"><summary><h3>${es
 
 // Menu and scooters written into the HTML, so search engines see them without
 // running JavaScript. main.js redraws the same cards with the + buttons.
-const menuStatic = cat.menu.map((i) => `<div class="card dish${i.img ? ' has-img' : ''}">${i.img ? `<img class="dish-img" src="/assets/img/${i.img}" alt="${esc(i.name)} at TAKE" width="520" height="520" loading="lazy">` : ''}<div class="dish-body"><span class="label">${esc(i.cat)}</span><h3>${esc(i.name)}</h3>${i.desc ? `<p class="dish-desc">${esc(i.desc)}</p>` : ''}<span class="price">${i.price ? k(i.price) : 'Price at the counter'}</span></div></div>`).join('');
+const menuStatic = cat.menu.map((i) => `<div class="card dish${i.img ? ' has-img' : ''}">${i.img ? `<div class="dish-pic"><img class="dish-img" src="/assets/img/${i.img}" alt="${esc(i.name)}${i.ex ? ' (example photo)' : ' at TAKE'}" width="360" height="360" loading="lazy">${i.ex ? `<a class="ex-tag" href="${i.ex.source}" target="_blank" rel="noopener" title="Photo: ${esc(i.ex.author)}, ${esc(i.ex.licence)}">Example photo</a>` : ''}</div>` : ''}<div class="dish-body"><span class="label">${esc(i.cat)}</span><h3>${esc(i.name)}</h3>${i.desc ? `<p class="dish-desc">${esc(i.desc)}</p>` : ''}<span class="price">${i.price ? k(i.price) : 'Price at the counter'}</span></div></div>`).join('');
 const bikeImg = (id) => { const p = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'bike-photos.json'), 'utf8')).photos[id]; return p ? `<img class="bike-img" src="/assets/img/${p.file}" alt="" loading="lazy">` : ''; };
 const fleetStatic = cat.bikes.map((b) => `<div class="card bike">${bikeImg(b.id)}<span class="label">${b.cc}cc · ${b.kind}</span><h3>${esc(b.name)}</h3><div class="rates"><div><b>${b.day ? k(b.day) : '?'}</b>day</div><div><b>${b.week ? k(b.week) : '?'}</b>week</div><div><b>${b.month ? k(b.month) : '?'}</b>month</div></div></div>`).join('');
 
@@ -337,3 +340,11 @@ fs.writeFileSync(path.join(outDir, 'robots.txt'), `User-agent: *\nDisallow: /sta
 
 const unpriced = [...cat.menu, ...cat.bikes.map((b) => ({ ...b, price: b.day })), ...cat.trips].filter((i) => i.price == null).length;
 console.log(`built /, /ride and /staff; ${unpriced} items still without a price; ${REVIEWS.length} reviews`);
+
+// Cache busting: every build stamps its scripts and styles, so a new deploy
+// reaches visitors at once even though /assets/* is cached for a week.
+const STAMP = Date.now().toString(36);
+for (const f of fs.readdirSync(outDir).filter((x) => x.endsWith('.html'))) {
+  const p = path.join(outDir, f);
+  fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace(/(\/assets\/(?:js|css)\/[\w.-]+\.(?:js|css))(?=")/g, `$1?v=${STAMP}`));
+}

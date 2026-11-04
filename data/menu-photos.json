@@ -1,0 +1,227 @@
+{
+ "_note": "Example photos from Wikimedia Commons for dishes without a TAKE photo yet; shown with an \"Example photo\" tag and credit. A real TAKE photo (img in catalogue.json) always wins.",
+ "photos": {
+  "easy-breakfast": {
+   "file": "menu/ex/easy-breakfast.jpg",
+   "author": "Bahnfrend",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:All_Day_Big_Breakfast,_Coffee_Quarter,_Perth_Airport,_2026_(02).jpg"
+  },
+  "simple-breakfast": {
+   "file": "menu/ex/simple-breakfast.jpg",
+   "author": "Meg H",
+   "licence": "CC BY 2.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Skinny-Fried-Egg-and-Avocado-Toast-Perfect-breakfast_(35555668870).jpg"
+  },
+  "2x2-breakfast": {
+   "file": "menu/ex/2x2-breakfast.jpg",
+   "author": "Kgbo",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Breakfast_in_Australia;_bacon_and_fried_eggs_on_toast.jpg"
+  },
+  "nasi-goreng-chicken": {
+   "file": "menu/ex/nasi-goreng-chicken.jpg",
+   "author": "Bahnfrend",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Nasi_Goreng_Sate_Ayam,_Malaysia_Airlines,_2026_(02).jpg"
+  },
+  "mi-goreng": {
+   "file": "menu/ex/mi-goreng.jpg",
+   "author": "مانفی",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Mie_goreng.jpg"
+  },
+  "mi-goreng-chicken": {
+   "file": "menu/ex/mi-goreng-chicken.jpg",
+   "author": "Indonesiagood",
+   "licence": "CC BY 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Mie_Goreng_Ayam_dan_Acar_Timun.jpg"
+  },
+  "sweet-sour-chicken": {
+   "file": "menu/ex/sweet-sour-chicken.jpg",
+   "author": "Miansari66",
+   "licence": "CC0",
+   "source": "https://commons.wikimedia.org/wiki/File:Sweet_and_Sour_Chicken.JPG"
+  },
+  "fuyung-hai": {
+   "file": "menu/ex/fuyung-hai.jpg",
+   "author": "Ceeseven",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Egg_Foo_Young_in_Hong_Kong.jpg"
+  },
+  "cap-cay": {
+   "file": "menu/ex/cap-cay.jpg",
+   "author": "Lim Natee",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Cap_Cay_(Sayur_Cap_Chay).jpg"
+  },
+  "steamed-rice": {
+   "file": "menu/ex/steamed-rice.jpg",
+   "author": "Anna Frodesiak",
+   "licence": "CC0",
+   "source": "https://commons.wikimedia.org/wiki/File:Steamed_rice_in_bowl_01.jpg"
+  },
+  "pizza-meat-lover": {
+   "file": "menu/ex/pizza-meat-lover.jpg",
+   "author": "Elsie Hui",
+   "licence": "CC BY 2.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Sammy%27s_Pizza_Falher_Alberta_Meat_Lovers_Pizza_(10354092396).jpg"
+  },
+  "pizza-hawai": {
+   "file": "menu/ex/pizza-hawai.jpg",
+   "author": "Roderick Suñaz Sumalinog",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Hawaiian_pizza_2023.jpg"
+  },
+  "pizza-vegetable": {
+   "file": "menu/ex/pizza-vegetable.jpg",
+   "author": "Food Recipes",
+   "licence": "CC BY 2.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Vegetarian_pizza.jpg"
+  },
+  "pasta-bolognese": {
+   "file": "menu/ex/pasta-bolognese.jpg",
+   "author": "Andy Li",
+   "licence": "CC0",
+   "source": "https://commons.wikimedia.org/wiki/File:Spaghetti_Bolognese_-_Figaros,_Brighton_2023-10-06.jpg"
+  },
+  "pasta-carbonara": {
+   "file": "menu/ex/pasta-carbonara.jpg",
+   "author": "Tamorlan",
+   "licence": "CC BY-SA 3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Spaghetti_alla_Carbonara_(Madrid).JPG"
+  },
+  "pasta-aglio-olio": {
+   "file": "menu/ex/pasta-aglio-olio.jpg",
+   "author": "Bairuilong",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Spaghetti_aglio_e_olio_KB.jpg"
+  },
+  "french-fries": {
+   "file": "menu/ex/french-fries.jpg",
+   "author": "Acabashi",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Plate_of_chips_at_the_Chalet_Cafe,_Cowfold,_West_Sussex,_England.jpg"
+  },
+  "chicken-nuggets": {
+   "file": "menu/ex/chicken-nuggets.jpg",
+   "author": "Jiafei Slay Queen",
+   "licence": "CC0",
+   "source": "https://commons.wikimedia.org/wiki/File:Chicken_nuggets_on_a_plate.jpg"
+  },
+  "grilled-sausage": {
+   "file": "menu/ex/grilled-sausage.jpg",
+   "author": "JIP",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Grilled_sausages_at_home.jpg"
+  },
+  "potato-wedges": {
+   "file": "menu/ex/potato-wedges.jpg",
+   "author": "Moheen Reeyad",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Potato_wedges_(164510).jpg"
+  },
+  "fried-tempeh": {
+   "file": "menu/ex/fried-tempeh.jpg",
+   "author": "DARMAS BUDI SANTOSO",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Tempe_goreng.jpg"
+  },
+  "cappuccino": {
+   "file": "menu/ex/cappuccino.jpg",
+   "author": "Ioacc1234red",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Cappuccino-cup_20230110_103258.jpg"
+  },
+  "bali-coffee": {
+   "file": "menu/ex/bali-coffee.jpg",
+   "author": "Michael.C.Wright",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Kopi-tubruk.jpg"
+  },
+  "nescafe": {
+   "file": "menu/ex/nescafe.jpg",
+   "author": "Corn cheese",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Instant_coffee_in_cup.jpg"
+  },
+  "tea": {
+   "file": "menu/ex/tea.jpg",
+   "author": "AntanO",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Cup_of_black_tea.JPG"
+  },
+  "fanta": {
+   "file": "menu/ex/fanta.jpg",
+   "author": "Emilian Robert Vicol from Com. Balanesti, Romania",
+   "licence": "CC BY 2.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Fanta-Orange-Can-330ml_84177_(7116950883).jpg"
+  },
+  "coca-cola": {
+   "file": "menu/ex/coca-cola.jpg",
+   "author": "Oleg Yunakov",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Coca-Cola_glass_bottle.jpg"
+  },
+  "juice-avocado": {
+   "file": "menu/ex/juice-avocado.jpg",
+   "author": "Midori",
+   "licence": "CC BY 3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Jus_alpukat_Bandung.JPG"
+  },
+  "juice-dragon-fruit": {
+   "file": "menu/ex/juice-dragon-fruit.jpg",
+   "author": "Sandhiya Rangasami",
+   "licence": "CC BY 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Dragon_fruit_drink.jpg"
+  },
+  "juice-watermelon": {
+   "file": "menu/ex/juice-watermelon.jpg",
+   "author": "Brindhashanmugam312",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Watermelon_juice_in_glass.jpg"
+  },
+  "juice-pineapple": {
+   "file": "menu/ex/juice-pineapple.jpg",
+   "author": "B722N",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Pineapple_juice_in_glass.jpg"
+  },
+  "juice-orange": {
+   "file": "menu/ex/juice-orange.jpg",
+   "author": "Agency of the United States Department of Agriculture Edited",
+   "licence": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Orange_juice_1_edit1.jpg"
+  },
+  "jamu": {
+   "file": "menu/ex/jamu.jpg",
+   "author": "Dyah Umiyarni",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Jamu_dan_bahan-bahannya.jpg"
+  },
+  "black-honey": {
+   "file": "menu/ex/black-honey.jpg",
+   "author": "Nic McPhee from Morris, MN, USA",
+   "licence": "CC BY-SA 2.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Honey_jar_(411317929).jpg"
+  },
+  "bintang-original": {
+   "file": "menu/ex/bintang-original.jpg",
+   "author": "Ocdp",
+   "licence": "CC BY-SA 3.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Bintang_003.jpg"
+  },
+  "bintang-radler": {
+   "file": "menu/ex/bintang-radler.jpg",
+   "author": "Hainanman",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Bintang_Radler_2015.jpeg"
+  },
+  "bintang-crystal": {
+   "file": "menu/ex/bintang-crystal.jpg",
+   "author": "Bahnfrend",
+   "licence": "CC BY-SA 4.0",
+   "source": "https://commons.wikimedia.org/wiki/File:Bintang_can_with_beer_glass,_Dili,_2023_(02).jpg"
+  }
+ }
+}
