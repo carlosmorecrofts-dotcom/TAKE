@@ -44,6 +44,12 @@ const VARIANTS = {
     description: 'Rent a Scoopy, Beat, Vario, NMAX, PCX, ADV or XMAX in Berawa, Canggu, from Rp 85K a day. Drivers for the airport, Ubud, Uluwatu and Mount Batur sunrise treks. Book online, confirm on WhatsApp.',
     image: '/assets/img/og-ride.jpg', hero: '/assets/img/shop-side.jpg',
   },
+  member: {
+    file: 'member.html', path: '/member', look: 'eat', place: 'eat',
+    title: 'Member area | TAKE Canggu',
+    description: 'Your TAKE member area: member card, points, food orders, scooter bookings and rider details.',
+    image: '/assets/img/og-eat.jpg', hero: '/assets/img/shop-front.jpg',
+  },
   terms: {
     file: 'terms.html', path: '/terms', look: 'ride', place: 'ride',
     title: 'Scooter rental terms | TAKE Scooter Rental Canggu',
@@ -167,7 +173,7 @@ function structured(v) {
   const page = { '@type': 'WebPage', '@id': CONFIG.site + VARIANTS[v].path, url: CONFIG.site + VARIANTS[v].path, name: VARIANTS[v].title,
     description: VARIANTS[v].description, about: { '@id': ((VARIANTS[v].place || v) === 'eat' ? cafe : rental)['@id'] }, inLanguage: 'en' };
   const faq = { '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
-  return { '@context': 'https://schema.org', '@graph': v === 'terms' ? [page, rental] : v === 'eat' ? [page, cafe, rental, faq] : [page, rental, cafe, faq] };
+  return { '@context': 'https://schema.org', '@graph': v === 'member' ? [page] : v === 'terms' ? [page, rental] : v === 'eat' ? [page, cafe, rental, faq] : [page, rental, cafe, faq] };
 }
 
 const ICON_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.9 3 3 6.6 3 11.1c0 2.5 1.2 4.7 3.2 6.2L5.5 21l3.9-2.1c.8.2 1.7.3 2.6.3 5.1 0 9-3.6 9-8.1S17.1 3 12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
@@ -207,7 +213,7 @@ function layout(v, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${V.title}</title>
 <meta name="description" content="${esc(V.description)}">
-${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
+${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}${v === 'member' ? '<meta name="robots" content="noindex">' : ''}
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${CONFIG.name}">
@@ -247,11 +253,11 @@ ${v === 'terms' ? '<meta name="dj-i18n" content="legal">' : ''}
   </nav>
   <span class="lang-slot" data-lang-slot></span>
   <button class="theme-btn" id="themeBtn" type="button" aria-label="Light or dark theme" aria-pressed="false"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-  <button class="member-btn" id="memberBtn" type="button" aria-haspopup="dialog" aria-controls="memberDrawer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Member</span></button>
+  <a class="member-btn" id="memberBtn" href="/member"${v === 'member' ? ' aria-current="page"' : ''}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Member</span></a>
   <button class="burger" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <main>
-${v === 'terms' ? fill(body) : oneH1(fill(body), v)}
+${v === 'terms' || v === 'member' ? fill(body) : oneH1(fill(body), v)}
 </main>
 <footer class="foot">
   <div class="wrap foot-grid">
@@ -321,6 +327,7 @@ const read = (f) => {
 const home = read('index.html');
 for (const v of ['eat', 'ride']) fs.writeFileSync(path.join(outDir, VARIANTS[v].file), layout(v, home.body));
 fs.writeFileSync(path.join(outDir, VARIANTS.terms.file), layout('terms', read('terms.html').body));
+fs.writeFileSync(path.join(outDir, VARIANTS.member.file), layout('member', read('member.html').body));
 const staff = read('staff.html');
 fs.writeFileSync(path.join(outDir, 'staff.html'), staffLayout(staff.meta, staff.body));
 

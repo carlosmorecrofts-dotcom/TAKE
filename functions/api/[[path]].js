@@ -246,7 +246,7 @@ async function members(request, env, db, p, m, url) {
     if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) return bad('Google sign-in is not switched on yet', 409);
     const back = url.origin + '/api/member/google/back';
     if (p[2] !== 'back') {
-      const state = rnd(16), next = /^\/(ride)?$/.test(url.searchParams.get('next') || '') ? url.searchParams.get('next') : '/';
+      const state = rnd(16), next = /^\/(ride|member)?$/.test(url.searchParams.get('next') || '') ? url.searchParams.get('next') : '/';
       const q = new URLSearchParams({ client_id: env.GOOGLE_CLIENT_ID, redirect_uri: back, response_type: 'code', scope: 'openid email profile', state, prompt: 'select_account' });
       return new Response(null, { status: 302, headers: { Location: 'https://accounts.google.com/o/oauth2/v2/auth?' + q,
         'Set-Cookie': 'take_g=' + state + '.' + encodeURIComponent(next) + '; Path=/api/member/google; HttpOnly; Secure; SameSite=Lax; Max-Age=600' } });
@@ -266,7 +266,7 @@ async function members(request, env, db, p, m, url) {
     await db.prepare('UPDATE members SET name = COALESCE(name, ?) WHERE email = ?').bind(str(g.name, 80), email).run();
     const mem = await db.prepare('SELECT id FROM members WHERE email=?').bind(email).first();
     const next = decodeURIComponent(ck[2] || '/');
-    const h = new Headers({ Location: url.origin + (/^\/(ride)?$/.test(next) ? next : '/') + '?member=1' });
+    const h = new Headers({ Location: url.origin + (/^\/(ride|member)?$/.test(next) ? next : '/') + '?member=1' });
     h.append('Set-Cookie', await startSession(db, mem.id));
     h.append('Set-Cookie', 'take_g=; Path=/api/member/google; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
     return new Response(null, { status: 302, headers: h });
@@ -299,7 +299,7 @@ async function members(request, env, db, p, m, url) {
     if (!mailOn(env) && env.DEV_LOGIN_LINKS !== '1') return bad('member sign-in is not switched on yet', 409);
     const recent = await db.prepare("SELECT COUNT(*) n FROM login_tokens WHERE email=? AND created > datetime('now','-15 minutes')").bind(email).first();
     if (recent.n >= 3) return bad('too many sign-in emails: please wait 15 minutes', 429);
-    const t = rnd(32), next = /^\/(ride)?$/.test(b.next || '') ? b.next : '/';
+    const t = rnd(32), next = /^\/(ride|member)?$/.test(b.next || '') ? b.next : '/';
     await db.prepare("INSERT INTO login_tokens (hash,email,next,expires) VALUES (?,?,?,datetime('now','+20 minutes'))").bind(await sha(t), email, next).run();
     const link = url.origin + '/api/member/verify?t=' + t;
     if (mailOn(env)) {

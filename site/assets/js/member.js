@@ -23,19 +23,21 @@
   document.body.appendChild(dr);
   dr.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) M.close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dr.hidden) M.close(); });
-  var body = $('#mBody', dr);
+  var page = document.getElementById('memberPage');
+  var body = page || $('#mBody', dr);
 
   M.open = function (want, opts) {
     opts = opts || {};
     M.onDone = opts.onDone || null; M.next = opts.next || location.pathname;
     if (want) tab = want;
+    if (page) { render(opts.message); page.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
     dr.hidden = false; document.body.classList.add('drawer-open');
     render(opts.message);
     var f = dr.querySelector('input, button:not(.drawer-x)'); if (f) setTimeout(function () { f.focus(); }, 50);
   };
-  M.close = function () { dr.hidden = true; document.body.classList.remove('drawer-open'); };
+  M.close = function () { if (page) return; dr.hidden = true; document.body.classList.remove('drawer-open'); };
   M.refresh = function () {
-    return api('member/me').then(function (d) { M.data = d; }, function () { M.data = null; }).then(function () { headerBadge(); if (!dr.hidden) render(); return M.data; });
+    return api('member/me').then(function (d) { M.data = d; }, function () { M.data = null; }).then(function () { headerBadge(); if (!dr.hidden || page) render(); return M.data; });
   };
   M.ready = function () { return !!(M.data && M.data.check.profileOk && !M.data.check.missingDocs.length && M.data.check.termsOk); };
 
@@ -58,6 +60,8 @@
   }
 
   var mode = 'join';
+  // where to land after signing in: back to /ride or /member, else home
+  function nextPath() { var m = /^\/(ride|member)/.exec(M.next || location.pathname); return m ? m[0] : '/'; }
   function renderSignIn(message) {
     var L = T.loyalty, emailLinks = M.config && M.config.emailLinks;
     var join = mode === 'join';
@@ -243,7 +247,7 @@
 
   // ---- start
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('#memberBtn, [data-member-open]');
+    var t = e.target.closest('[data-member-open]');
     if (t) { e.preventDefault(); M.open(); }
   });
   var qs = new URLSearchParams(location.search);
@@ -260,6 +264,7 @@
     }
     if (qs.get('signin') === 'google-failed') { history.replaceState(null, '', location.pathname); M.open(null, { message: 'Google sign-in did not finish. Try again, or use your email.' }); }
     if (qs.get('signin') === 'expired') { history.replaceState(null, '', location.pathname); M.open(null, { message: 'That sign-in link has expired or was already used. Send yourself a new one.' }); }
+    if (page && !qs.get('member') && qs.get('signin') == null) render();
     document.dispatchEvent(new CustomEvent('take:member-ready'));
   });
 })();
