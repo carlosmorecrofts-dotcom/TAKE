@@ -5,4 +5,4 @@ compatibility_date = "2026-10-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "take"
-database_id = "LOCAL-ONLY-REPLACE-AFTER-d1-create"
+database_id = "e80392f1-ad45-43dc-be41-d33f01151ceb"
