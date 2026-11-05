@@ -295,8 +295,10 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
 .member-page .m-tabs { position: sticky; top: 72px; z-index: 2; padding: 8px 0; background: inherit; }
 .member-side { display: grid; gap: 16px; position: sticky; top: 90px; }
 .member-side h3 { margin-top: 0; }
-.ticks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.ticks li { padding-left: 26px; position: relative; }
-.ticks li::before { content: '\2713'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+.member-side .ticks { margin: 0; gap: 10px; }
+.member-side .ticks li { align-items: center; }
+.member-side .ticks li::before { width: 24px; height: 24px; margin-top: 0; border-radius: 50%;
+  background: linear-gradient(135deg, #ff5a6e, #ff8a3d) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E") center / 14px no-repeat;
+  box-shadow: 0 2px 8px rgba(255, 90, 110, .35); }
 @media (max-width: 860px) { .member-wrap { grid-template-columns: 1fr; } .member-side { position: static; } .member-page { padding: 18px; } }
 .member-btn[aria-current="page"] { border-color: var(--green); }
