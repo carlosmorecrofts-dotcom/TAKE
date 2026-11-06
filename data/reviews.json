@@ -1,4 +1,131 @@
 {
   "_note": "Real Google reviews only, copied word for word. Never write one. 'place' is 'eat' (Take Coffee Canggu) or 'ride' (TAKE SCOOTER RENTAL). Example entry: {\"place\": \"ride\", \"name\": \"First name L.\", \"stars\": 5, \"when\": \"2 weeks ago\", \"text\": \"...\"}. Then run node build.mjs.",
-  "reviews": []
+  "reviews": [
+    {
+      "place": "eat",
+      "name": "ivy hughes",
+      "stars": 5,
+      "when": "5 days ago",
+      "text": "Love this place my partner and I go all the time for a great breakfast and absolutely amazing coffee!!! 🩷🩷"
+    },
+    {
+      "place": "eat",
+      "name": "Charlie Kroger",
+      "stars": 5,
+      "when": "3 weeks ago",
+      "text": "Really great food and the owner is so friendly. My accommodation was close by so I went here everyday since the price and the quality of the food"
+    },
+    {
+      "place": "eat",
+      "name": "Shepherd Sargent",
+      "stars": 5,
+      "when": "a month ago",
+      "text": "Food is fresh and tasty at a great price. The family is kind and hospitable. We went here for 3 meals a day for the time We spent in canngu."
+    },
+    {
+      "place": "eat",
+      "name": "isaac dale",
+      "stars": 5,
+      "when": "a month ago",
+      "text": "Amazing service, very good food for cheap, quality coffees and lattes. The owners are extremely kind and friendly. I recommend to all tourists"
+    },
+    {
+      "place": "eat",
+      "name": "Nadja Ha",
+      "stars": 5,
+      "when": "2 weeks ago",
+      "text": "The food is always fresh and delicious! Never disappointed me. Also really cheap"
+    },
+    {
+      "place": "eat",
+      "name": "Ash Wells",
+      "stars": 5,
+      "when": "4 months ago",
+      "text": "Great food, good price. Always have fat chats with the owner, very nice people. Great place to come for breakfast, lunch, dinner and BINTANG."
+    },
+    {
+      "place": "eat",
+      "name": "Olaf de Rooij",
+      "stars": 5,
+      "when": "7 months ago",
+      "text": "Lovely family, with great food, and love for making people happy with a proper conversations l, great food and a wonderful scooter rental service 🙏"
+    },
+    {
+      "place": "eat",
+      "name": "Julien",
+      "stars": 5,
+      "when": "10 months ago (translated from French)",
+      "text": "The owner is fantastic: he can prepare custom dishes if you request it in advance. You can go there without hesitation, you won't be disappointed, and the prices are very reasonable. Thanks again!"
+    },
+    {
+      "place": "eat",
+      "name": "Yannis Nouari",
+      "stars": 5,
+      "when": "5 months ago (translated from French)",
+      "text": "I stayed in Bali for a week and came to this restaurant every day because the price, the staff, and the food are excellent. I highly recommend it!"
+    },
+    {
+      "place": "eat",
+      "name": "Maisie McCall",
+      "stars": 5,
+      "when": "7 months ago",
+      "text": "Cute little cafe with great fresh food, iced coffee was delicious. Owner was very kind, would definitely go back."
+    },
+    {
+      "place": "eat",
+      "name": "Яна Максимова",
+      "stars": 5,
+      "when": "7 months ago (translated from Russian)",
+      "text": "Very cheap and tasty, we didn't expect anything for that price, but everything was fresh, we ate our fill, breakfast was 45k, I definitely recommend having breakfast here"
+    },
+    {
+      "place": "eat",
+      "name": "Aldienezha Devangga",
+      "stars": 5,
+      "when": "a year ago",
+      "text": "Small but really cozy, has good wifi too. The food is unbelievably good. Gonna come here again soon."
+    },
+    {
+      "place": "eat",
+      "name": "Lisa Lauret",
+      "stars": 5,
+      "when": "5 months ago",
+      "text": "Very good food. We are eating here every night since one week! Thank you so much"
+    },
+    {
+      "place": "eat",
+      "name": "Quirky Cocktails",
+      "stars": 5,
+      "when": "a year ago (translated from Indonesian)",
+      "text": "The coffee is delicious, it is recommended for those who want to come here to order the hazelnut latte tropical sweet & salted caramel, it is a must try and there are several delicious mocktails menus that are worth trying"
+    },
+    {
+      "place": "eat",
+      "name": "Elisa Khristina",
+      "stars": 5,
+      "when": "11 months ago (translated from Indonesian)",
+      "text": "The food and coffee are delicious. The prices are very pocket-friendly. The owner is also friendly."
+    },
+    {
+      "place": "eat",
+      "name": "Donny Saputra",
+      "stars": 5,
+      "when": "a year ago (translated from Indonesian)",
+      "text": "Comfortable place, food and drinks are suitable for college students' pockets... street food prices, five-star taste 👍"
+    },
+    {
+      "place": "eat",
+      "name": "FunnyCoverMemes",
+      "stars": 5,
+      "when": "a month ago",
+      "text": "Best noodle on a Bali"
+    },
+    {
+      "place": "eat",
+      "name": "Victor Madsen",
+      "stars": 5,
+      "when": "a year ago",
+      "text": "Super cozy, delisious food. Come and try it out :)"
+    }
+  ]
 }
