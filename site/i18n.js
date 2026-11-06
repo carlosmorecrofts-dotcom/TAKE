@@ -357,12 +357,39 @@
       .then(function(r){ if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function(j){ cache[code] = j || {}; return cache[code]; });
   }
+  // TAKE offers only the languages that are fully translated (the build's gate
+  // checks these ten plus English), so the list stays short.
+  var SHOWN = { en: 1, id: 1, ru: 1, zh: 1, ko: 1, ja: 1, de: 1, fr: 1, es: 1, pt: 1, it: 1 };
+  function shown(code){ return !!SHOWN[code]; }
+  // Flags drawn as small pictures: flag emoji show as two letters on Windows.
+  function star(cx, cy, r, rot){
+    var p = [];
+    for(var i = 0; i < 10; i++){ var a = (rot || 0) - Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .382 : r; p.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2)); }
+    return '<polygon points="' + p.join(' ') + '" fill="#FFDE00"/>';
+  }
+  function bars(x, y, deg){ // a trigram on the Korean flag: three short bars
+    return '<g transform="rotate(' + deg + ' ' + x + ' ' + y + ')" fill="#000"><rect x="' + (x - 2.2) + '" y="' + (y - 1.6) + '" width="4.4" height=".7"/><rect x="' + (x - 2.2) + '" y="' + (y - .35) + '" width="4.4" height=".7"/><rect x="' + (x - 2.2) + '" y="' + (y + .9) + '" width="4.4" height=".7"/></g>';
+  }
+  var FLAG_ART = {
+    en: '<rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.6"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="3.4"/>',
+    id: '<rect width="30" height="10" fill="#CE1126"/><rect y="10" width="30" height="10" fill="#fff"/>',
+    ru: '<rect width="30" height="6.7" fill="#fff"/><rect y="6.7" width="30" height="6.6" fill="#0039A6"/><rect y="13.3" width="30" height="6.7" fill="#D52B1E"/>',
+    zh: '<rect width="30" height="20" fill="#DE2910"/>' + star(5, 5, 3) + star(10, 2, 1, .4) + star(12, 4, 1, .9) + star(12, 7, 1, 0) + star(10, 9, 1, .4),
+    ko: '<rect width="30" height="20" fill="#fff"/><g transform="rotate(33.7 15 10)"><path d="M10 10a5 5 0 0 1 10 0z" fill="#CD2E3A"/><path d="M10 10a5 5 0 0 0 10 0z" fill="#0047A0"/><circle cx="12.5" cy="10" r="2.5" fill="#CD2E3A"/><circle cx="17.5" cy="10" r="2.5" fill="#0047A0"/></g>' + bars(6, 4.5, -56.3) + bars(24, 15.5, -56.3) + bars(24, 4.5, 56.3) + bars(6, 15.5, 56.3),
+    ja: '<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/>',
+    de: '<rect width="30" height="6.7" fill="#000"/><rect y="6.7" width="30" height="6.6" fill="#DD0000"/><rect y="13.3" width="30" height="6.7" fill="#FFCE00"/>',
+    fr: '<rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/>',
+    es: '<rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/>',
+    pt: '<rect width="30" height="20" fill="#FF0000"/><rect width="12" height="20" fill="#006600"/><circle cx="12" cy="10" r="3.6" fill="#FFCC00"/><circle cx="12" cy="10" r="2" fill="#FF0000"/>',
+    it: '<rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/>'
+  };
+  function flag(code){ return FLAG_ART[code] ? '<svg class="dj-flag" viewBox="0 0 30 20" aria-hidden="true">' + FLAG_ART[code] + '</svg>' : ''; }
   function info(code){
     for(var i = 0; i < LANGUAGES.length; i++) if(LANGUAGES[i].code === code) return LANGUAGES[i];
     return null;
   }
   function stored(){
-    try{ var s = localStorage.getItem('msi_lang'); if(s && info(s)) return s; }catch(e){}
+    try{ var s = localStorage.getItem('msi_lang'); if(s && info(s) && shown(s)) return s; }catch(e){}
     return '';
   }
   function firstLanguage(){
@@ -372,7 +399,7 @@
     for(var i = 0; i < list.length; i++){
       var c = String(list[i] || '').toLowerCase().split('-')[0];
       if(c === 'nb' || c === 'nn') c = 'no';
-      if(info(c)) return c;
+      if(info(c) && shown(c)) return c;
     }
     return 'en';
   }
@@ -438,6 +465,9 @@
     + '.dj-lang-code{flex:0 0 30px;text-align:center;font-size:10px;letter-spacing:.08em;padding:3px 0;border-radius:5px;border:1px solid rgba(0,200,255,.28);color:#8fdcff;text-transform:uppercase}'
     + '.dj-lang-native{flex:1 1 auto;font-weight:600;overflow:hidden;text-overflow:ellipsis}'
     + '.dj-lang-en{flex:0 0 auto;opacity:.55;font-size:10px}'
+    + '.dj-flag{width:22px;height:15px;flex:0 0 22px;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.25)}'
+    + '.dj-lang-flagbox{display:inline-flex;align-items:center}.dj-lang-btn .dj-flag{width:20px;height:14px}'
+    + '.dj-lang-menu--light .dj-flag{box-shadow:0 0 0 1px rgba(0,0,0,.18)}'
     + '.dj-lang-menu::-webkit-scrollbar{width:6px}.dj-lang-menu::-webkit-scrollbar-thumb{background:rgba(0,200,255,.22);border-radius:3px}'
     + '.dj-lang--float{position:fixed;top:12px;right:12px;margin:0;z-index:2147483000}'
     + '.dj-lang--float .dj-lang-btn{background:rgba(8,14,24,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}'
@@ -480,7 +510,7 @@
   function fitMenu(){
     if(!menu || !picker) return;
     var b = picker.getBoundingClientRect(), vw = root.clientWidth || window.innerWidth, vh = window.innerHeight;
-    var w = Math.min(268, vw - 16);
+    var w = Math.min(210, vw - 16);
     var left = root.dir === 'rtl' ? b.left : b.right - w;
     left = Math.max(8, Math.min(left, vw - w - 8));
     var below = vh - b.bottom - 16, above = b.top - 16, full = Math.min(430, menu.scrollHeight || 430);
@@ -520,7 +550,7 @@
     btn.setAttribute('aria-haspopup', 'true');
     btn.setAttribute('aria-expanded', 'false');
     btn.setAttribute('aria-label', 'Language');
-    btn.innerHTML = GLOBE + '<span class="dj-lang-name"></span><span class="dj-lang-short"></span><span class="dj-lang-caret" aria-hidden="true">▾</span>';
+    btn.innerHTML = '<span class="dj-lang-flagbox">' + GLOBE + '</span><span class="dj-lang-name"></span><span class="dj-lang-short"></span><span class="dj-lang-caret" aria-hidden="true">▾</span>';
     menu = doc.createElement('div');
     menu.id = 'djLangMenu';
     menu.className = 'dj-lang-menu notranslate';
@@ -528,7 +558,7 @@
     menu.setAttribute('translate', 'no');
     menu.setAttribute('data-i18n-skip', '');
     // The menu lists countries A to Z; LANGUAGES itself keeps English first (the fallback).
-    LANGUAGES.slice().sort(function(a, b){ return a.country.localeCompare(b.country); }).forEach(function(L){
+    LANGUAGES.filter(function(L){ return shown(L.code); }).sort(function(a, b){ return a.country.localeCompare(b.country); }).forEach(function(L){
       var it = doc.createElement('button');
       it.type = 'button';
       it.className = 'dj-lang-item';
@@ -536,10 +566,9 @@
       it.setAttribute('data-lang', L.code);
       it.setAttribute('lang', L.code);
       it.setAttribute('aria-checked', 'false');
-      it.innerHTML = '<span class="dj-lang-code"></span><span class="dj-lang-native"></span><span class="dj-lang-en"></span>';
-      it.children[0].textContent = L.code;
-      it.children[1].textContent = L.native;
-      it.children[2].textContent = L.country;
+      it.innerHTML = flag(L.code) + '<span class="dj-lang-native"></span>';
+      it.querySelector('.dj-lang-native').textContent = L.native;
+      it.title = L.country;
       it.addEventListener('click', function(ev){
         ev.preventDefault(); ev.stopPropagation();
         closeMenu();
@@ -578,6 +607,7 @@
     var L = info(current) || LANGUAGES[0];
     var n = picker.querySelector('.dj-lang-name'), s = picker.querySelector('.dj-lang-short');
     if(n) n.textContent = L.native;
+    var fb = picker.querySelector('.dj-lang-flagbox'); if(fb) fb.innerHTML = flag(L.code) || GLOBE;
     if(s) s.textContent = L.code.toUpperCase();
     var items = menu ? menu.querySelectorAll('.dj-lang-item') : [];
     for(var i = 0; i < items.length; i++) items[i].setAttribute('aria-checked', items[i].getAttribute('data-lang') === L.code ? 'true' : 'false');
@@ -600,7 +630,8 @@
     if(!picker) return;
     try{
       var light = backdrop(picker.parentNode) > 0.6;
-      picker.classList.toggle('dj-lang--light', light);
+      // TAKE's header always sits over the dark hero: the button keeps dark colours there
+      picker.classList.toggle('dj-lang--light', light && !(picker.closest && picker.closest('.nav')));
       if(menu) menu.classList.toggle('dj-lang-menu--light', light);
       if(notice){ notice.style.background = light ? 'rgba(255,255,255,.97)' : ''; notice.style.color = light ? '#16303f' : ''; }
     }catch(e){}
@@ -872,7 +903,7 @@
       window.addEventListener('load', placeSoon);
       window.addEventListener('orientationchange', placeSoon);
       // another tab changed the language: follow it
-      window.addEventListener('storage', function(ev){ if(ev.key === 'msi_lang' && ev.newValue && ev.newValue !== current && info(ev.newValue)) setLanguage(ev.newValue, { silent: true }); });
+      window.addEventListener('storage', function(ev){ if(ev.key === 'msi_lang' && ev.newValue && ev.newValue !== current && info(ev.newValue) && shown(ev.newValue)) setLanguage(ev.newValue, { silent: true }); });
       var first = firstLanguage();
       if(first !== 'en') setLanguage(first, { silent: !stored() });
       else { try{ root.lang = 'en'; }catch(e){} }
