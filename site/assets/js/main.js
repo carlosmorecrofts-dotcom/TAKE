@@ -62,7 +62,7 @@
     el.innerHTML = T.menu.filter(function (i) { return curCat === 'All' || i.cat === curCat; }).map(function (i) {
       var q = cart[i.id] || 0;
       return '<div class="card dish' + (i.img ? ' has-img' : '') + '">' + (i.img ? '<div class="dish-pic"><img class="dish-img" src="/assets/img/' + i.img + '" alt="' + esc(i.name) + (i.ex ? ' (example photo)' : ' at TAKE') + '" loading="lazy">' + (i.ex ? (i.ex.source ? '<a class="ex-tag" href="' + i.ex.source + '" target="_blank" rel="noopener" title="Photo: ' + esc(i.ex.author) + ', ' + esc(i.ex.licence) + '">Example photo</a>' : '<span class="ex-tag" title="' + esc(i.ex.author) + '">Example photo</span>') : '') + '</div>' : '') +
-        '<div class="dish-body"><span class="label">' + i.cat + '</span><h3>' + esc(i.name) + '</h3>' + (i.desc ? '<p class="dish-desc">' + esc(i.desc) + '</p>' : '') + '<span class="price">' +
+        '<div class="dish-body"><span class="label">' + i.cat + '</span><h3><span class="dish-no">' + i.no + '</span>' + esc(i.name) + '</h3>' + (i.desc ? '<p class="dish-desc">' + esc(i.desc) + '</p>' : '') + '<span class="price">' +
         (i.price ? k(i.price) : 'Price at the counter') + '</span></div><div class="qty" data-id="' + i.id + '">' +
         (q ? '<button type="button" class="minus" aria-label="One less ' + esc(i.name) + '">&minus;</button><b>' + q + '</b>' : '') +
         '<button type="button" class="plus" aria-label="Add ' + esc(i.name) + '">+</button></div></div>';
@@ -81,7 +81,7 @@
   function renderCart() {
     var t = totals(), list = $('#cartList'); if (!list) return;
     list.innerHTML = t.n ? Object.keys(cart).map(function (id) {
-      var i = byId[id]; return '<li>' + cart[id] + ' × ' + esc(i.name) + '<em>' + (i.price ? k(i.price * cart[id]) : 'at counter') + '</em></li>';
+      var i = byId[id]; return '<li>' + cart[id] + ' × ' + i.no + '. ' + esc(i.name) + '<em>' + (i.price ? k(i.price * cart[id]) : 'at counter') + '</em></li>';
     }).join('') : '<li class="mute">Nothing yet. Tap a dish above.</li>';
     $('#cartSum').textContent = rp(t.sum) + (t.unpriced ? ' + drinks' : '');
     var fab = $('#cartFab'); fab.hidden = !t.n;

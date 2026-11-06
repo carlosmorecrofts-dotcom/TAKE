@@ -6,28 +6,32 @@
       "cat": "Breakfast",
       "name": "Easy Breakfast",
       "price": 45000,
-      "desc": "Two slices of white toast, sautéed potato wedges with onion and garlic, chicken sausage, two eggs (any style)"
+      "desc": "Two slices of white toast, sautéed potato wedges with onion and garlic, chicken sausage, two eggs (any style)",
+      "no": 1
     },
     {
       "id": "simple-breakfast",
       "cat": "Breakfast",
       "name": "Simple Breakfast",
       "price": 50000,
-      "desc": "Avocado, two slices of white toast, grilled chicken, two eggs (any style)"
+      "desc": "Avocado, two slices of white toast, grilled chicken, two eggs (any style)",
+      "no": 2
     },
     {
       "id": "2x2-breakfast",
       "cat": "Breakfast",
       "name": "2 x 2 Breakfast",
       "price": 25000,
-      "desc": "Two slices of white toast, two eggs (any style)"
+      "desc": "Two slices of white toast, two eggs (any style)",
+      "no": 3
     },
     {
       "id": "fruit-platter",
       "cat": "Breakfast",
       "name": "Fruit Platter",
       "price": 40000,
-      "desc": "Papaya, pineapple, dragon fruit, watermelon"
+      "desc": "Papaya, pineapple, dragon fruit, watermelon",
+      "no": 4
     },
     {
       "id": "nasi-goreng",
@@ -35,76 +39,87 @@
       "name": "Nasi Goreng",
       "price": 20000,
       "desc": "Rice, cabbage, carrot, green peas, egg",
-      "img": "menu/nasi-goreng.jpg"
+      "img": "menu/nasi-goreng.jpg",
+      "no": 5
     },
     {
       "id": "nasi-goreng-chicken",
       "cat": "Local food",
       "name": "Nasi Goreng Chicken",
       "price": 25000,
-      "desc": "Rice, cabbage, carrot, green peas, egg, with chicken"
+      "desc": "Rice, cabbage, carrot, green peas, egg, with chicken",
+      "no": 6
     },
     {
       "id": "mi-goreng",
       "cat": "Local food",
       "name": "Mi Goreng",
       "price": 20000,
-      "desc": "Egg noodles, cabbage, carrot, egg"
+      "desc": "Egg noodles, cabbage, carrot, egg",
+      "no": 7
     },
     {
       "id": "mi-goreng-chicken",
       "cat": "Local food",
       "name": "Mi Goreng Chicken",
       "price": 25000,
-      "desc": "Egg noodles, cabbage, carrot, egg, with chicken"
+      "desc": "Egg noodles, cabbage, carrot, egg, with chicken",
+      "no": 8
     },
     {
       "id": "sweet-sour-chicken",
       "cat": "Local food",
       "name": "Sweet & Sour Chicken",
       "price": 25000,
-      "desc": "Fried chicken in sweet and sour sauce"
+      "desc": "Fried chicken in sweet and sour sauce",
+      "no": 9
     },
     {
       "id": "fuyung-hai",
       "cat": "Local food",
       "name": "Fuyung Hai",
       "price": 20000,
-      "desc": "Egg omelette with chicken, cabbage and carrot, served with sweet and sour sauce"
+      "desc": "Egg omelette with chicken, cabbage and carrot, served with sweet and sour sauce",
+      "no": 10
     },
     {
       "id": "cap-cay",
       "cat": "Local food",
       "name": "Cap Cay",
       "price": 25000,
-      "desc": "Stir-fried mixed vegetables with chicken"
+      "desc": "Stir-fried mixed vegetables with chicken",
+      "no": 11
     },
     {
       "id": "steamed-rice",
       "cat": "Local food",
       "name": "Steamed Rice",
-      "price": 6000
+      "price": 6000,
+      "no": 12
     },
     {
       "id": "pizza-meat-lover",
       "cat": "Pizza",
       "name": "Meat Lover",
       "price": 55000,
-      "desc": "Tomato sauce, pepperoni, smoked beef, chicken, chicken sausage, bell peppers, onion, mozzarella cheese"
+      "desc": "Tomato sauce, pepperoni, smoked beef, chicken, chicken sausage, bell peppers, onion, mozzarella cheese",
+      "no": 13
     },
     {
       "id": "pizza-hawai",
       "cat": "Pizza",
       "name": "Hawai",
       "price": 50000,
-      "desc": "Tomato sauce, grilled chicken, pineapple, bell pepper, onion, mozzarella cheese"
+      "desc": "Tomato sauce, grilled chicken, pineapple, bell pepper, onion, mozzarella cheese",
+      "no": 14
     },
     {
       "id": "pizza-vegetable",
       "cat": "Pizza",
       "name": "Vegetable",
       "price": 45000,
-      "desc": "Tomato sauce, mixed bell peppers, onion, tomato, mozzarella cheese"
+      "desc": "Tomato sauce, mixed bell peppers, onion, tomato, mozzarella cheese",
+      "no": 15
     },
     {
       "id": "pizza-margherita",
@@ -112,180 +127,209 @@
       "name": "Margherita",
       "price": 40000,
       "desc": "Tomato sauce, fresh tomato, mozzarella cheese",
-      "img": "menu/margherita.jpg"
+      "img": "menu/margherita.jpg",
+      "no": 16
     },
     {
       "id": "pasta-bolognese",
       "cat": "Pasta",
       "name": "Bolognese",
       "price": 45000,
-      "desc": "Spaghetti with minced beef, tomato sauce and parmesan cheese"
+      "desc": "Spaghetti with minced beef, tomato sauce and parmesan cheese",
+      "no": 17
     },
     {
       "id": "pasta-carbonara",
       "cat": "Pasta",
       "name": "Carbonara",
       "price": 50000,
-      "desc": "Spaghetti with chicken, creamy garlic sauce and parmesan cheese"
+      "desc": "Spaghetti with chicken, creamy garlic sauce and parmesan cheese",
+      "no": 18
     },
     {
       "id": "pasta-aglio-olio",
       "cat": "Pasta",
       "name": "Aglio Olio",
       "price": 40000,
-      "desc": "Spaghetti with olive oil, garlic, fresh mushrooms, tomato, chili and parmesan cheese"
+      "desc": "Spaghetti with olive oil, garlic, fresh mushrooms, tomato, chili and parmesan cheese",
+      "no": 19
     },
     {
       "id": "french-fries",
       "cat": "Small bites",
       "name": "French Fries",
-      "price": 20000
+      "price": 20000,
+      "no": 20
     },
     {
       "id": "chicken-nuggets",
       "cat": "Small bites",
       "name": "Chicken Nuggets",
-      "price": 20000
+      "price": 20000,
+      "no": 21
     },
     {
       "id": "grilled-sausage",
       "cat": "Small bites",
       "name": "Grilled Sausage",
-      "price": 20000
+      "price": 20000,
+      "no": 22
     },
     {
       "id": "potato-wedges",
       "cat": "Small bites",
       "name": "Potato Wedges",
-      "price": 20000
+      "price": 20000,
+      "no": 23
     },
     {
       "id": "fried-tempeh",
       "cat": "Small bites",
       "name": "Fried Tempeh",
-      "price": 20000
+      "price": 20000,
+      "no": 24
     },
     {
       "id": "latte",
       "cat": "Coffee & drinks",
       "name": "Latte (hot or cold)",
       "price": 20000,
-      "img": "menu/latte.jpg"
+      "img": "menu/latte.jpg",
+      "no": 25
     },
     {
       "id": "cappuccino",
       "cat": "Coffee & drinks",
       "name": "Cappuccino (hot or cold)",
-      "price": 20000
+      "price": 20000,
+      "no": 26
     },
     {
       "id": "bali-coffee",
       "cat": "Coffee & drinks",
       "name": "Bali Coffee",
-      "price": 10000
+      "price": 10000,
+      "no": 27
     },
     {
       "id": "nescafe",
       "cat": "Coffee & drinks",
       "name": "Nescafe",
-      "price": 10000
+      "price": 10000,
+      "no": 28
     },
     {
       "id": "tea",
       "cat": "Coffee & drinks",
       "name": "Tea (hot or cold)",
-      "price": 8000
+      "price": 8000,
+      "no": 29
     },
     {
       "id": "mineral-water",
       "cat": "Coffee & drinks",
       "name": "Mineral Water",
-      "price": 8000
+      "price": 8000,
+      "no": 30
     },
     {
       "id": "sprite",
       "cat": "Coffee & drinks",
       "name": "Sprite",
-      "price": 10000
+      "price": 10000,
+      "no": 31
     },
     {
       "id": "fanta",
       "cat": "Coffee & drinks",
       "name": "Fanta",
-      "price": 10000
+      "price": 10000,
+      "no": 32
     },
     {
       "id": "coca-cola",
       "cat": "Coffee & drinks",
       "name": "Coca Cola",
-      "price": 10000
+      "price": 10000,
+      "no": 33
     },
     {
       "id": "juice-avocado",
       "cat": "Juices",
       "name": "Avocado Juice",
-      "price": 20000
+      "price": 20000,
+      "no": 34
     },
     {
       "id": "juice-dragon-fruit",
       "cat": "Juices",
       "name": "Dragon Fruit Juice",
-      "price": 20000
+      "price": 20000,
+      "no": 35
     },
     {
       "id": "juice-watermelon",
       "cat": "Juices",
       "name": "Watermelon Juice",
-      "price": 15000
+      "price": 15000,
+      "no": 36
     },
     {
       "id": "juice-pineapple",
       "cat": "Juices",
       "name": "Pineapple Juice",
-      "price": 15000
+      "price": 15000,
+      "no": 37
     },
     {
       "id": "juice-orange",
       "cat": "Juices",
       "name": "Orange Juice",
-      "price": 15000
+      "price": 15000,
+      "no": 38
     },
     {
       "id": "young-coconut",
       "cat": "Juices",
       "name": "Young Coconut",
       "price": 20000,
-      "img": "menu/young-coconut.jpg"
+      "img": "menu/young-coconut.jpg",
+      "no": 39
     },
     {
       "id": "jamu",
       "cat": "Juices",
       "name": "Traditional Jamu",
-      "price": 35000
+      "price": 35000,
+      "no": 40
     },
     {
       "id": "black-honey",
       "cat": "Juices",
       "name": "Natural Black Honey",
-      "price": null
+      "price": null,
+      "no": 41
     },
     {
       "id": "bintang-original",
       "cat": "Beer",
       "name": "Bintang Original",
-      "price": 35000
+      "price": 35000,
+      "no": 42
     },
     {
       "id": "bintang-radler",
       "cat": "Beer",
       "name": "Bintang Radler",
-      "price": 35000
+      "price": 35000,
+      "no": 43
     },
     {
       "id": "bintang-crystal",
       "cat": "Beer",
       "name": "Bintang Crystal",
-      "price": 35000
+      "price": 35000,
+      "no": 44
     }
   ],
   "bikes": [
