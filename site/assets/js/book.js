@@ -24,7 +24,7 @@
     $('.cal-wrap') && $('.cal-wrap').classList.add('loading');
     return fetch('/api/availability?model=' + encodeURIComponent(S.model) + '&from=' + from + '&days=' + n)
       .then(function (r) { return r.json().then(function (d) { if (!r.ok || !d.days) throw new Error(d.error || r.status); return d; }); })
-      .then(function (d) { S.total = d.total; d.days.forEach(function (x) { S.avail[S.model + x.date] = x; }); draw(); })
+      .then(function (d) { S.total = d.total; S.ask = d.ask; d.days.forEach(function (x) { S.avail[S.model + x.date] = x; }); draw(); })
       .catch(function (e) { if (/database not bound/.test(e.message)) return offline(); S.msg = 'Could not load the calendar. Check your connection and try again.'; draw(); });
   }
   var day = function (date) { return S.avail[S.model + date]; };
@@ -47,7 +47,7 @@
       if (!a) { cls += ' unknown'; }
       else if (a.past) { cls += ' past'; }
       else if (a.free < 1) { cls += ' full'; label = 'Booked'; }
-      else { cls += a.free === 1 ? ' last' : ' free'; label = a.free === 1 ? 'Last one' : a.free + ' left'; attrs = ' data-d="' + date + '"'; }
+      else { cls += S.ask || a.free > 1 ? ' free' : ' last'; label = S.ask ? 'Ask' : a.free === 1 ? 'Last one' : a.free + ' left'; attrs = ' data-d="' + date + '"'; }
       if (S.start && date === S.start) cls += ' sel start';
       if (S.end && date === S.end) cls += ' sel end';
       if (S.start && S.end && date > S.start && date < S.end) cls += ' in-range';
@@ -73,13 +73,13 @@
     var L = T.loyalty, canPts = me && me.points >= L.redeemPoints && p;
     var second = new Date(S.month.getFullYear(), S.month.getMonth() + 1, 1);
     var prevOk = S.month > new Date(now.getFullYear(), now.getMonth(), 1);
-    var none = S.total === 0;
+    var none = !!S.ask;
     host.innerHTML =
       '<div class="bk-models" role="radiogroup" aria-label="Scooter">' + T.bikes.map(function (x) {
         return '<button type="button" role="radio" aria-checked="' + (x.id === S.model) + '" data-m="' + x.id + '"><b>' + esc(x.name.replace(/^(Honda|Yamaha) /, '')) + '</b><small>' + x.cc + 'cc · ' + k(x.day) + '</small></button>';
       }).join('') + '</div>' +
       '<div class="cal-nav"><button type="button" class="sb" data-nav="-1"' + (prevOk ? '' : ' disabled') + ' aria-label="Earlier month">&larr;</button><b>' + esc(b.name) + '</b><button type="button" class="sb" data-nav="1" aria-label="Later month">&rarr;</button></div>' +
-      (none ? '<p class="m-msg">This model is not in the fleet right now. Try another one.</p>' : '') +
+      (none ? '<p class="m-msg">Book on request: choose your dates and we confirm this scooter on WhatsApp before you pay.</p>' : '') +
       '<div class="cal-wrap">' + monthHtml(S.month) + (two() ? monthHtml(second) : '') + '</div>' +
       '<div class="cal-legend"><span class="lg free"></span>Free <span class="lg last"></span>Last one <span class="lg full"></span>Booked <span class="lg sel"></span>Your dates</div>' +
       '<p class="cal-hint">' + esc(S.msg || (!S.start ? 'Tap your pick-up day.' : !S.end ? 'Now tap your return day.' : '')) + '</p>' +

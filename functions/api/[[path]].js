@@ -223,7 +223,8 @@ async function rentBooking(request, env, db, b, url) {
   const freeDay = price && b.useFreeDay && (await rides(db, me)).free > 0 ? Math.min(BIKES[model].day, price - red.discount) : 0;
   red.discount += freeDay;
   const method = pickMethod(env, b.pay);
-  const online = !!method.online && price && price - red.discount > 0;
+  // on request (no fleet entered yet): nothing is paid until staff confirm the scooter
+  const online = !free.ask && !!method.online && price && price - red.discount > 0;
   const t = rnd(12);
   const r = await db.prepare(`INSERT INTO bookings (token,kind,member_id,name,wa,hotel,model,start,end,status,hold_until,price,discount,points_used,note)
     VALUES (?,?,?,?,?,?,?,?,?,?,${online ? "datetime('now', ?)" : '?'},?,?,?,?)`)

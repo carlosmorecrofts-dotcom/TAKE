@@ -90,14 +90,15 @@ export async function calendar(db, model, from, n, exceptId) {
       const end = b.status === 'out' && b.end <= t ? addDays(t, 1) : b.end;
       if (b.start <= d && d < end) used++;
     }
-    out.push({ date: d, free: Math.max(0, total - used), past: d < t });
+    // no scooters of this model entered by staff yet: take it as a request, staff confirm
+    out.push({ date: d, free: total ? Math.max(0, total - used) : 1, past: d < t });
   }
-  return { model, total, days: out };
+  return { model, total, ask: !total, days: out };
 }
 export async function rangeFree(db, model, start, end, exceptId) {
   const c = await calendar(db, model, start, days(start, end), exceptId);
   const full = c.days.find((d) => d.free < 1);
-  return { ok: c.total > 0 && !full, total: c.total, fullOn: full ? full.date : null };
+  return { ok: !full, ask: c.ask, total: c.total, fullOn: full ? full.date : null };
 }
 // Rental price: day rate x days; from 7 days, full weeks at the week rate plus the
 // extra days at the day rate, never more than one more full week. book.js uses the same rule.
