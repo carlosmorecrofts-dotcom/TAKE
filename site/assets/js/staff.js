@@ -4,6 +4,13 @@
   var T = window.TAKE, $ = function (s, r) { return (r || document).querySelector(s); };
   var pin = '', data = { orders: [], bookings: [], bikes: [], last: [] }, seen = null, tab = 'kitchen', map, layer;
   try { pin = localStorage.getItem('take_pin') || ''; } catch (e) {}
+  // What this device is for: 'till' (everything) or 'kitchen' (orders only, big, always on).
+  // Chosen once per device and remembered; /staff?mode=kitchen sets it too.
+  var MODE = 'till';
+  try { MODE = new URLSearchParams(location.search).get('mode') || localStorage.getItem('take_mode') || 'till'; } catch (e) {}
+  if (MODE !== 'kitchen') MODE = 'till';
+  var SOUND = true; try { SOUND = localStorage.getItem('take_sound') !== 'off'; } catch (e) {}
+  var actx = null, timer = null;
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var rp = function (n) { return n == null ? '-' : 'Rp ' + Number(n).toLocaleString('id-ID'); };
   var bikeName = function (id) { var b = T.bikes.filter(function (x) { return x.id === id; })[0]; return b ? b.name : id; };
@@ -16,7 +23,16 @@
       .then(function (r) { return r.json().then(function (j) { if (r.status === 401) logout(); if (!r.ok) throw new Error(j.error || r.status); return j; }); });
   }
   function toast(t) { var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 3500); }
-  function beep() { try { var a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value = 880; g.gain.value = .2; o.start(); o.stop(a.currentTime + .25); setTimeout(function () { var o2 = a.createOscillator(); o2.connect(g); o2.frequency.value = 1175; o2.start(); o2.stop(a.currentTime + .25); }, 300); } catch (e) {} }
+  // Tablets only allow sound after a tap, so the sound is switched on by the first tap anywhere.
+  function audio() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (actx && actx.state === 'suspended') actx.resume(); return actx; }
+  document.addEventListener('pointerdown', function () { audio(); devBar(); }, { once: true });
+  function beep(loud) {
+    var a = actx; if (!SOUND || !a || a.state !== 'running') return;
+    [[880, 0], [1175, .3]].concat(loud ? [[1480, .6]] : []).forEach(function (n) {
+      var o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination);
+      o.frequency.value = n[0]; g.gain.value = loud ? .35 : .2; o.start(a.currentTime + n[1]); o.stop(a.currentTime + n[1] + .25);
+    });
+  }
 
   // ---- login
   function logout() { pin = ''; try { localStorage.removeItem('take_pin'); } catch (e) {} $('#app').hidden = true; $('#login').hidden = false; }
@@ -25,7 +41,66 @@
     api('login').then(function () { try { localStorage.setItem('take_pin', pin); } catch (x) {} start(); })
       .catch(function (err) { $('#loginNote').textContent = err.message; });
   });
-  function start() { $('#login').hidden = true; $('#app').hidden = false; refresh(); setInterval(refresh, 15000); }
+  function start() {
+    $('#login').hidden = true; $('#app').hidden = false;
+    setMode(MODE); refresh();
+    if (!timer) timer = setInterval(refresh, MODE === 'kitchen' ? 5000 : 10000);
+    // a new order nobody has started yet rings again every 30 seconds on the kitchen screen
+    setInterval(function () { if (MODE === 'kitchen' && data.orders.some(function (o) { return o.status === 'new'; })) beep(true); }, 30000);
+    keepAwake();
+  }
+
+  // ---- this device: kitchen screen or till, sound, full screen, install, always on
+  function setMode(m) {
+    MODE = m; try { localStorage.setItem('take_mode', m); } catch (e) {}
+    document.body.classList.toggle('kds', m === 'kitchen');
+    if (m === 'kitchen' && tab !== 'kitchen') $('[data-tab=kitchen]').click();
+    if (timer) { clearInterval(timer); timer = setInterval(refresh, m === 'kitchen' ? 5000 : 10000); }
+    if (data.orders) kitchen();
+    devBar();
+  }
+  function devBar() {
+    $('#modeBtn').textContent = MODE === 'kitchen' ? 'Kitchen screen ▾' : 'Till ▾';
+    var on = SOUND && actx && actx.state === 'running';
+    $('#soundBtn').textContent = !SOUND ? 'Sound off' : on ? 'Sound on' : 'Tap to turn sound on';
+    $('#soundBtn').classList.toggle('warn', !on);
+    $('#fsBtn').hidden = !document.documentElement.requestFullscreen || standalone();
+  }
+  $('#modeBtn').onclick = function () {
+    dialog('What is this screen for?', [['mode', 'This device', 'select', MODE, [['till', 'Till: orders, bookings, fleet, takings'], ['kitchen', 'Kitchen screen: food orders only, big, always on']]]],
+      function (v) { setMode(v.mode); return Promise.resolve(); });
+  };
+  $('#soundBtn').onclick = function () {
+    var a = audio();
+    if (SOUND && a && a.state === 'running' && this.textContent === 'Sound on') SOUND = false; else SOUND = true;
+    try { localStorage.setItem('take_sound', SOUND ? 'on' : 'off'); } catch (e) {}
+    setTimeout(function () { devBar(); beep(); }, 150);
+  };
+  $('#fsBtn').onclick = function () { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(function () {}); };
+  function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+  var installEv = null;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installEv = e; $('#installBtn').hidden = false; });
+  window.addEventListener('appinstalled', function () { $('#installBtn').hidden = true; toast('Installed. Open "TAKE staff" from the home screen.'); });
+  $('#installBtn').hidden = standalone();
+  $('#installBtn').onclick = function () {
+    if (installEv) { installEv.prompt(); installEv = null; return; }
+    var ios = /iPad|iPhone|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
+    dialog('Install TAKE staff', [['x', ios
+      ? 'On the iPad, in Safari: tap the Share button (square with an arrow), then "Add to Home Screen", then Add.'
+      : 'In Chrome: open the menu (three dots), then "Cast, save and share", then "Install page as app". On an Android tablet: menu, then "Add to home screen", then Install.', 'note', '']],
+      function () { return Promise.resolve(); });
+  };
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/staff-sw.js', { scope: '/staff' }).catch(function () {});
+  // the screen never goes dark while the app is open
+  var lock = null;
+  function keepAwake() {
+    if (!('wakeLock' in navigator) || lock) return;
+    navigator.wakeLock.request('screen').then(function (l) { lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () {});
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { keepAwake(); if (pin) refresh(); } });
+  function tick() { var d = new Date(); $('#clock').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  tick(); setInterval(tick, 10000);
+  devBar();
 
   // ---- tabs
   document.querySelectorAll('[data-tab]').forEach(function (b) {
@@ -43,15 +118,18 @@
       var ids = d.orders.filter(function (o) { return o.status === 'new'; }).map(function (o) { return o.id; });
       var req = d.bookings.filter(function (b) { return ['request', 'pending', 'confirmed'].indexOf(b.status) >= 0; }).map(function (b) { return 'b' + b.id + (b.paid ? 'p' : ''); });
       var now = ids.concat(req);
-      if (seen && now.some(function (x) { return seen.indexOf(x) < 0; })) { beep(); toast('New order or booking'); }
-      seen = now;
+      // the kitchen screen rings for food only; the till for food and bookings
+      var fresh = seen ? now.filter(function (x) { return seen.indexOf(x) < 0 && (MODE !== 'kitchen' || typeof x === 'number'); }) : [];
+      if (fresh.length) { beep(true); toast(MODE === 'kitchen' ? 'New order' : 'New order or booking'); }
+      seen = now; $('#offline').hidden = true;
       kitchen(); rentals(); fleet(); if (tab === 'map') drawMap(); if (tab === 'calendar') gantt();
-    }).catch(function (e) { toast('Offline: ' + e.message); });
+    }).catch(function () { $('#offline').hidden = false; });
   }
 
   // ---- kitchen
   function kitchen() {
-    var cols = [['new', 'New'], ['cooking', 'Cooking'], ['ready', 'Ready / on the way'], ['done', 'Done today']];
+    var cols = [['new', 'New'], ['cooking', 'Cooking'], ['ready', 'Ready / on the way']].concat(MODE === 'kitchen' ? [] : [['done', 'Done today']]);
+    var mins = function (iso) { return Math.round((Date.now() - new Date(iso.replace(' ', 'T') + 'Z')) / 60000); };
     var next = { new: ['cooking', 'Start cooking'], cooking: ['ready', 'Ready'], ready: ['done', 'Handed over'] };
     var nNew = data.orders.filter(function (o) { return o.status === 'new'; }).length;
     $('#bKitchen').hidden = !nNew; $('#bKitchen').textContent = nNew;
@@ -59,7 +137,8 @@
       var list = data.orders.filter(function (o) { return o.status === c[0]; });
       return '<div class="col"><h3>' + c[1] + ' (' + list.length + ')</h3>' + list.map(function (o) {
         var mode = { dine: 'Eat here' + (o.tbl ? ' · table ' + esc(o.tbl) : ''), pickup: 'Pick up', delivery: 'Delivery' }[o.mode];
-        return '<div class="tk' + (c[0] === 'new' && ago(o.created).indexOf('h') > 0 ? ' late' : '') + '"><header><span>#' + o.id + ' ' + esc(o.name) + '</span><span>' + ago(o.created) + '</span></header>' +
+        var age = c[0] === 'done' ? 0 : mins(o.created);
+        return '<div class="tk' + (age >= 20 ? ' late' : age >= 10 ? ' soon' : '') + '"><header><span>#' + o.id + ' ' + esc(o.name) + '</span><span>' + ago(o.created) + '</span></header>' +
           '<div class="meta">' + mode + (o.address ? ': ' + esc(o.address) : '') + '</div><ul>' + o.items.map(function (i) { return '<li><b>' + i.qty + '×</b> ' + esc(i.name) + '</li>'; }).join('') + '</ul>' +
           (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total - (o.discount || 0)) + (o.discount ? ' (points used)' : '') + (o.paid ? ' · <b class="ok">paid · ' + esc(o.pay || '') + '</b>' : o.pay_claimed ? ' · <b class="wait">customer says paid by ' + esc(o.pay) + ': check</b>' : o.pay === 'online' || o.pay === 'test' ? ' · <b class="wait">paying online...</b>' : ' · will pay by ' + esc(o.pay || 'cash')) + (o.member_email ? ' · ★ member' : '') + '</div>' +
           '<div class="acts">' + (next[o.status] ? '<button class="sb go" data-o="' + o.id + '" data-s="' + next[o.status][0] + '">' + next[o.status][1] + '</button>' : '') +
@@ -293,6 +372,7 @@
     var f = $('#dlgForm');
     f.innerHTML = '<h3>' + esc(title) + '</h3>' + fields.map(function (x) {
       var v = x[3] == null ? '' : x[3];
+      if (x[2] === 'note') return '<p class="mute" style="font-size:16px;line-height:1.5">' + esc(x[1]) + '</p>';
       return '<label>' + x[1] + (x[2] === 'select' ? '<select name="' + x[0] + '">' + x[4].map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === String(v) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select>'
         : '<input name="' + x[0] + '" type="' + x[2] + '" value="' + esc(v) + '">') + '</label>';
     }).join('') + '<div class="row"><button class="btn btn-green" type="submit">Save</button><button class="btn btn-ghost" type="button" id="dlgX">Close</button></div><p class="form-note" id="dlgNote"></p>';

@@ -134,3 +134,23 @@ html[data-v="eat"] .vswitch [data-to="eat"], html[data-v="ride"] .vswitch [data-
 .g-bar.s-pending, .g-bar.s-request { background: rgba(242, 193, 78, .14); border-color: rgba(242, 193, 78, .5); border-style: dashed; }
 .g-bar.s-late { background: rgba(255, 59, 78, .3); border-color: #ff3b4e; }
 .g-bar.s-returned { opacity: .5; }
+
+/* device bar: kitchen screen or till, sound, full screen, install */
+.st-dev { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.st-clock { font: 700 20px Oswald, sans-serif; letter-spacing: .04em; padding: 0 6px; }
+.st-offline { position: sticky; top: 64px; z-index: 9; margin: 0; padding: 10px 16px; background: #5a1d00; color: #ffd9b0; font-weight: 600; text-align: center; }
+.tk.soon { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+/* kitchen screen: food orders only, readable across the kitchen */
+body.kds .st-tabs { display: none; }
+body.kds .st-main { max-width: none; padding: 16px; }
+body.kds .st-main h2 { display: none; }
+body.kds .cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+body.kds .col h3 { font-size: 22px; color: var(--txt); }
+body.kds .tk { font-size: 19px; padding: 18px; }
+body.kds .tk header { font-size: 22px; }
+body.kds .tk .meta { font-size: 16px; }
+body.kds .tk li { font-size: 24px; line-height: 1.35; }
+body.kds .tk li b { color: var(--gold); }
+body.kds .tk .sb { font-size: 18px; padding: 14px 18px; border-radius: 12px; }
+body.kds .tk .sb.go { flex: 1 1 100%; }
+@media (max-width: 760px) { body.kds .cols { grid-template-columns: 1fr; } }

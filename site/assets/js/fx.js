@@ -47,7 +47,7 @@
   }
 
   // progress rail down the right edge with the THEME marker on it
-  var mk = (window.THEME && THEME.paths[THEME.marker]) || 'M12 4v16';
+  var mk = (window.THEME && THEME.paths[document.body.classList.contains('page-ride') ? THEME.marker : (THEME.markerEat || THEME.marker)]) || 'M12 4v16';
   var rail = document.createElement('div');
   rail.className = 'scroll-rail'; rail.setAttribute('aria-hidden', 'true');
   rail.innerHTML = '<span class="sr-fill"></span><span class="sr-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="' + mk + '"/></svg></span>';

@@ -11,6 +11,13 @@
 <div id="app" hidden>
   <div class="st-top">
     <a class="logo" href="/"><img src="/assets/img/icon.svg" alt="" width="38" height="38"><span>TAKE <b>staff</b></span></a>
+    <div class="st-dev">
+      <span class="st-clock" id="clock"></span>
+      <button type="button" class="sb" id="modeBtn" title="Choose what this screen shows"></button>
+      <button type="button" class="sb" id="soundBtn"></button>
+      <button type="button" class="sb" id="fsBtn" title="Full screen">Full screen</button>
+      <button type="button" class="sb go" id="installBtn">Install app</button>
+    </div>
     <div class="st-tabs" role="tablist">
       <button role="tab" data-tab="kitchen" aria-selected="true">Kitchen <span class="badge" id="bKitchen" hidden></span></button>
       <button role="tab" data-tab="rentals">Rentals <span class="badge" id="bRentals" hidden></span></button>
@@ -21,6 +28,7 @@
       <button role="tab" data-tab="today">Today</button>
     </div>
   </div>
+  <div class="st-offline" id="offline" hidden>No connection. Showing the last orders; trying again...</div>
   <main class="st-main">
     <section data-pane="kitchen"><h2>Kitchen</h2><div class="cols" id="kitchen"></div></section>
     <section data-pane="rentals" hidden>

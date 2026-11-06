@@ -1,2 +1,56 @@
-{ "name": "TAKE staff", "short_name": "TAKE staff", "start_url": "/staff", "display": "standalone", "background_color": "#0c0a0a", "theme_color": "#0c0a0a",
-  "icons": [{ "src": "/assets/img/tc-192.png", "sizes": "192x192", "type": "image/png" }, { "src": "/assets/img/tc-512.png", "sizes": "512x512", "type": "image/png" }] }
+{
+  "id": "/staff",
+  "name": "TAKE staff",
+  "short_name": "TAKE staff",
+  "description": "Orders, kitchen screen, rentals and takings for TAKE Canggu.",
+  "start_url": "/staff",
+  "scope": "/staff",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c0a0a",
+  "theme_color": "#0c0a0a",
+  "icons": [
+    {
+      "src": "/assets/img/tc-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/tc-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/tc-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Kitchen screen",
+      "short_name": "Kitchen",
+      "url": "/staff?mode=kitchen",
+      "icons": [
+        {
+          "src": "/assets/img/tc-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Till: orders and bookings",
+      "short_name": "Till",
+      "url": "/staff?mode=till",
+      "icons": [
+        {
+          "src": "/assets/img/tc-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

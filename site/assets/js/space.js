@@ -16,6 +16,7 @@ var THEME = {
     wave: 'M2 14c3-3 5-3 8 0s5 3 8 0 3-2 4-2M2 19c3-3 5-3 8 0s5 3 8 0 3-2 4-2',
     key: 'M8 15m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0M11 12l9-9M17 6l3 3M15 8l2 2',
     coconut: 'M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0M15 7l3-4M10 11h.01M14 11h.01M12 14h.01',
+    cloche: 'M2 18h20M4 18a8 8 0 0 1 16 0M12 7v3M10 7h4M7 15a5 5 0 0 1 3-3',
     bowl: 'M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4M2 21h20'
   },
   // big soft shapes, pre-blurred once: [kind, x 0-1, y 0-1, size px, depth, colour, spin deg/s]
@@ -40,7 +41,8 @@ var THEME = {
     ['scooter', [-.08, .86], [1.08, .62], 38, 34, '255,90,110'],
     ['scooter', [1.08, .30], [-.08, .48], 52, 28, '242,193,78']
   ],
-  marker: 'scooter'          // the object on the scroll progress bar (fx.js)
+  marker: 'scooter',         // the object on the scroll progress bar (fx.js) on the rental page
+  markerEat: 'cloche'        // the same on the restaurant page
 };
 
 (function () {

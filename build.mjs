@@ -185,6 +185,7 @@ function staffLayout(meta, body) {
 <meta name="theme-color" content="#0c0a0a"><link rel="manifest" href="/staff.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/tc-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/tc-192.png">
 <link rel="apple-touch-icon" href="/assets/img/tc-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="TAKE staff">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="/assets/css/app.css">
