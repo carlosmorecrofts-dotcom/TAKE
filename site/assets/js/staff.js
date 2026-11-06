@@ -177,6 +177,7 @@
     var cols = [['new', 'New'], ['cooking', 'Cooking'], ['ready', 'Ready / on the way']].concat(MODE === 'kitchen' ? [] : [['done', 'Done today']]);
     var mins = function (iso) { return Math.round((Date.now() - new Date(iso.replace(' ', 'T') + 'Z')) / 60000); };
     var next = { new: ['cooking', 'Start cooking'], cooking: ['ready', 'Ready'], ready: ['done', 'Handed over'] };
+    var prev = { cooking: ['new', 'New'], ready: ['cooking', 'Cooking'], done: ['ready', 'Ready'] }; // Back: undo the last step
     var nNew = data.orders.filter(function (o) { return o.status === 'new'; }).length;
     $('#bKitchen').hidden = !nNew; $('#bKitchen').textContent = nNew;
     $('#kitchen').innerHTML = cols.map(function (c) {
@@ -188,15 +189,18 @@
           '<div class="meta">' + mode + (o.address ? ': ' + esc(o.address) : '') + '</div><ul>' + o.items.map(function (i) { return '<li><b>' + i.qty + '×</b> ' + esc(i.name) + '</li>'; }).join('') + '</ul>' +
           (o.note ? '<div class="meta">Note: ' + esc(o.note) + '</div>' : '') + '<div class="meta">' + rp(o.total - (o.discount || 0)) + (o.discount ? ' (points used)' : '') + (o.paid ? ' · <b class="ok">paid · ' + esc(o.pay || '') + '</b>' : o.pay_claimed ? ' · <b class="wait">customer says paid by ' + esc(o.pay) + ': check</b>' : o.pay === 'online' || o.pay === 'test' ? ' · <b class="wait">paying online...</b>' : ' · will pay by ' + esc(o.pay || 'cash')) + (o.member_email ? ' · ★ member' : '') + '</div>' +
           '<div class="acts">' + (next[o.status] ? '<button class="sb go" data-o="' + o.id + '" data-s="' + next[o.status][0] + '">' + next[o.status][1] + '</button>' : '') +
-          (o.paid ? '' : '<button class="sb" data-o="' + o.id + '" data-paid="1">Paid</button>') +
+          (o.paid ? (MODE === 'kitchen' ? '' : '<button class="sb back" data-o="' + o.id + '" data-unpaid="1">Not paid</button>') : '<button class="sb" data-o="' + o.id + '" data-paid="1">Paid</button>') +
           '<a class="sb" href="' + telWa(o.wa) + '" target="_blank" rel="noopener">WhatsApp</a>' +
-          (o.status === 'new' ? '<button class="sb warn" data-o="' + o.id + '" data-s="cancelled">Cancel</button>' : '') + '</div></div>';
+          (o.status === 'new' ? '<button class="sb warn" data-o="' + o.id + '" data-s="cancelled">Cancel</button>' : '') +
+          (prev[o.status] ? '<button class="sb back" data-o="' + o.id + '" data-s="' + prev[o.status][0] + '" data-back="' + prev[o.status][1] + '" title="Undo: back to ' + prev[o.status][1] + '">↩ Back</button>' : '') + '</div></div>';
       }).join('') + '</div>';
     }).join('');
     $('#kitchen').querySelectorAll('[data-o]').forEach(function (b) {
       b.onclick = function () {
-        var body = b.dataset.paid ? { paid: true, method: askMethod() } : { status: b.dataset.s };
+        var body = b.dataset.paid ? { paid: true, method: askMethod() } : b.dataset.unpaid ? { unpaid: true } : { status: b.dataset.s };
         if (body.paid && !body.method) return;
+        if (body.unpaid && !confirm('Order #' + b.dataset.o + ' is marked paid. Undo that?')) return;
+        if (b.dataset.back) toast('Order #' + b.dataset.o + ' moved back to ' + b.dataset.back);
         if (body.status === 'cancelled' && !confirm('Cancel this order?')) return;
         api('orders/' + b.dataset.o, 'PATCH', body).then(refresh);
       };
@@ -236,8 +240,10 @@
     var a = function (act, label, cls) { return '<button type="button" class="sb ' + (cls || '') + '" data-b="' + b.id + '" data-a="' + act + '">' + label + '</button>'; };
     if (b.status === 'pending') return a('cancel', 'Cancel', 'warn');
     if (b.status === 'request') return a('confirm', 'Confirm', 'go') + a('cancel', 'Decline', 'warn');
-    if (b.status === 'confirmed') return (b.kind === 'rent' ? a('checkout', 'Hand over bike', 'go') : a('done', 'Trip done', 'go')) + (b.paid ? '' : a('paid', 'Paid')) + a('cancel', 'Cancel', 'warn');
-    if (b.status === 'out') return (b.kind === 'rent' ? a('checkin', 'Check in', 'go') + a('extend', 'Extend') + a('track', 'Map') : a('done', 'Trip done', 'go')) + (b.paid ? '' : a('paid', 'Paid'));
+    var undoPaid = b.paid ? a('unpaid', 'Not paid', 'back') : a('paid', 'Paid');
+    if (b.status === 'confirmed') return (b.kind === 'rent' ? a('checkout', 'Hand over bike', 'go') : a('done', 'Trip done', 'go')) + undoPaid + a('cancel', 'Cancel', 'warn') + a('back', '↩ Back', 'back');
+    if (b.status === 'out') return (b.kind === 'rent' ? a('checkin', 'Check in', 'go') + a('extend', 'Extend') + a('track', 'Map') : a('done', 'Trip done', 'go')) + undoPaid + a('back', '↩ Back', 'back');
+    if (b.status === 'returned') return (b.paid ? a('unpaid', 'Not paid', 'back') : '') + a('back', '↩ Back', 'back');
     return '';
   }
   function doBooking(id, act) {
@@ -251,6 +257,12 @@
     if (act === 'cancel') { if (confirm('Cancel booking #' + id + '?')) api('bookings/' + id, 'PATCH', { status: 'cancelled' }).then(refresh); return; }
     if (act === 'paid') { var pm = askMethod(); if (!pm) return; return api('bookings/' + id, 'PATCH', { paid: true, method: pm }).then(refresh); }
     if (act === 'done') return api('bookings/' + id, 'PATCH', { action: 'checkin' }).then(refresh);
+    if (act === 'unpaid') { if (confirm('Booking #' + id + ' is marked paid. Undo that?')) api('bookings/' + id, 'PATCH', { unpaid: true }).then(refresh); return; }
+    if (act === 'back') {
+      var undo = { confirmed: 'Undo the confirmation? It goes back to Requests.', out: 'Undo the hand-over? The bike becomes available again.', returned: b.kind === 'rent' ? 'Undo the check-in? The bike goes back out with ' + b.name + '.' : 'Undo "trip done"?' }[b.status];
+      if (!undo || !confirm('Booking #' + id + ': ' + undo)) return;
+      return api('bookings/' + id, 'PATCH', { action: 'back' }).then(function () { toast('Booking #' + id + ' moved back one step'); refresh(); }).catch(function (e) { toast(e.message); });
+    }
     if (act === 'extend') return dialog('Extend #' + id, [['end', 'New return date', 'date', b.end], ['price', 'New total price (Rp)', 'number', b.price]], function (v) { return api('bookings/' + id, 'PATCH', { end: v.end, price: v.price }); });
     if (act === 'track') { $('[data-tab=map]').click(); setTimeout(function () { track(id); }, 300); return; }
     if (act === 'checkout') {

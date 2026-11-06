@@ -452,6 +452,9 @@ async function staff(request, env, db, p, m, url) {
     if (st) await db.prepare('UPDATE orders SET status=? WHERE id=?').bind(st, id).run();
     if (st === 'cancelled' && o.points_used) await refundPoints(db, o.member_id, o.points_used, 'order', id);
     if (b.paid) await markPaid(db, 'order', id, null, ['cash', 'qris', 'transfer', 'card', 'online'].includes(b.method) ? b.method : 'cash');
+    if (b.unpaid && o.paid) await db.batch([ // "Paid" pressed by mistake: undo it and the points it gave
+      db.prepare('UPDATE orders SET paid=0 WHERE id=?').bind(id),
+      db.prepare('DELETE FROM points_log WHERE ref=?').bind('earn:order:' + id)]);
     return J({ ok: true });
   }
 
@@ -484,6 +487,25 @@ async function staff(request, env, db, p, m, url) {
       ]);
       return J({ ok: true, token: bk.token });
     }
+    if (b.action === 'back') { // staff pressed Back: undo the last step
+      if (bk.status === 'confirmed') { await db.prepare("UPDATE bookings SET status='request' WHERE id=?").bind(id).run(); return J({ ok: true, to: 'request' }); }
+      if (bk.status === 'out') { // undo the hand-over: the bike is free again
+        const q = [db.prepare("UPDATE bookings SET status='confirmed', bike_id=NULL, km_out=NULL, fuel_out=NULL, out_at=NULL WHERE id=?").bind(id), db.prepare('DELETE FROM pings WHERE booking_id=?').bind(id)];
+        if (bk.bike_id) q.push(db.prepare("UPDATE bikes SET status='available' WHERE id=? AND status='out'").bind(bk.bike_id));
+        await db.batch(q); return J({ ok: true, to: 'confirmed' });
+      }
+      if (bk.status === 'returned') { // undo the check-in: back out on the road
+        const to = bk.kind === 'rent' && bk.bike_id ? 'out' : 'confirmed';
+        if (to === 'out') {
+          const bike = await db.prepare('SELECT status FROM bikes WHERE id=?').bind(bk.bike_id).first();
+          if (bike && bike.status === 'out') return bad('that bike is already out with another booking', 409);
+        }
+        const q = [db.prepare('UPDATE bookings SET status=?, km_in=NULL, fuel_in=NULL, in_at=NULL WHERE id=?').bind(to, id)];
+        if (to === 'out') q.push(db.prepare("UPDATE bikes SET status='out' WHERE id=?").bind(bk.bike_id));
+        await db.batch(q); return J({ ok: true, to });
+      }
+      return bad('nothing to go back to', 409);
+    }
     if (b.action === 'checkin') {
       const km = int(b.km);
       const q = [db.prepare("UPDATE bookings SET status='returned', km_in=?, fuel_in=?, staff_note=COALESCE(?,staff_note), in_at=datetime('now') WHERE id=?").bind(km, str(b.fuel, 20), str(b.note, 500), id),
@@ -501,6 +523,9 @@ async function staff(request, env, db, p, m, url) {
       .bind(st, int(b.price), int(b.deposit), str(b.end, 20), str(b.staff_note, 500), id).run();
     if (st === 'cancelled' && bk.points_used) await refundPoints(db, bk.member_id, bk.points_used, 'booking', id);
     if (b.paid) await markPaid(db, 'booking', id, null, ['cash', 'qris', 'transfer', 'card', 'online'].includes(b.method) ? b.method : 'cash');
+    if (b.unpaid && bk.paid) await db.batch([
+      db.prepare('UPDATE bookings SET paid=0 WHERE id=?').bind(id),
+      db.prepare('DELETE FROM points_log WHERE ref=?').bind('earn:booking:' + id)]);
     return J({ ok: true });
   }
 
