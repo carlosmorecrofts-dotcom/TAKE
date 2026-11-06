@@ -100,7 +100,7 @@ const faqHtml = FAQ.map(([q, a]) => `<details class="card faq"><summary><h3>${es
 
 // Menu and scooters written into the HTML, so search engines see them without
 // running JavaScript. main.js redraws the same cards with the + buttons.
-const menuStatic = cat.menu.map((i) => `<div class="card dish${i.img ? ' has-img' : ''}">${i.img ? `<div class="dish-pic"><img class="dish-img" src="/assets/img/${i.img}" alt="${esc(i.name)}${i.ex ? ' (example photo)' : ' at TAKE'}" width="360" height="360" loading="lazy">${i.ex ? (i.ex.source ? `<a class="ex-tag" href="${i.ex.source}" target="_blank" rel="noopener" title="Photo: ${esc(i.ex.author)}, ${esc(i.ex.licence)}">Example photo</a>` : `<span class="ex-tag" title="${esc(i.ex.author)}">Example photo</span>`) : ''}</div>` : ''}<div class="dish-body"><span class="label">${esc(i.cat)}</span><h3><span class="dish-no">${i.no}</span>${esc(i.name)}</h3>${i.desc ? `<p class="dish-desc">${esc(i.desc)}</p>` : ''}<span class="price">${i.price ? k(i.price) : 'Price at the counter'}</span></div></div>`).join('');
+const menuStatic = cat.menu.map((i) => `<div class="card dish${i.img ? ' has-img' : ''}"><span class="dish-no" aria-label="Number ${i.no}">${i.no}</span>${i.img ? `<div class="dish-pic"><img class="dish-img" src="/assets/img/${i.img}" alt="${esc(i.name)}${i.ex ? ' (example photo)' : ' at TAKE'}" width="360" height="360" loading="lazy">${i.ex ? (i.ex.source ? `<a class="ex-tag" href="${i.ex.source}" target="_blank" rel="noopener" title="Photo: ${esc(i.ex.author)}, ${esc(i.ex.licence)}">Example photo</a>` : `<span class="ex-tag" title="${esc(i.ex.author)}">Example photo</span>`) : ''}</div>` : ''}<div class="dish-body"><span class="label">${esc(i.cat)}</span><h3>${esc(i.name)}</h3>${i.desc ? `<p class="dish-desc">${esc(i.desc)}</p>` : ''}<span class="price">${i.price ? k(i.price) : 'Price at the counter'}</span></div></div>`).join('');
 const bikeImg = (id) => { const p = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'bike-photos.json'), 'utf8')).photos[id]; return p ? `<img class="bike-img" src="/assets/img/${p.file}" alt="" loading="lazy">` : ''; };
 const fleetStatic = cat.bikes.map((b) => `<div class="card bike">${bikeImg(b.id)}<span class="label">${b.cc}cc · ${b.kind}</span><h3>${esc(b.name)}</h3><div class="rates"><div><b>${b.day ? k(b.day) : '?'}</b>day</div><div><b>${b.week ? k(b.week) : '?'}</b>week</div><div><b>${b.month ? k(b.month) : '?'}</b>month</div></div></div>`).join('');
 
@@ -125,7 +125,7 @@ const TOKENS = {
   '{{TRIP_OPTIONS}}': cat.trips.map((t) => `<option value="${t.name}">${t.name}</option>`).join(''),
   '{{ADD_DELIVERY}}': add('delivery area and fee'),
   '{{ADD_DEPOSIT}}': add('deposit and documents needed (passport? licence?)'),
-  '{{ADD_PAY}}': add('payment: cash, QRIS, transfer, card?'),
+  '{{ADD_PAY}}': 'Pay by cash, QRIS or bank transfer.',
   '{{ADD_STORY}}': add('owner name and a line about how TAKE started'),
   // rental terms: decisions only the owner can make
   '{{TERMS_VERSION}}': cat.rental.termsVersion,

@@ -2,9 +2,9 @@
    The heroes stay dark on purpose, so the neon signs keep their glow. */
 html[data-theme="light"] {
   --deep: #faf6f2; --navy: #ffffff; --navy-2: #f1e8e2;
-  --green: #e0243f; --green-ink: #ffffff; --gold: #9a6a00;
+  --green: #ff5a6e; --green-ink: #2a0308; --gold: #9a6a00; /* the same pink as the dark theme */
   --txt: #241a1a; --mute: #6b5b57;
-  --line: rgba(224, 36, 63, .22);
+  --line: rgba(255, 90, 110, .28);
   --glass: linear-gradient(160deg, rgba(255, 255, 255, .96), rgba(250, 244, 240, .98));
   color-scheme: light;
 }

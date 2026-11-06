@@ -38,6 +38,7 @@
       ms.forEach(function (m) { m.addedNodes.forEach(function (n) {
         if (n.nodeType !== 1 || !n.classList.contains('card') || n.closest('#statusCard')) return;
         // a grid redrawn after a tap (+ on a dish) must not fade in again
+        if (!n.parentNode) return; // already replaced by a redraw
         if (n.parentNode.dataset.shown) { n.classList.add('reveal', 'in'); return; }
         n.classList.add('reveal'); pending.push(n);
         setTimeout(function (p) { p.dataset.shown = '1'; }, 1500, n.parentNode);
