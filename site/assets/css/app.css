@@ -167,3 +167,5 @@ body.kds .tk .sb.go { flex: 1 1 100%; }
 /* staff app logo: the website's TAKE word mark, never cropped */
 .st-top .logo img.word, .login img.word { width: auto; height: 34px; border-radius: 0; box-shadow: none; mix-blend-mode: screen; }
 .login img.word { height: 64px; margin: 0 auto 4px; display: block; }
+/* on a card with a photo the number sits on the photo, top-left */
+.dish.has-img > .dish-no { left: 10px; right: auto; top: 10px; }
