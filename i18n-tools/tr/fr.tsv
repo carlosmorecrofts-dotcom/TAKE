@@ -283,7 +283,7 @@
 401	Demander un chauffeur
 402	Points TAKE
 403	Mangez, roulez, <1>économisez</1>
-404	Un seul compte membre pour le café et les scooters. 1 point pour chaque Rp 10K payé en repas et scooters. 100 points = Rp 25K de réduction. <1>[ADD: owner to confirm these rates]</1>
+404	Un seul compte membre pour le café et les scooters. 1 point pour chaque Rp 10K payé en repas et scooters. 100 points = Rp 200K de réduction. <1>[ADD: owner to confirm these rates]</1>
 405	S'inscrire ou se connecter
 406	Conditions de location
 407	Paiement
@@ -306,7 +306,7 @@
 429	Comment payer ?
 430	Le paiement en ligne arrive bientôt. Pour l'instant, nous confirmons votre réservation sur WhatsApp et vous payez en boutique ; les repas se paient au comptoir.
 431	Comment fonctionnent les points TAKE ?
-432	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et locations de scooter, et 100 points retirent Rp 25K de votre prochaine commande ou location.
+432	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et locations de scooter, et 100 points retirent Rp 200K de votre prochaine commande ou location.
 433	Proposez-vous des chauffeurs et des excursions ?
 434	Oui : transfert aéroport, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, randonnée au mont Batur, randonnée au mont Agung, excursion d'une journée. Envoyez une demande avec la date et le lieu de prise en charge.
 435	Une petite maison, deux enseignes
@@ -374,7 +374,7 @@
 498	Servez-vous du café ?
 499	Oui, dès 7 h : latte ou cappuccino chaud ou glacé 20K, café de Bali 10K. Aussi des jus frais dès 15K, noix de coco fraîche 20K, jamu traditionnel et Bintang 35K.
 500	Oui : transfert aéroport, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, randonnée au mont Batur, randonnée au mont Agung, excursion d'une journée. Envoyez une demande dans la section Transport avec la date et le lieu de prise en charge.
-501	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et scooters, et 100 points retirent Rp 25K de votre prochaine commande ou location.
+501	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et scooters, et 100 points retirent Rp 200K de votre prochaine commande ou location.
 502	Mon scooter est en panne. Que faire ?
 503	Mettez-vous en sécurité, ouvrez votre page de réservation et appuyez sur « Partager ma position », puis écrivez-nous sur WhatsApp au 0822 4016 0894 pour que nous sachions où vous êtes.
 504	Bonjour ! Je suis l'assistant TAKE. Posez-moi vos questions sur le menu, la livraison ou nos scooters, ou touchez une question ci-dessous.
@@ -393,3 +393,11 @@
 517	Exemple généré par IA (Figma)
 518	Eau minérale (photo d'exemple)
 519	Sprite (photo d'exemple)
+522	Un seul compte membre pour le café et les scooters. 1 point pour chaque Rp 10K payé en repas et scooters. 100 points = Rp 200K de réduction. <1>[ADD: owner to confirm these rates]</1>
+523	Oui. Commandez sur cette page et choisissez la livraison, ou écrivez à la cuisine sur WhatsApp au 0822 4016 0894.
+524	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et locations de scooter, et 100 points retirent Rp 200K de votre prochaine commande ou location.
+525	Cuisine et livraison : 0822 4016 0894
+526	Oui. Ajoutez des plats du menu, choisissez Livraison et indiquez-nous l'adresse, ou écrivez à la cuisine sur WhatsApp au 0822 4016 0894.
+527	Connectez-vous en tant que membre avec votre e-mail. Vous gagnez 1 point pour chaque Rp 10K payé en repas et scooters, et 100 points retirent Rp 200K de votre prochaine commande ou location.
+520	Questions : <1/>
+521	Nous confirmons sur WhatsApp ; vous payez comme choisi ci-dessus. <1>Conditions de location</1>

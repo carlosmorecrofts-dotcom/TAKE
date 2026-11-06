@@ -164,19 +164,15 @@
 164	~c4dv0g	Latte (hot or cold)
 165	~ryk5of	Add Latte (hot or cold)
 166	~1y9bs1u	Cappuccino (hot or cold) (example photo)
-167	~ulss1d	Photo: Ioacc1234red, CC BY-SA 4.0
 168	~1jk95uz	Cappuccino (hot or cold)
 169	~1ma4ic2	Add Cappuccino (hot or cold)
 170	~11i9db0	Bali Coffee (example photo)
-171	~4cf1hg	Photo: Michael.C.Wright, CC BY-SA 4.0
 172	~1c098w5	Bali Coffee
 173	~ipcd6q	Add Bali Coffee
 174	~idkjeh	Nescafe (example photo)
-175	~nqno8	Photo: Corn cheese, CC BY-SA 4.0
 176	~10jzm9s	Nescafe
 177	~k2sd2j	Add Nescafe
 178	~22k1ld	Tea (hot or cold) (example photo)
-179	~cmspdu	Photo: AntanO, CC BY-SA 4.0
 180	~1qw0h5k	Tea (hot or cold)
 181	~bo2je7	Add Tea (hot or cold)
 182	~14n0z0y	Mineral Water
@@ -184,51 +180,40 @@
 184	~1vrb7ss	Sprite
 185	~hrstj9	Add Sprite
 186	~d16qrc	Fanta (example photo)
-187	~1c76ohz	Photo: Emilian Robert Vicol from Com. Balanesti, Romania, CC BY 2.0
 188	~10aqykp	Fanta
 189	~du76qa	Add Fanta
 190	~vjq861	Coca Cola (example photo)
-191	~1xy7a8b	Photo: Oleg Yunakov, CC BY-SA 4.0
 192	~a57mao	Coca Cola
 193	~eg0qs7	Add Coca Cola
 194	~ioxaiz	Avocado Juice (example photo)
-195	~882rox	Photo: Midori, CC BY 3.0
 196	~1qj6dtu	Avocado Juice
 197	~17s35id	Add Avocado Juice
 198	~1nm5l0t	Dragon Fruit Juice (example photo)
-199	~g8gdqu	Photo: Sandhiya Rangasami, CC BY 4.0
 200	~1ua0j1o	Dragon Fruit Juice
 201	~1fhz9cx	Add Dragon Fruit Juice
 202	~7evvgu	Watermelon Juice (example photo)
-203	~n2vyew	Photo: Brindhashanmugam312, CC BY-SA 4.0
 204	~xd38hb	Watermelon Juice
 205	~1iy316y	Add Watermelon Juice
 206	~1007640	Pineapple Juice (example photo)
-207	~d62w20	Photo: B722N, CC BY-SA 4.0
 208	~1c811gh	Pineapple Juice
 209	~x6ni8i	Add Pineapple Juice
 210	~aezup6	Orange Juice (example photo)
-211	~i8hev5	Photo: Agency of the United States Department of Agriculture Edited, Public domain
 212	~1hqar1v	Orange Juice
 213	~121wp3u	Add Orange Juice
 214	~1jyl4u4	Young Coconut at TAKE
 215	~snbekw	Young Coconut
 216	~jqsk6r	Add Young Coconut
 217	~1msgseg	Traditional Jamu (example photo)
-218	~1al2fpj	Photo: Dyah Umiyarni, CC BY-SA 4.0
 219	~1mqztcp	Traditional Jamu
 220	~1566k4g	Add Traditional Jamu
 221	~sm3s03	Natural Black Honey (example photo)
-222	~1x4cnlf	Photo: Nic McPhee from Morris, MN, USA, CC BY-SA 2.0
 223	~msrkqi	Natural Black Honey
 224	~1p1h010	Price at the counter
 225	~17ub1h1	Add Natural Black Honey
 226	~1m0y1kc	Bintang Original (example photo)
-227	~1quk2l6	Photo: Ocdp, CC BY-SA 3.0
 228	~19v38r9	Bintang Original
 229	~6re49o	Add Bintang Original
 230	~1kxokal	Bintang Radler (example photo)
-231	~fknioi	Photo: Hainanman, CC BY-SA 4.0
 232	~1lasb3w	Bintang Radler
 233	~8k480l	Add Bintang Radler
 234	~197qift	Bintang Crystal (example photo)
@@ -265,8 +250,6 @@
 265	~n9j8ox	Note for the kitchen
 266	~1a6zwz0	No chilli, extra egg...
 267	~958wsx	Payment
-268	~p151vc	Pay now online
-269	~yozobh	Pay at the counter
 270	~x7euvg	Place order
 271	~y6jyw1	You get a link to follow your order. We also open WhatsApp so the kitchen sees it at once.
 272	~fbxmlv	Pick your ride
@@ -327,7 +310,6 @@
 327	~1g0pz1b	Sign in as a member, add your passport and licence photos once, accept the <1>rental terms</1>
 328	~1yhh7k9	Pay in advance online, then pick it up at the shop in Perum Prapta Canggu Asri
 329	~lshn3t	Broken down or lost? Share your location from your booking page and WhatsApp us
-330	~1abfdwt	Questions: <1/> · <2/> · <3/>
 331	~4sodb8	Scooter
 332	~1wl5u5h	Beat
 333	~7ys9qi	110cc · 85K
@@ -367,7 +349,6 @@
 367	~qqicdh	Choose dates
 368	~16d9c12	Pick-up and return at the shop, 7am to 8pm
 369	~rbow7h	Sign in to book
-370	~kodttq	Online payment opens soon: for now we confirm on WhatsApp and you pay at the shop. <1>Rental terms</1>
 371	~11tqx2f	TAKE Transport
 372	~1998ud3	Driver, airport & tours
 373	~11x6337	Airport transfer<1><2>[ADD: price]</2></1>
@@ -401,7 +382,6 @@
 401	~12r3rgl	Request a driver
 402	~4o58px	TAKE Points
 403	~133i8o5	Eat, ride, <1>save</1>
-404	~17grft3	One member account for the café and the scooters. 1 point for every Rp 10K you pay on food and scooters. 100 points = Rp 25K off. <1>[ADD: owner to confirm these rates]</1>
 405	~1xe2zki	Join or sign in
 406	~w0tp9o	Rental terms
 407	~1p24pvb	Paying
@@ -421,7 +401,6 @@
 421	~2ydvxq	What are the opening hours?
 422	~1w4q4cg	Every day from 7am to 8pm, for the kitchen and the rental desk.
 423	~3hcn2f	Do you deliver food?
-424	~1yps9gt	Yes. Order on this page and choose delivery, or WhatsApp the kitchen on 0822 4016 0894.
 425	~15xwu20	How much is a scooter a day?
 426	~114hkfy	From Rp 85K a day: Honda Beat 85K, Yamaha Gear 85K, Honda Scoopy 100K, Yamaha Fazzio 100K, Honda Vario 120K, Yamaha NMAX 150K, Honda PCX 150K, Honda ADV 175K, Yamaha XMAX 300K.
 427	~12c3avv	How do I book a scooter?
@@ -429,7 +408,6 @@
 429	~1ohgp68	How do I pay?
 430	~1tuf6y6	Online payment is coming soon. For now we confirm your scooter booking on WhatsApp and you pay at the shop; food is paid at the counter.
 431	~78l7oy	How do TAKE Points work?
-432	~1e3s8hu	Sign in as a member with your email. You get 1 point for every Rp 10K you pay on food and scooter rentals, and 100 points take Rp 25K off your next order or rental.
 433	~1p7cqrn	Do you have drivers and tours?
 434	~1cau994	Yes: Airport transfer, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bay, Trekking Mount Batur, Trekking Mount Agung, Full day tour. Send a request with the date and pick-up place.
 435	~addxx0	One small house, two signs
@@ -438,7 +416,6 @@
 438	~vizsqe	Open in Google Maps
 439	~9cbyyr	Open every day, 7am to 8pm
 440	~1n3onht	Kitchen and rental desk
-441	~g9v33	Kitchen & delivery: 0822 4016 0894
 442	~16ninfz	The TAKE house: TAKE Scooter Rental and TAKE Coffee Canggu signs over a terrace with plants
 443	~1fc6u0m	Reviews
 444	~7x7suw	What guests <1>say</1>
@@ -493,11 +470,9 @@
 494	~1td6m6z	Perum Prapta Canggu Asri Blok D No.1, Jl. Krisnantara 1, a quiet lane off Jalan Pantai Berawa in Tibubeneng, Canggu. Look for the white house with the two signs. The map is in the Find us section.
 495	~1m2wfx1	What is on the menu?
 496	~14ydlu4	Local and western food, Bali style. Breakfasts, nasi goreng and mi goreng, sweet and sour chicken, fuyung hai, cap cay, four pizzas, spaghetti bolognese, carbonara and aglio olio, small bites, coffee, fresh juices, young coconut and Bintang. Everything with prices is in the Menu section.
-497	~1d6cn66	Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0822 4016 0894.
 498	~rwifjp	Do you serve coffee?
 499	~1huhvac	Yes, from 7am: latte or cappuccino hot or cold 20K, Bali coffee 10K. Also fresh juices from 15K, young coconut 20K, traditional jamu and Bintang 35K.
 500	~e8cbnu	Yes: Airport transfer, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bay, Trekking Mount Batur, Trekking Mount Agung, Full day tour. Send a request in the Transport section with the date and pick-up place.
-501	~14av5ma	Sign in as a member with your email. You get 1 point for every Rp 10K you pay on food and scooters, and 100 points take Rp 25K off your next order or rental.
 502	~rr7mpp	My scooter broke down. What do I do?
 504	~fmtglh	Hi! I am the TAKE assistant. Ask me about the menu, delivery or our scooters, or tap a question below.
 505	~14lytok	Good question. Someone from TAKE can answer that best. Tap "Talk to a person" and we reply on WhatsApp.
@@ -515,3 +490,11 @@
 517	~hrlwsa	AI-generated example (Figma)
 518	~ptmxi3	Mineral Water (example photo)
 519	~ndextp	Sprite (example photo)
+520	~15ng6pe	Questions: <1/>
+521	~wuetmo	We confirm on WhatsApp; you pay as you chose above. <1>Rental terms</1>
+522	~g69esa	One member account for the café and the scooters. 1 point for every Rp 10K you pay on food and scooters. 100 points = Rp 200K off. <1>[ADD: owner to confirm these rates]</1>
+523	~197wllr	Yes. Order on this page and choose delivery, or WhatsApp the kitchen on 0822 4016 0894.
+524	~q86qj5	Sign in as a member with your email. You get 1 point for every Rp 10K you pay on food and scooter rentals, and 100 points take Rp 200K off your next order or rental.
+525	~1mrq2o1	Kitchen & delivery: 0822 4016 0894
+526	~10btqi0	Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0822 4016 0894.
+527	~1qxewn5	Sign in as a member with your email. You get 1 point for every Rp 10K you pay on food and scooters, and 100 points take Rp 200K off your next order or rental.

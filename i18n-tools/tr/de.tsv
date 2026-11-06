@@ -283,7 +283,7 @@
 401	Fahrer anfragen
 402	TAKE-Punkte
 403	Essen, fahren, <1>sparen</1>
-404	Ein Mitgliedskonto für Café und Roller. 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst. 100 Punkte = Rp 25K Rabatt. <1>[ADD: owner to confirm these rates]</1>
+404	Ein Mitgliedskonto für Café und Roller. 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst. 100 Punkte = Rp 200K Rabatt. <1>[ADD: owner to confirm these rates]</1>
 405	Beitreten oder anmelden
 406	Mietbedingungen
 407	Bezahlen
@@ -306,7 +306,7 @@
 429	Wie bezahle ich?
 430	Onlinezahlung kommt bald. Vorerst bestätigen wir deine Rollerbuchung auf WhatsApp und du zahlst im Shop; Essen wird an der Theke bezahlt.
 431	Wie funktionieren TAKE-Punkte?
-432	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Rollermiete bezahlst, und 100 Punkte ziehen Rp 25K von deiner nächsten Bestellung oder Miete ab.
+432	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Rollermiete bezahlst, und 100 Punkte ziehen Rp 200K von deiner nächsten Bestellung oder Miete ab.
 433	Habt ihr Fahrer und Touren?
 434	Ja: Flughafentransfer, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, Trekking auf den Batur, Trekking auf den Agung, Ganztagestour. Sende eine Anfrage mit Datum und Abholort.
 435	Ein kleines Haus, zwei Schilder
@@ -374,7 +374,7 @@
 498	Gibt es Kaffee?
 499	Ja, ab 7 Uhr: Latte oder Cappuccino, heiß oder kalt, 20K, Bali-Kaffee 10K. Außerdem frische Säfte ab 15K, junge Kokosnuss 20K, traditionelles Jamu und Bintang 35K.
 500	Ja: Flughafentransfer, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, Trekking auf den Batur, Trekking auf den Agung, Ganztagestour. Sende im Bereich Transport eine Anfrage mit Datum und Abholort.
-501	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst, und 100 Punkte ziehen Rp 25K von deiner nächsten Bestellung oder Miete ab.
+501	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst, und 100 Punkte ziehen Rp 200K von deiner nächsten Bestellung oder Miete ab.
 502	Mein Roller hat eine Panne. Was tun?
 503	Bring dich in Sicherheit, öffne deine Buchungsseite und tippe auf „Meinen Standort teilen", dann schreib uns auf WhatsApp unter 0822 4016 0894, damit wir wissen, wo du bist.
 504	Hallo! Ich bin der TAKE-Assistent. Frag mich zur Speisekarte, Lieferung oder zu unseren Rollern, oder tippe unten auf eine Frage.
@@ -393,3 +393,11 @@
 517	KI-erzeugtes Beispiel (Figma)
 518	Mineralwasser (Beispielfoto)
 519	Sprite (Beispielfoto)
+522	Ein Mitgliedskonto für Café und Roller. 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst. 100 Punkte = Rp 200K Rabatt. <1>[ADD: owner to confirm these rates]</1>
+523	Ja. Bestell auf dieser Seite und wähle Lieferung, oder schreib der Küche auf WhatsApp unter 0822 4016 0894.
+524	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Rollermiete bezahlst, und 100 Punkte ziehen Rp 200K von deiner nächsten Bestellung oder Miete ab.
+525	Küche & Lieferung: 0822 4016 0894
+526	Ja. Füge Gerichte aus der Karte hinzu, wähle Lieferung und sag uns, wohin, oder schreib der Küche auf WhatsApp unter 0822 4016 0894.
+527	Melde dich mit deiner E-Mail als Mitglied an. Du bekommst 1 Punkt für je Rp 10K, die du für Essen und Roller bezahlst, und 100 Punkte ziehen Rp 200K von deiner nächsten Bestellung oder Miete ab.
+520	Fragen: <1/>
+521	Wir bestätigen per WhatsApp; du zahlst so, wie du oben gewählt hast. <1>Mietbedingungen</1>

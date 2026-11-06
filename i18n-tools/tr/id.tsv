@@ -283,7 +283,7 @@
 401	Pesan sopir
 402	Poin TAKE
 403	Makan, berkendara, <1>hemat</1>
-404	Satu akun member untuk kafe dan skuter. 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter. 100 poin = potongan Rp 25K. <1>[ADD: owner to confirm these rates]</1>
+404	Satu akun member untuk kafe dan skuter. 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter. 100 poin = potongan Rp 200K. <1>[ADD: owner to confirm these rates]</1>
 405	Daftar atau masuk
 406	Ketentuan sewa
 407	Pembayaran
@@ -306,7 +306,7 @@
 429	Bagaimana cara bayar?
 430	Pembayaran online segera hadir. Untuk sekarang kami konfirmasi booking skuter lewat WhatsApp dan Anda bayar di toko; makanan dibayar di kasir.
 431	Bagaimana Poin TAKE bekerja?
-432	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan sewa skuter, dan 100 poin memotong Rp 25K dari pesanan atau sewa berikutnya.
+432	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan sewa skuter, dan 100 poin memotong Rp 200K dari pesanan atau sewa berikutnya.
 433	Ada sopir dan tur?
 434	Ada: antar jemput bandara, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, trekking Gunung Batur, trekking Gunung Agung, tur seharian. Kirim permintaan dengan tanggal dan tempat jemput.
 435	Satu rumah kecil, dua papan nama
@@ -374,7 +374,7 @@
 498	Ada kopi?
 499	Ada, mulai jam 7 pagi: latte atau cappuccino panas atau dingin 20K, kopi Bali 10K. Juga jus segar mulai 15K, kelapa muda 20K, jamu tradisional dan Bintang 35K.
 500	Ada: antar jemput bandara, Sanur, Ubud, Nusa Dua, Uluwatu, Tanah Lot, Candi Dasa, Padang Bai, trekking Gunung Batur, trekking Gunung Agung, tur seharian. Kirim permintaan di bagian Transportasi dengan tanggal dan tempat jemput.
-501	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter, dan 100 poin memotong Rp 25K dari pesanan atau sewa berikutnya.
+501	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter, dan 100 poin memotong Rp 200K dari pesanan atau sewa berikutnya.
 502	Skuter saya mogok. Apa yang harus saya lakukan?
 503	Tetap aman, buka halaman booking Anda dan tekan "Bagikan lokasi saya", lalu WhatsApp kami di 0822 4016 0894 agar kami tahu posisi Anda.
 504	Halo! Saya asisten TAKE. Tanyakan soal menu, antar atau skuter kami, atau ketuk pertanyaan di bawah.
@@ -393,3 +393,11 @@
 517	Contoh buatan AI (Figma)
 518	Air Mineral (contoh foto)
 519	Sprite (contoh foto)
+522	Satu akun member untuk kafe dan skuter. 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter. 100 poin = potongan Rp 200K. <1>[ADD: owner to confirm these rates]</1>
+523	Bisa. Pesan di halaman ini dan pilih antar, atau WhatsApp dapur di 0822 4016 0894.
+524	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan sewa skuter, dan 100 poin memotong Rp 200K dari pesanan atau sewa berikutnya.
+525	Dapur & antar: 0822 4016 0894
+526	Bisa. Tambahkan menu, pilih Antar dan beri tahu alamatnya, atau WhatsApp dapur di 0822 4016 0894.
+527	Masuk sebagai member dengan email Anda. Anda dapat 1 poin untuk setiap Rp 10K yang Anda bayar untuk makanan dan skuter, dan 100 poin memotong Rp 200K dari pesanan atau sewa berikutnya.
+520	Pertanyaan: <1/>
+521	Kami konfirmasi lewat WhatsApp; kamu bayar sesuai pilihan di atas. <1>Syarat sewa</1>
