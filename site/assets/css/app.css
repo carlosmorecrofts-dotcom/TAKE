@@ -169,3 +169,13 @@ body.kds .tk .sb.go { flex: 1 1 100%; }
 .login img.word { height: 64px; margin: 0 auto 4px; display: block; }
 /* on a card with a photo the number sits on the photo, top-left */
 .dish.has-img > .dish-no { left: 10px; right: auto; top: 10px; }
+
+/* menu separators: Breakfast, Lunch & dinner, Drinks */
+.menu-sep { grid-column: 1 / -1; display: flex; align-items: center; flex-wrap: wrap; gap: 6px 18px; margin: 26px 0 0; padding-bottom: 10px; border-bottom: 2px solid var(--line); }
+.menu-sep:first-child { margin-top: 0; }
+.menu-sep h3 { font-family: Oswald, sans-serif; font-size: clamp(24px, 3vw, 34px); line-height: 1.1; text-transform: uppercase; letter-spacing: .04em; color: var(--txt); margin: 0; }
+.menu-sep h3::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-right: 12px; vertical-align: .18em; }
+.menu-sep .cats { display: flex; flex-wrap: wrap; gap: 2px 0; color: var(--mute); font-size: 14px; }
+.menu-sep .cats span + span::before { content: '\00b7'; margin: 0 10px; color: var(--green); }
+/* dish numbers in inverse colours: dark badge, pink number (unlike the pink + button) */
+.dish > .dish-no { background: #1a1212; color: #ff5a6e; box-shadow: 0 0 0 2px #ff5a6e, 0 2px 8px rgba(0, 0, 0, .3); }

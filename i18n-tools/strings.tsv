@@ -40,7 +40,6 @@
 40	~1ksfeat	Berawa
 41	~652ke6	Perum Prapta Canggu Asri
 42	~1whq6qg	Tap to add
-43	~swze49	From our printed menu. Prices in Indonesian rupiah (K = thousand). <1>[ADD: payment: cash, QRIS, transfer, card?]</1>
 44	~wnjk2s	All
 45	~191joqu	Breakfast
 46	~11v8wh8	Local food
@@ -421,7 +420,6 @@
 444	~7x7suw	What guests <1>say</1>
 445	~1fd13ig	Café on Google
 446	~i555md	Scooters on Google
-447	~greqsa	[ADD: paste the real Google reviews into data/reviews.json, word for word. The wall, the average rating and "show more" appear by themselves.]
 448	~12zgaa4	Been to TAKE?
 449	~1raym0x	A short review on Google helps other travellers find us.
 450	~baa9zv	Review the café
@@ -497,3 +495,49 @@
 526	~10btqi0	Yes. Add dishes from the menu, choose Delivery and tell us where to bring it, or WhatsApp the kitchen on 0822 4016 0894.
 528	~17la9tk	One member account for the café and the scooters. 1 point for every Rp 10K you pay on food and scooters. First 100 members: 100 points = Rp 200K off. Every 6 rentals = 1 free day. <1>[ADD: owner to confirm these rates]</1>
 529	~1ygw7vn	Sign in as a member with your email. You get 1 point for every Rp 10K you pay on food and scooter rentals. Our first 100 members get Rp 200K off for every 100 points; after that, 100 points take Rp 25K off. Every 6 scooter rentals earn you a free day.
+530	~122l6lg	From our printed menu. Prices in Indonesian rupiah (K = thousand). Pay by cash, QRIS or bank transfer.
+535	~rudkzr	Lunch & dinner
+556	~15fwgdi	Drinks
+577	~1my575y	Café · 18 reviews shown
+578	~lerwl2	5 out of 5
+579	~1dq41b0	Café
+580	~2ocmgw	Love this place my partner and I go all the time for a great breakfast and absolutely amazing coffee!!! 🩷🩷
+581	~1e5c7lj	ivy hughes<1>5 days ago on Google</1>
+582	~h8za7w	Really great food and the owner is so friendly. My accommodation was close by so I went here everyday since the price and the quality of the food
+583	~m7yuhd	Charlie Kroger<1>3 weeks ago on Google</1>
+584	~y8xze3	Food is fresh and tasty at a great price. The family is kind and hospitable. We went here for 3 meals a day for the time We spent in canngu.
+585	~hieexl	Shepherd Sargent<1>a month ago on Google</1>
+586	~18eaj36	Amazing service, very good food for cheap, quality coffees and lattes. The owners are extremely kind and friendly. I recommend to all tourists
+587	~ak2ror	isaac dale<1>a month ago on Google</1>
+588	~1w9fnwj	The food is always fresh and delicious! Never disappointed me. Also really cheap
+589	~1lbzi19	Nadja Ha<1>2 weeks ago on Google</1>
+590	~4py3ka	Great food, good price. Always have fat chats with the owner, very nice people. Great place to come for breakfast, lunch, dinner and BINTANG.
+591	~1jy6eyp	Ash Wells<1>4 months ago on Google</1>
+592	~jtx7rr	Lovely family, with great food, and love for making people happy with a proper conversations l, great food and a wonderful scooter rental service 🙏
+593	~1u38f7l	Olaf de Rooij<1>7 months ago on Google</1>
+594	~emgsws	The owner is fantastic: he can prepare custom dishes if you request it in advance. You can go there without hesitation, you won't be disappointed, and the prices are very reasonable. Thanks again!
+595	~vnq02b	Julien<1>10 months ago (translated from French) on Google</1>
+596	~h04ces	I stayed in Bali for a week and came to this restaurant every day because the price, the staff, and the food are excellent. I highly recommend it!
+597	~g2rrom	Yannis Nouari<1>5 months ago (translated from French) on Google</1>
+598	~1hsqnr0	Cute little cafe with great fresh food, iced coffee was delicious. Owner was very kind, would definitely go back.
+599	~9jf7tl	Maisie McCall<1>7 months ago on Google</1>
+600	~1rgramy	Very cheap and tasty, we didn't expect anything for that price, but everything was fresh, we ate our fill, breakfast was 45k, I definitely recommend having breakfast here
+601	~u5fugq	7 months ago (translated from Russian) on Google
+602	~av8rs7	Small but really cozy, has good wifi too. The food is unbelievably good. Gonna come here again soon.
+603	~1lu3pu7	Aldienezha Devangga<1>a year ago on Google</1>
+604	~m4q6du	Very good food. We are eating here every night since one week! Thank you so much
+605	~1ypcu3b	Lisa Lauret<1>5 months ago on Google</1>
+606	~1h9rfr0	The coffee is delicious, it is recommended for those who want to come here to order the hazelnut latte tropical sweet & salted caramel, it is a must try and there are several delicious mocktails menus that are worth trying
+607	~n9hi8y	Quirky Cocktails<1>a year ago (translated from Indonesian) on Google</1>
+608	~1gxabzb	The food and coffee are delicious. The prices are very pocket-friendly. The owner is also friendly.
+609	~1cbk9dy	Elisa Khristina<1>11 months ago (translated from Indonesian) on Google</1>
+610	~15reocy	Comfortable place, food and drinks are suitable for college students' pockets... street food prices, five-star taste 👍
+611	~o2jkzu	Donny Saputra<1>a year ago (translated from Indonesian) on Google</1>
+612	~scszdi	Best noodle on a Bali
+613	~1ireqfs	FunnyCoverMemes<1>a month ago on Google</1>
+614	~1wyc0pc	Super cozy, delisious food. Come and try it out :)
+615	~3y26e2	Victor Madsen<1>a year ago on Google</1>
+616	~1sav5s9	Show all 18 reviews
+617	~1m84wbv	My card
+618	~4nuljv	At least 8 characters
+619	~cnn0pw	Type your email first.

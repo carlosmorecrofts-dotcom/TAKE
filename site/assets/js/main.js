@@ -59,9 +59,14 @@
   }
   function renderMenu() {
     var el = $('#menuGrid'); if (!el) return;
+    var groups = T.menuGroups || [], last = null;
+    var groupOf = function (c) { return groups.filter(function (g) { return g.cats.indexOf(c) >= 0; })[0]; };
     el.innerHTML = T.menu.filter(function (i) { return curCat === 'All' || i.cat === curCat; }).map(function (i) {
-      var q = cart[i.id] || 0;
-      return '<div class="card dish' + (i.img ? ' has-img' : '') + '"><span class="dish-no" aria-label="Number ' + i.no + '">' + i.no + '</span>' + (i.img ? '<div class="dish-pic"><img class="dish-img" src="/assets/img/' + i.img + '" alt="' + esc(i.name) + (i.ex ? ' (example photo)' : ' at TAKE') + '" loading="lazy">' + (i.ex ? (i.ex.source ? '<a class="ex-tag" href="' + i.ex.source + '" target="_blank" rel="noopener" title="Photo: ' + esc(i.ex.author) + ', ' + esc(i.ex.licence) + '">Example photo</a>' : '<span class="ex-tag" title="' + esc(i.ex.author) + '">Example photo</span>') : '') + '</div>' : '') +
+      var q = cart[i.id] || 0, g = groupOf(i.cat), sep = '';
+      // a separator wherever the menu moves to the next group (breakfast, lunch & dinner, drinks)
+      if (g && g !== last) sep = '<div class="menu-sep"><h3>' + esc(g.name) + '</h3>' + (g.cats.length > 1 || g.cats[0] !== g.name ? '<div class="cats">' + g.cats.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '') + '</div>';
+      last = g;
+      return sep + '<div class="card dish' + (i.img ? ' has-img' : '') + '"><span class="dish-no">' + i.no + '</span>' + (i.img ? '<div class="dish-pic"><img class="dish-img" src="/assets/img/' + i.img + '" alt="' + esc(i.name) + (i.ex ? ' (example photo)' : ' at TAKE') + '" loading="lazy">' + (i.ex ? (i.ex.source ? '<a class="ex-tag" href="' + i.ex.source + '" target="_blank" rel="noopener" title="Photo: ' + esc(i.ex.author) + ', ' + esc(i.ex.licence) + '">Example photo</a>' : '<span class="ex-tag" title="' + esc(i.ex.author) + '">Example photo</span>') : '') + '</div>' : '') +
         '<div class="dish-body"><span class="label">' + i.cat + '</span><h3>' + esc(i.name) + '</h3>' + (i.desc ? '<p class="dish-desc">' + esc(i.desc) + '</p>' : '') + '<span class="price">' +
         (i.price ? k(i.price) : 'Price at the counter') + '</span></div><div class="qty" data-id="' + i.id + '">' +
         (q ? '<button type="button" class="minus" aria-label="One less ' + esc(i.name) + '">&minus;</button><b>' + q + '</b>' : '') +

@@ -515,5 +515,30 @@
     ],
     "holdMinutes": 30,
     "maxDays": 90
-  }
+  },
+  "menuGroups": [
+    {
+      "name": "Breakfast",
+      "cats": [
+        "Breakfast"
+      ]
+    },
+    {
+      "name": "Lunch & dinner",
+      "cats": [
+        "Local food",
+        "Pizza",
+        "Pasta",
+        "Small bites"
+      ]
+    },
+    {
+      "name": "Drinks",
+      "cats": [
+        "Coffee & drinks",
+        "Juices",
+        "Beer"
+      ]
+    }
+  ]
 }

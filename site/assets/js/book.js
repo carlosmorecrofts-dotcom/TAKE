@@ -79,7 +79,7 @@
         return '<button type="button" role="radio" aria-checked="' + (x.id === S.model) + '" data-m="' + x.id + '"><b>' + esc(x.name.replace(/^(Honda|Yamaha) /, '')) + '</b><small>' + x.cc + 'cc · ' + k(x.day) + '</small></button>';
       }).join('') + '</div>' +
       '<div class="cal-nav"><button type="button" class="sb" data-nav="-1"' + (prevOk ? '' : ' disabled') + ' aria-label="Earlier month">&larr;</button><b>' + esc(b.name) + '</b><button type="button" class="sb" data-nav="1" aria-label="Later month">&rarr;</button></div>' +
-      (none ? '<p class="m-msg">Book on request: choose your dates and we confirm this scooter on WhatsApp before you pay.</p>' : '') +
+      (none ? '<p class="m-msg">' + 'Book on request: choose your dates and we confirm this scooter on WhatsApp before you pay.' + '</p>' : '') +
       '<div class="cal-wrap">' + monthHtml(S.month) + (two() ? monthHtml(second) : '') + '</div>' +
       '<div class="cal-legend"><span class="lg free"></span>Free <span class="lg last"></span>Last one <span class="lg full"></span>Booked <span class="lg sel"></span>Your dates</div>' +
       '<p class="cal-hint">' + esc(S.msg || (!S.start ? 'Tap your pick-up day.' : !S.end ? 'Now tap your return day.' : '')) + '</p>' +
