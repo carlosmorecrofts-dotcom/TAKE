@@ -26,6 +26,44 @@
   // Tablets only allow sound after a tap, so the sound is switched on by the first tap anywhere.
   function audio() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (actx && actx.state === 'suspended') actx.resume(); return actx; }
   document.addEventListener('pointerdown', function () { audio(); devBar(); }, { once: true });
+  // ---- the app talks: new orders and bookings read out, reminders every few minutes
+  var TALK = true; try { TALK = localStorage.getItem('take_talk') !== 'off'; } catch (e) {}
+  var said = {};
+  function say(text) {
+    if (!TALK || !window.speechSynthesis) return;
+    var u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; u.rate = 0.95; u.volume = 1;
+    var v = speechSynthesis.getVoices().filter(function (x) { return /^en/i.test(x.lang); })[0]; if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  }
+  function remind(key, everyMin, text) {
+    var t = Date.now(); if (said[key] && t - said[key] < everyMin * 60000) return false;
+    said[key] = t; toast(text); say(text); return true;
+  }
+  var mins = function (iso) { return iso ? Math.round((Date.now() - new Date(String(iso).replace(' ', 'T') + 'Z')) / 60000) : 0; };
+  function reminders() {
+    if (!data || !data.orders) return;
+    var t = today(), food = data.orders, bk = data.bookings || [], n = 0;
+    food.forEach(function (o) {
+      if (n > 2) return;
+      if (o.status === 'new' && mins(o.created) >= 10 && remind('on' + o.id, 10, 'Order ' + o.id + ' for ' + o.name + ' is waiting ' + mins(o.created) + ' minutes. Please start cooking.')) n++;
+      else if (o.status === 'ready' && mins(o.updated || o.created) >= 10 && remind('or' + o.id, 10, 'Order ' + o.id + ' for ' + o.name + ' is ready and not collected yet.')) n++;
+    });
+    if (MODE === 'kitchen') return;
+    bk.forEach(function (b) {
+      if (n > 3) return;
+      var who = 'booking ' + b.id + ' for ' + b.name;
+      if (b.status === 'request' && remind('br' + b.id, 15, 'New request, ' + who + ', is waiting for an answer.')) n++;
+      else if (b.pay_claimed && !b.paid && remind('bp' + b.id, 30, 'Please check the payment for ' + who + '.')) n++;
+      else if (b.status === 'confirmed' && b.start && b.start <= t && remind('bh' + b.id, 60, 'Hand over today: ' + who + '.')) n++;
+      else if (b.status === 'out' && b.kind === 'rent' && b.end && b.end < t && remind('bl' + b.id, 60, 'Late return: ' + who + ' was due back on ' + b.end + '. Please message them.')) n++;
+      else if (b.status === 'out' && b.kind === 'rent' && b.end === t && remind('bd' + b.id, 180, 'Due back today: ' + who + '.')) n++;
+    });
+  }
+  setInterval(reminders, 60000);
+  function talkBtn() { $('#talkBtn').textContent = TALK ? 'Voice on' : 'Voice off'; $('#talkBtn').classList.toggle('warn', !TALK); }
+  $('#talkBtn').onclick = function () { TALK = !TALK; try { localStorage.setItem('take_talk', TALK ? 'on' : 'off'); } catch (e) {} talkBtn(); if (TALK) say('Voice on. I will read new orders and remind you.'); else speechSynthesis.cancel(); };
+  talkBtn();
+
   function beep(loud) {
     var a = actx; if (!SOUND || !a || a.state !== 'running') return;
     [[880, 0], [1175, .3]].concat(loud ? [[1480, .6]] : []).forEach(function (n) {
@@ -120,7 +158,15 @@
       var now = ids.concat(req);
       // the kitchen screen rings for food only; the till for food and bookings
       var fresh = seen ? now.filter(function (x) { return seen.indexOf(x) < 0 && (MODE !== 'kitchen' || typeof x === 'number'); }) : [];
-      if (fresh.length) { beep(true); toast(MODE === 'kitchen' ? 'New order' : 'New order or booking'); }
+      if (fresh.length) {
+        beep(true); toast(MODE === 'kitchen' ? 'New order' : 'New order or booking');
+        setTimeout(function () {
+          fresh.forEach(function (x) {
+            if (typeof x === 'number') { var o = d.orders.filter(function (y) { return y.id === x; })[0]; if (o) say('New order ' + o.id + ' for ' + o.name + '. ' + o.items.map(function (i) { return i.qty + ' ' + i.name; }).join(', ') + '.'); }
+            else { var b = d.bookings.filter(function (y) { return 'b' + y.id === String(x).replace(/p$/, ''); })[0]; if (b) say(String(x).slice(-1) === 'p' ? 'Booking ' + b.id + ' for ' + b.name + ' is paid.' : 'New booking ' + b.id + ' from ' + b.name + '.'); }
+          });
+        }, 1200);
+      }
       seen = now; $('#offline').hidden = true;
       kitchen(); rentals(); fleet(); if (tab === 'map') drawMap(); if (tab === 'calendar') gantt();
     }).catch(function () { $('#offline').hidden = false; });
