@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   hold_until TEXT,                   -- a pending booking holds a bike until then
   price INTEGER, discount INTEGER DEFAULT 0, points_used INTEGER DEFAULT 0,
   deposit INTEGER, paid INTEGER DEFAULT 0, pay TEXT, invoice_id TEXT, invoice_url TEXT, pay_claimed TEXT,
+  free_day INTEGER DEFAULT 0,       -- 1 = a loyalty free day was used on this booking
   km_out INTEGER, km_in INTEGER, fuel_out TEXT, fuel_in TEXT,
   note TEXT, staff_note TEXT,
   created TEXT NOT NULL DEFAULT (datetime('now')),

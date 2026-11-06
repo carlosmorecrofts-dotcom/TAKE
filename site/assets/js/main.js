@@ -104,7 +104,7 @@
       var m = window.TAKE_MEMBER || {}, cfg = m.config || {}, me = m.data, L = T.loyalty;
       if (window.TAKE_PAY) { TAKE_PAY.load(cfg); TAKE_PAY.picker($('#paySeg'), 'cash'); }
       var pr = $('#ptsRow');
-      if (pr && me && me.points >= L.redeemPoints) { pr.hidden = false; pr.querySelector('span').textContent = 'Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.'; }
+      if (pr && me && me.points >= L.redeemPoints) { pr.hidden = false; pr.querySelector('span').textContent = 'Use ' + L.redeemPoints + ' points (Rp ' + k(me.pointValue || L.redeemValue) + ' off). You have ' + me.points + '.'; }
       if (me) { if (!of.name.value) of.name.value = me.member.name || ''; if (!of.wa.value) of.wa.value = me.member.wa || ''; }
     });
     of.addEventListener('submit', function (e) {

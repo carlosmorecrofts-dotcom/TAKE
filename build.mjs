@@ -91,7 +91,7 @@ const FAQ = [
   ['How much is a scooter a day?', `From Rp ${k(minDay)} a day: ${priced.map((b) => `${b.name} ${k(b.day)}`).join(', ')}.`],
   ['How do I book a scooter?', 'Choose a model and your dates on the scooter page and send the request. We confirm the bike and the price on WhatsApp, then you pick it up at the shop.'],
   ['How do I pay?', CONFIG.payLive ? 'Scooter rentals are paid in advance online when you book. Food can be paid online when you order, or at the counter. Online payment is by QRIS, e-wallets, bank transfer or card through Xendit.' : 'Online payment is coming soon. For now we confirm your scooter booking on WhatsApp and you pay at the shop; food is paid at the counter.'],
-  ['How do TAKE Points work?', `Sign in as a member with your email. You get 1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooter rentals, and ${cat.loyalty.redeemPoints} points take Rp ${k(cat.loyalty.redeemValue)} off your next order or rental.`],
+  ['How do TAKE Points work?', `Sign in as a member with your email. You get 1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooter rentals. Our first ${cat.loyalty.founderMembers} members get Rp ${k(cat.loyalty.founderValue)} off for every ${cat.loyalty.redeemPoints} points; after that, ${cat.loyalty.redeemPoints} points take Rp ${k(cat.loyalty.redeemValue)} off. Every ${cat.loyalty.freeDayEvery} scooter rentals earn you a free day.`],
   ['Do you have drivers and tours?', `Yes: ${cat.trips.map((t) => t.name).join(', ')}. Send a request with the date and pick-up place.`],
 ];
 const faqHtml = FAQ.map(([q, a]) => `<details class="card faq"><summary><h3>${esc(q)}</h3></summary><p>${esc(a)}</p></details>`).join('');
@@ -137,7 +137,7 @@ const TOKENS = {
   '{{ADD_CANCEL}}': add('refund rules: e.g. full refund up to 24 hours before pick-up, none after'),
   '{{ADD_AREA}}': add('areas not allowed, e.g. Nusa islands by ferry, other islands, off-road'),
   '{{ADD_RETENTION}}': add('how long document photos are kept after the last rental'),
-  '{{POINTS_RULE}}': `1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooters. ${cat.loyalty.redeemPoints} points = Rp ${k(cat.loyalty.redeemValue)} off.` + (cat.loyalty.confirmed ? '' : ' ' + add('owner to confirm these rates')),
+  '{{POINTS_RULE}}': `1 point for every Rp ${k(cat.loyalty.perIDR)} you pay on food and scooters. First ${cat.loyalty.founderMembers} members: ${cat.loyalty.redeemPoints} points = Rp ${k(cat.loyalty.founderValue)} off. Every ${cat.loyalty.freeDayEvery} rentals = 1 free day.` + (cat.loyalty.confirmed ? '' : ' ' + add('owner to confirm these rates')),
 };
 const fill = (s) => Object.entries(TOKENS).reduce((t, [a, b]) => t.split(a).join(b), s);
 

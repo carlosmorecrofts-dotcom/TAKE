@@ -66,7 +66,7 @@
     var L = T.loyalty, emailLinks = M.config && M.config.emailLinks;
     var join = mode === 'join';
     body.innerHTML = (message ? '<p class="m-msg">' + esc(message) + '</p>' : '') +
-      '<h2>' + (join ? 'Join TAKE' : 'Welcome back') + '</h2><p class="mute">One account for the café and the scooters. Earn 1 point for every Rp ' + k(L.perIDR) + ' you pay; ' + L.redeemPoints + ' points = Rp ' + k(L.redeemValue) + ' off.</p>' +
+      '<h2>' + (join ? 'Join TAKE' : 'Welcome back') + '</h2><p class="mute">One account for the café and the scooters. Earn 1 point for every Rp ' + k(L.perIDR) + ' you pay; first ' + (L.founderMembers || 100) + ' members: ' + L.redeemPoints + ' points = Rp ' + k(L.founderValue || L.redeemValue) + ' off; every ' + (L.freeDayEvery || 6) + ' rentals = 1 free day.</p>' +
       '<div class="m-tabs" role="tablist"><button type="button" role="tab" data-mode="join" aria-selected="' + join + '">Create account</button><button type="button" role="tab" data-mode="in" aria-selected="' + !join + '">Sign in</button></div>' +
       (M.config && M.config.google ? '<a class="btn btn-google" href="/api/member/google?next=' + (/^\/ride/.test(M.next || location.pathname) ? '/ride' : '/') + '"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continue with Google</a><p class="m-or"><span>or with email</span></p>' : '') +
       '<form class="form" id="mAuth">' +
@@ -110,7 +110,7 @@
   function paneP(d) {
     var L = d.loyalty, have = d.points, step = L.redeemPoints, pct = Math.min(100, Math.round(have % step / step * 100)), rewards = Math.floor(have / step);
     return '<div class="m-points"><b>' + have + '</b><span>points</span></div>' +
-      '<p class="mute">' + (rewards ? 'You can take Rp ' + k(L.redeemValue) + ' off ' + (rewards > 1 ? rewards + ' times' : 'your next order or rental') + '.' : (step - have % step) + ' more points to Rp ' + k(L.redeemValue) + ' off.') + '</p>' +
+      '<p class="mute">' + (rewards ? 'You can take Rp ' + k(d.pointValue || L.redeemValue) + ' off ' + (rewards > 1 ? rewards + ' times' : 'your next order or rental') + '.' : (step - have % step) + ' more points to Rp ' + k(L.redeemValue) + ' off.') + '</p>' +
       '<div class="m-bar"><span style="width:' + (rewards ? 100 : pct) + '%"></span></div>' +
       '<p class="note">1 point for every Rp ' + k(L.perIDR) + ' paid on food and scooters. Points arrive when the payment does.' + (L.confirmed ? '' : ' <span class="add">[ADD: owner to confirm]</span>') + '</p>' +
       '<h3>History</h3><ul class="list">' + (d.history.length ? d.history.map(function (h) { return '<li>' + esc(h.reason || '') + '<em>' + (h.delta > 0 ? '+' : '') + h.delta + '</em></li>'; }).join('') : '<li class="mute">No points yet.</li>') + '</ul>';
@@ -155,7 +155,8 @@
   // The card a member shows at the counter: name, number, points.
   function paneCard(d) {
     var me = d.member, L = d.loyalty, num = 'TAKE-' + String(me.id).padStart(5, '0');
-    var tier = d.points >= 1000 ? 'Gold' : d.points >= 300 ? 'Silver' : 'Member';
+    var tier = d.founder ? 'Founding member' : d.points >= 1000 ? 'Gold' : d.points >= 300 ? 'Silver' : 'Member';
+    var R = d.rides || { done: 0, free: 0, toNext: L.freeDayEvery || 6 }, every = L.freeDayEvery || 6;
     var c = d.check, todo = [];
     if (!c.profileOk) todo.push('add your name and WhatsApp');
     if (c.missingDocs.length) todo.push('add your passport and driving licence');
@@ -165,6 +166,9 @@
       '<div class="m-card-num">' + num + '</div>' +
       '<div class="m-card-pts"><b>' + d.points + '</b> points · member since ' + esc((me.created || '').slice(0, 10)) + '</div></div>' +
       '<p class="mute">Show this card at the counter so we can add your points to cash payments too.</p>' +
+      (d.founder ? '<p class="m-msg">Founding member: every ' + L.redeemPoints + ' points take Rp ' + k(d.pointValue) + ' off (20% back).</p>' : '') +
+      '<h3>Free scooter day</h3><div class="m-rides">' + Array.from({ length: every }, function (_, i) { return '<span class="' + (i < R.done % every ? 'on' : '') + '"></span>'; }).join('') + '</div>' +
+      '<p class="mute">' + (R.free ? 'You have ' + R.free + ' free day' + (R.free > 1 ? 's' : '') + ': tick it when you book. ' : '') + R.toNext + ' more rental' + (R.toNext > 1 ? 's' : '') + ' to your next free day.</p>' +
       '<div class="row" style="margin:14px 0"><a class="btn btn-green" href="/#order" data-close>Order food</a><a class="btn btn-ghost" href="/ride#book" data-close>Book a scooter</a></div>' +
       (todo.length ? '<p class="m-msg">To rent a scooter, ' + todo.join(', ') + '. <a href="#" data-goto="rider">Do it now</a></p>' : '<p class="note">✓ Ready to rent a scooter.</p>') +
       '<h3>Paying at TAKE</h3><ul class="list">' + ((M.config && M.config.methods) || []).map(function (x) { return '<li>' + esc(x.name) + '<em>' + esc(x.note) + '</em></li>'; }).join('') + '</ul>';

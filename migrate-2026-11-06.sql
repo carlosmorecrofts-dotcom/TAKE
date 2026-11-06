@@ -1,0 +1,1 @@
+ALTER TABLE bookings ADD COLUMN free_day INTEGER DEFAULT 0;

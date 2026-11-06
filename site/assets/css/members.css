@@ -302,3 +302,8 @@ html .hero.only-eat { --hero: url(/assets/img/logo-eat.jpg); }
   box-shadow: 0 2px 8px rgba(255, 90, 110, .35); }
 @media (max-width: 860px) { .member-wrap { grid-template-columns: 1fr; } .member-side { position: static; } .member-page { padding: 18px; } }
 .member-btn[aria-current="page"] { border-color: var(--green); }
+
+/* free day progress: one dot per rental */
+.m-rides { display: flex; gap: 8px; margin: 6px 0 4px; }
+.m-rides span { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); }
+.m-rides span.on { background: linear-gradient(135deg, #ff5a6e, #ff8a3d); border-color: transparent; }

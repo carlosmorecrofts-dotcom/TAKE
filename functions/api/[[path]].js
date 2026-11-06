@@ -157,10 +157,19 @@ async function pub(request, env, db, p, m, url) {
   return bad('not found', 404);
 }
 
+// The first founderMembers members get founderValue per redeemPoints (20% back); everyone after, redeemValue.
+const pointValue = (me) => (me && me.id <= (LOYALTY.founderMembers || 0) ? LOYALTY.founderValue : LOYALTY.redeemValue);
+// Free days: every freeDayEvery returned rentals earn one free day; a free day used on a booking that was cancelled comes back.
+async function rides(db, me) {
+  const r = await db.prepare("SELECT SUM(kind='rent' AND status='returned') AS done, SUM(CASE WHEN free_day=1 AND status!='cancelled' THEN 1 ELSE 0 END) AS used FROM bookings WHERE member_id=?").bind(me.id).first();
+  const done = (r && r.done) || 0, used = (r && r.used) || 0, every = LOYALTY.freeDayEvery || 6;
+  return { done, free: Math.max(0, Math.floor(done / every) - used), toNext: every - (done % every) };
+}
+
 async function redeem(db, me, amount) {
   const have = await balance(db, me.id);
   if (have < LOYALTY.redeemPoints || amount <= 0) return { discount: 0, points: 0 };
-  return { discount: Math.min(LOYALTY.redeemValue, amount), points: LOYALTY.redeemPoints };
+  return { discount: Math.min(pointValue(me), amount), points: LOYALTY.redeemPoints };
 }
 
 function pickMethod(env, want) {
@@ -211,6 +220,8 @@ async function rentBooking(request, env, db, b, url) {
   if (!free.ok) return bad(free.total ? 'sorry, this scooter is fully booked on ' + free.fullOn : 'this scooter is not in the fleet right now', 409, { fullOn: free.fullOn });
   const price = rentPrice(model, n);
   const red = price && b.usePoints ? await redeem(db, me, price) : { discount: 0, points: 0 };
+  const freeDay = price && b.useFreeDay && (await rides(db, me)).free > 0 ? Math.min(BIKES[model].day, price - red.discount) : 0;
+  red.discount += freeDay;
   const method = pickMethod(env, b.pay);
   const online = !!method.online && price && price - red.discount > 0;
   const t = rnd(12);
@@ -219,6 +230,7 @@ async function rentBooking(request, env, db, b, url) {
     .bind(t, 'rent', me.id, me.name, me.wa, str(b.hotel, 200), model, start, end, online ? 'pending' : 'request', online ? '+' + RENTAL.holdMinutes + ' minutes' : null, price, red.discount, red.points, str(b.note, 500)).run();
   const id = r.meta.last_row_id;
   if (!online) await db.prepare('UPDATE bookings SET pay=? WHERE id=?').bind(method.online ? 'cash' : method.id, id).run();
+  if (freeDay) await db.prepare('UPDATE bookings SET free_day=1 WHERE id=?').bind(id).run();
   if (red.points) await db.prepare('INSERT INTO points_log (member_id, delta, reason, ref) VALUES (?,?,?,?)').bind(me.id, -red.points, 'Used on booking #' + id, 'spend:booking:' + id).run();
   let pay_url = null;
   if (online) pay_url = await invoiceFor(env, db, 'booking', id, t, price - red.discount, me, `TAKE ${BIKES[model].name}, ${start} to ${end} (#${id})`, url.origin + '/ride?booking=' + id + '&t=' + t, method.id, url);
@@ -337,8 +349,9 @@ async function members(request, env, db, p, m, url) {
       db.prepare('SELECT id, token, kind, model, start, end, status, price, discount, paid, pay FROM bookings WHERE member_id=? ORDER BY start DESC LIMIT 20').bind(me.id).all(),
       riderCheck(db, me),
     ]);
+    const rd = await rides(db, me);
     return J({ member: { id: me.id, email: me.email, name: me.name, wa: me.wa, terms_version: me.terms_version, terms_at: me.terms_at, created: me.created, hasPassword: !!me.pass_hash },
-      points: pts, history: hist.results, docs: docs.results, orders: orders.results, bookings: bookings.results, check: chk, loyalty: LOYALTY, rental: RENTAL });
+      points: pts, pointValue: pointValue(me), founder: me.id <= (LOYALTY.founderMembers || 0), rides: rd, history: hist.results, docs: docs.results, orders: orders.results, bookings: bookings.results, check: chk, loyalty: LOYALTY, rental: RENTAL });
   }
   if (what === 'password' && m === 'POST') {
     const b = await body(request), pw = String(b.password || '');

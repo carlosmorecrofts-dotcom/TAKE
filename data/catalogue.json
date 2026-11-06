@@ -451,7 +451,10 @@
     "confirmed": false,
     "perIDR": 10000,
     "redeemPoints": 100,
-    "redeemValue": 200000
+    "redeemValue": 25000,
+    "founderMembers": 100,
+    "founderValue": 200000,
+    "freeDayEvery": 6
   },
   "rental": {
     "_note": "Booking rules. Version changes force members to accept the terms again.",

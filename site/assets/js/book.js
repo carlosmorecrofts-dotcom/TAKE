@@ -85,17 +85,19 @@
       '<p class="cal-hint">' + esc(S.msg || (!S.start ? 'Tap your pick-up day.' : !S.end ? 'Now tap your return day.' : '')) + '</p>' +
       '<div class="bk-sum' + (S.end ? ' ready' : '') + '">' +
         '<div><b>' + (S.end ? esc(S.start) + ' to ' + esc(S.end) : 'Choose dates') + '</b><small>' + (n ? n + ' day' + (n > 1 ? 's' : '') + (b.week && n >= 7 ? ', week rate ' + k(b.week) : ' × ' + k(b.day)) : 'Pick-up and return at the shop, 7am to 8pm') + '</small></div>' +
-        '<div class="bk-price">' + (p ? rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : n ? 'Price on WhatsApp' : '') + '</div>' +
+        '<div class="bk-price">' + (p ? rp(Math.max(0, p - (S.usePoints && canPts ? Math.min(((window.TAKE_MEMBER && TAKE_MEMBER.data && TAKE_MEMBER.data.pointValue) || L.redeemValue), p) : 0) - (S.useFreeDay && me && me.rides && me.rides.free > 0 ? b.day : 0))) : n ? 'Price on WhatsApp' : '') + '</div>' +
       '</div>' +
-      (canPts && S.end ? '<label class="m-agree"><input type="checkbox" id="bkPts"' + (S.usePoints ? ' checked' : '') + '> Use ' + L.redeemPoints + ' points (Rp ' + k(L.redeemValue) + ' off). You have ' + me.points + '.</label>' : '') +
+      (canPts && S.end ? '<label class="m-agree"><input type="checkbox" id="bkPts"' + (S.usePoints ? ' checked' : '') + '> Use ' + L.redeemPoints + ' points (Rp ' + k(((window.TAKE_MEMBER && TAKE_MEMBER.data && TAKE_MEMBER.data.pointValue) || L.redeemValue)) + ' off). You have ' + me.points + '.</label>' : '') +
+      (me && me.rides && me.rides.free > 0 && S.end ? '<label class="m-agree"><input type="checkbox" id="bkFree"' + (S.useFreeDay ? ' checked' : '') + '> Use 1 free day (Rp ' + k(b.day) + ' off). You have ' + me.rides.free + '.</label>' : '') +
       (S.end ? '<label class="bk-field">Where are you staying? (optional)<input id="bkHotel" placeholder="Villa name or area"></label><div class="pay-pick" id="bkPay"></div>' : '') +
       '<button type="button" class="btn btn-green bk-go" id="bkGo"' + (S.end && !S.busy ? '' : ' disabled') + '>' +
-        (S.busy ? 'One moment...' : !me ? 'Sign in to book' : !M().ready() ? 'Add rider details to book' : S.payOnline && p ? 'Book and pay ' + rp(p - (S.usePoints && canPts ? Math.min(L.redeemValue, p) : 0)) : 'Send booking request') + '</button>' +
+        (S.busy ? 'One moment...' : !me ? 'Sign in to book' : !M().ready() ? 'Add rider details to book' : S.payOnline && p ? 'Book and pay ' + rp(Math.max(0, p - (S.usePoints && canPts ? Math.min(((window.TAKE_MEMBER && TAKE_MEMBER.data && TAKE_MEMBER.data.pointValue) || L.redeemValue), p) : 0) - (S.useFreeDay && me && me.rides && me.rides.free > 0 ? b.day : 0))) : 'Send booking request') + '</button>' +
       '<p class="form-note">' + (S.payOnline ? 'We hold the scooter for 30 minutes while you pay. ' : 'We confirm on WhatsApp; you pay as you chose above. ') + '<a href="/terms">Rental terms</a></p>';
     host.querySelectorAll('[data-m]').forEach(function (x) { x.onclick = function () { S.model = x.dataset.m; S.start = S.end = null; S.msg = ''; load(); }; });
     host.querySelectorAll('[data-nav]').forEach(function (x) { x.onclick = function () { S.month = new Date(S.month.getFullYear(), S.month.getMonth() + +x.dataset.nav, 1); load(); }; });
     host.querySelectorAll('[data-d]').forEach(function (x) { x.onclick = function () { pick(x.dataset.d); }; });
     var pts = $('#bkPts'); if (pts) pts.onchange = function () { S.usePoints = pts.checked; draw(); };
+    var fr = $('#bkFree'); if (fr) fr.onchange = function () { S.useFreeDay = fr.checked; draw(); };
     var bp = $('#bkPay');
     if (bp && window.TAKE_PAY) {
       if (!TAKE_PAY.methods.length) TAKE_PAY.load(cfg);
@@ -123,7 +125,7 @@
     S.busy = true; draw();
     var hotel = $('#bkHotel') ? $('#bkHotel').value : '';
     fetch('/api/bookings', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ kind: 'rent', model: S.model, start: S.start, end: S.end, hotel: hotel, usePoints: S.usePoints, pay: S.pay }) })
+      body: JSON.stringify({ kind: 'rent', model: S.model, start: S.start, end: S.end, hotel: hotel, usePoints: S.usePoints, useFreeDay: S.useFreeDay, pay: S.pay }) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (x) {
         S.busy = false;

@@ -50,7 +50,7 @@
       a: 'Yes: ' + T.trips.map(function (t) { return t.name; }).join(', ') + '. Send a request in the Transport section with the date and pick-up place.',
       k: ['driver', 'airport', 'tour', 'taxi', 'transfer', 'trip', 'ubud', 'uluwatu', 'batur', 'agung', 'sunrise', 'trek', 'bandara', 'supir', 'antar jemput'] },
     { id: 'points', area: 'both', q: 'How do TAKE Points work?',
-      a: 'Sign in as a member with your email. You get 1 point for every Rp ' + k(L.perIDR) + ' you pay on food and scooters, and ' + L.redeemPoints + ' points take Rp ' + k(L.redeemValue) + ' off your next order or rental.',
+      a: 'Sign in as a member with your email. You get 1 point for every Rp ' + k(L.perIDR) + ' you pay on food and scooter rentals. Our first ' + L.founderMembers + ' members get Rp ' + k(L.founderValue) + ' off for every ' + L.redeemPoints + ' points; after that, ' + L.redeemPoints + ' points take Rp ' + k(L.redeemValue) + ' off. Every ' + L.freeDayEvery + ' scooter rentals earn you a free day.',
       k: ['point', 'loyal', 'member', 'reward', 'discount', 'poin', 'diskon', 'anggota'] },
     { id: 'help', area: 'ride', q: 'My scooter broke down. What do I do?',
       a: 'Stay safe, open your booking page and press "Share my location", then WhatsApp us on 0822 4016 0894 so we know where you are.',
