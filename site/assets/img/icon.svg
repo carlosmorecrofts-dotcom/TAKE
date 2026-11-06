@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><!-- TAKE mark, redrawn from the banner photo (2026-11-03). Replace with the owner's original file when available. --><rect width="64" height="64" rx="14" fill="#0e0d0d"/><path d="M17 12H47a7 7 0 0 1 0 14H39V44a7 7 0 0 1-14 0V26H17a7 7 0 0 1 0-14Z" fill="none" stroke="#a9a3a1" stroke-width="3.4" stroke-linejoin="round"/><rect x="16" y="17.2" width="25" height="3.8" rx="1.9" fill="#f2efed"/><rect x="30.1" y="29.5" width="3.8" height="12.5" rx="1.9" fill="#f2efed"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs><linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff2d6a"/><stop offset="1" stop-color="#ff8a2a"/></linearGradient>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter></defs>
+<rect width="1024" height="1024" rx="200" fill="#07070a"/>
+<g transform="translate(512,512) scale(1.25) translate(-468,-482) translate(0,700) skewX(-24) translate(0,-700)"><path d="M11,265 H591 L560,385 H380 V700 H200 V385 H11 Z" fill="#ff2d6a" opacity=".7" filter="url(#glow)"/></g>
+<g transform="translate(512,512) scale(1.25) translate(-468,-482) translate(0,700) skewX(-24) translate(0,-700)"><path d="M11,265 H591 L560,385 H380 V700 H200 V385 H11 Z" transform="translate(10,16)" fill="#3a0a14"/></g>
+<g transform="translate(512,512) scale(1.25) translate(-468,-482) translate(0,700) skewX(-24) translate(0,-700)"><path d="M11,265 H591 L560,385 H380 V700 H200 V385 H11 Z" fill="url(#f)" stroke="#fff" stroke-width="22" stroke-linejoin="round"/></g>
+</svg>

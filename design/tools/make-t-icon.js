@@ -17,6 +17,6 @@ app.whenReady().then(async()=>{
  const w=new BrowserWindow({show:false,width:1024,height:1024,transparent:true,webPreferences:{offscreen:true}});
  await w.loadFile(path.join(__dirname,'t.html'));await new Promise(r=>setTimeout(r,800));
  const img=await w.webContents.capturePage();fs.writeFileSync(path.join(__dirname,'t-icon-1024.png'),img.toPNG());
- for(const s of [32,48,180,192,512]) fs.writeFileSync(path.join(__dirname,'tc-'+s+'.png'),img.resize({width:s,height:s,quality:'best'}).toPNG());
+ for(const s of [32,48,180,192,512]) fs.writeFileSync(path.join(__dirname,'take-t-'+s+'.png'),img.resize({width:s,height:s,quality:'best'}).toPNG());
  const s=nativeSheet(img);app.quit();});
 function nativeSheet(){}

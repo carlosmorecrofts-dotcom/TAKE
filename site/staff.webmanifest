@@ -11,19 +11,19 @@
   "theme_color": "#0c0a0a",
   "icons": [
     {
-      "src": "/assets/img/tc-192.png",
+      "src": "/assets/img/take-t-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/img/tc-512.png",
+      "src": "/assets/img/take-t-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/img/tc-512.png",
+      "src": "/assets/img/take-t-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -36,7 +36,7 @@
       "url": "/staff?mode=kitchen",
       "icons": [
         {
-          "src": "/assets/img/tc-192.png",
+          "src": "/assets/img/take-t-192.png",
           "sizes": "192x192"
         }
       ]
@@ -47,7 +47,7 @@
       "url": "/staff?mode=till",
       "icons": [
         {
-          "src": "/assets/img/tc-192.png",
+          "src": "/assets/img/take-t-192.png",
           "sizes": "192x192"
         }
       ]
