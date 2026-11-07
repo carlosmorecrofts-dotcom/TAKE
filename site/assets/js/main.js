@@ -54,8 +54,9 @@
   function save() { try { localStorage.setItem('take_cart', JSON.stringify(cart)); } catch (e) {} }
   function renderCats() {
     var el = $('#menuCats'); if (!el) return;
-    el.innerHTML = ['All'].concat(cats).map(function (c) { return '<button type="button" aria-pressed="' + (c === curCat) + '">' + c + '</button>'; }).join('');
-    el.querySelectorAll('button').forEach(function (b) { b.onclick = function () { curCat = b.textContent; renderCats(); renderMenu(); }; });
+    // the category travels in data-cat: the label on the button is translated, so it cannot be the key
+    el.innerHTML = ['All'].concat(cats).map(function (c) { return '<button type="button" data-cat="' + esc(c) + '" aria-pressed="' + (c === curCat) + '">' + esc(c) + '</button>'; }).join('');
+    el.querySelectorAll('button').forEach(function (b) { b.onclick = function () { curCat = b.getAttribute('data-cat'); renderCats(); renderMenu(); }; });
   }
   function renderMenu() {
     var el = $('#menuGrid'); if (!el) return;
