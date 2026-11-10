@@ -106,8 +106,10 @@ button.btn-ghost { background: transparent; }
 .gal.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .gal.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gal figure { margin: 0; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #181313; position: relative; }
-.gal img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
-.gal figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 12px; font-weight: 600; font-size: 14px; background: linear-gradient(transparent, rgba(12, 10, 10, .88)); }
+/* height:auto lets aspect-ratio win over the img's height attribute (without it the photos stretched) */
+.gal img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.gal.g4 img { aspect-ratio: 1 / 1; }
+.gal figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 12px; font-weight: 600; font-size: 14px; color: #fff; background: linear-gradient(transparent, rgba(12, 10, 10, .88)); }
 @media (max-width: 1080px) { .gal.g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 680px) { .gal.g3 { grid-template-columns: 1fr 1fr; } .gal.g3 figure:first-child { grid-column: 1 / -1; } .gal.g3 figure:first-child img { aspect-ratio: 4 / 3; } }
 
