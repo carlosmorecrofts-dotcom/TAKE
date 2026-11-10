@@ -107,22 +107,22 @@ button.btn-ghost { background: transparent; }
 .gal.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gal figure { margin: 0; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #181313; position: relative; }
 /* height:auto lets aspect-ratio win over the img's height attribute (without it the photos stretched) */
-.gal img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.gal img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
 .gal.g4 img { aspect-ratio: 1 / 1; }
 .gal figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 12px; font-weight: 600; font-size: 14px; color: #fff; background: linear-gradient(transparent, rgba(12, 10, 10, .88)); }
 @media (max-width: 1080px) { .gal.g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 680px) { .gal.g3 { grid-template-columns: 1fr 1fr; } .gal.g3 figure:first-child { grid-column: 1 / -1; } .gal.g3 figure:first-child img { aspect-ratio: 4 / 3; } }
+@media (max-width: 680px) { .gal.g3 { grid-template-columns: 1fr 1fr; } .gal.g3 figure:first-child { grid-column: 1 / -1; } .gal.g3 figure:first-child img { aspect-ratio: 1 / 1; } }
 
 /* ===================== riders: the group photo with the story, then three riders full width */
 .riders-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 48px; align-items: center; margin-bottom: 28px; }
 .riders-hero { margin: 0; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); }
-.riders-hero img { width: 100%; aspect-ratio: 5 / 6; object-fit: cover; display: block; }
+.riders-hero img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
 .riders-copy h2 { margin: 8px 0 18px; }
 .riders-copy .lead { color: var(--txt); margin-bottom: 14px; max-width: none; }
 .riders-copy p { color: var(--mute); margin-bottom: 12px; }
-.riders-row img { aspect-ratio: 4 / 5; }
+.riders-row img { aspect-ratio: 1 / 1; }
 @media (max-width: 1080px) { .riders-top { grid-template-columns: 1fr; gap: 28px; } }
-@media (max-width: 680px) { .riders-row { grid-template-columns: 1fr !important; } .riders-row figure:first-child img { aspect-ratio: 4 / 5; } }
+@media (max-width: 680px) { .riders-row { grid-template-columns: 1fr !important; } .riders-row figure:first-child img { aspect-ratio: 1 / 1; } }
 
 /* ===================== reviews wall */
 .review-wall { columns: 3 300px; column-gap: 18px; }
@@ -212,8 +212,12 @@ button.btn-ghost { background: transparent; }
 }
 
 /* menu photo cell; "Example photo" marks a Commons photo, not TAKE's own plate */
-.dish-pic { position: relative; align-self: stretch; }
-.dish-pic .dish-img { height: 100%; }
+/* every menu picture is a square: a framed thumbnail at the card's top left, never a strip stretched to the card */
+.dish.has-img { grid-template-columns: 112px 1fr auto; align-items: start; padding-left: 12px; }
+.dish-pic { position: relative; align-self: start; width: 112px; aspect-ratio: 1 / 1; margin: 12px 0; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(0, 0, 0, .35); }
+.dish-pic .dish-img { width: 100%; height: 100%; min-height: 0; }
+.dish.has-img .qty { align-self: center; }
+.dish.has-img > .dish-no { left: 6px; top: 6px; }
 .ex-tag { position: absolute; left: 4px; bottom: 4px; font: 600 9px Inter, sans-serif; color: #fff; background: rgba(0, 0, 0, .6); padding: 2px 5px; border-radius: 5px; text-decoration: none; }
 
 /* photos open full size on a tap (zoom.js) */
@@ -221,7 +225,7 @@ main img:not(.hero-logo) { cursor: zoom-in; }
 .zoom { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, .9); display: flex; align-items: center; justify-content: center; padding: 16px; cursor: zoom-out; }
 .zoom[hidden] { display: none !important; }
 .zoom figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.zoom img { max-width: 94vw; max-height: 84vh; object-fit: contain; border-radius: 10px; background: #fff0; cursor: zoom-out; }
+.zoom img { width: min(94vw, 84vh); height: min(94vw, 84vh); aspect-ratio: 1 / 1; object-fit: cover; border-radius: 14px; background: #fff0; cursor: zoom-out; }
 .zoom figcaption { color: #fff; font: 500 14px Inter, sans-serif; text-align: center; max-width: 80ch; }
 .zoom button { position: absolute; background: rgba(255, 255, 255, .12); color: #fff; border: 1px solid rgba(255, 255, 255, .3); border-radius: 50%; width: 44px; height: 44px; font-size: 26px; line-height: 1; cursor: pointer; }
 .zoom-x { top: 14px; right: 14px; }

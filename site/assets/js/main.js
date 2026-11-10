@@ -56,7 +56,13 @@
     var el = $('#menuCats'); if (!el) return;
     // the category travels in data-cat: the label on the button is translated, so it cannot be the key
     el.innerHTML = ['All'].concat(cats).map(function (c) { return '<button type="button" data-cat="' + esc(c) + '" aria-pressed="' + (c === curCat) + '">' + esc(c) + '</button>'; }).join('');
-    el.querySelectorAll('button').forEach(function (b) { b.onclick = function () { curCat = b.getAttribute('data-cat'); renderCats(); renderMenu(); }; });
+    el.querySelectorAll('button').forEach(function (b) { b.onclick = function () {
+      curCat = b.getAttribute('data-cat'); renderCats();
+      // a new filter draws a fresh menu: fx.js flips the cards in (a tap on + does not)
+      var g = $('#menuGrid'); if (g) g.dataset.fresh = '1';
+      renderMenu();
+      setTimeout(function () { if (g) delete g.dataset.fresh; }, 0);
+    }; });
   }
   function renderMenu() {
     var el = $('#menuGrid'); if (!el) return;

@@ -46,6 +46,89 @@ html[data-v="ride"] .hero.only-ride { --hero: url(/assets/img/shop-side.jpg); }
 .ticks li::before { content: ""; flex: none; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: rgba(255, 90, 110, .16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5a6e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / 12px no-repeat; }
 
 @media (max-width: 680px) { .section > .wrap::before { inset: -24px -8px; } }
+
+/* ================= menus in 3D (fx.js marks dishes, scooters and trips with .m3d) */
+.m3d { --rx: 0deg; --ry: 0deg; --px: 0; --py: 0; --mx: 50%; --my: 50%; position: relative; isolation: isolate;
+  transition: transform .75s cubic-bezier(.16, 1, .3, 1), box-shadow .5s ease, border-color .4s ease; }
+.bike.m3d { overflow: hidden; }
+/* arrival: the card flips up out of the page, sharpens, and a scan of light crosses it */
+@keyframes m3dIn {
+  0% { opacity: 0; transform: perspective(1100px) translateY(56px) rotateX(-28deg) scale(.92); filter: blur(7px) brightness(1.7); }
+  55% { opacity: 1; filter: blur(0) brightness(1.18); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+@keyframes m3dSweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.m3d-pop { animation: m3dIn .8s cubic-bezier(.16, .9, .24, 1) backwards; transform-origin: 50% 100%; }
+.m3d-pop::after { opacity: 1 !important; background: linear-gradient(100deg, transparent 32%, rgba(255, 255, 255, .3) 47%, rgba(255, 154, 60, .2) 53%, transparent 68%) no-repeat !important;
+  background-size: 260% 100% !important; animation: m3dSweep .7s ease-out backwards; animation-delay: inherit; }
+/* hover: the card leans toward the pointer, lifts, and throws its shadow the other way */
+.m3d.in.tilt { transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale3d(1.03, 1.03, 1.03); z-index: 3; will-change: transform;
+  transition: transform .12s ease-out, box-shadow .25s ease, border-color .25s ease; border-color: rgba(255, 90, 110, .55);
+  box-shadow: calc(var(--px) * -30px) calc(var(--py) * -30px + 26px) 50px rgba(0, 0, 0, .55), 0 0 36px rgba(255, 90, 110, .22); }
+.tilt-now, .tilt-now * { transition: none !important; }
+/* a light that follows the pointer across the card */
+.m3d::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4; opacity: 0; transition: opacity .4s ease; mix-blend-mode: screen;
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(255, 255, 255, .17), rgba(255, 154, 60, .06) 32%, transparent 58%); }
+/* the edge nearest the pointer lights up in TAKE pink and orange */
+.m3d::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 5; opacity: 0; transition: opacity .4s ease;
+  background: radial-gradient(240px circle at var(--mx) var(--my), #ff5a6e, #ff9a3c 38%, transparent 68%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
+.m3d.tilt::before, .m3d.tilt::after { opacity: 1; }
+/* depth: the picture drifts against the pointer, the number and the + float above it */
+.m3d .dish-img, .m3d .bike-img, .m3d .dish-no, .m3d .qty .plus { transition: transform .75s cubic-bezier(.16, 1, .3, 1), box-shadow .4s ease; }
+.m3d.tilt .dish-img, .m3d.tilt .bike-img { transform: scale(1.12) translate(calc(var(--px) * -9px), calc(var(--py) * -9px)); transition-duration: .15s; }
+.m3d.tilt .dish-no { transform: translate(calc(var(--px) * 7px), calc(var(--py) * 7px)); transition-duration: .15s; }
+.m3d.tilt .qty .plus { transform: translate(calc(var(--px) * 6px), calc(var(--py) * 6px)) scale(1.08); box-shadow: 0 0 0 4px rgba(255, 90, 110, .18), 0 0 24px rgba(255, 90, 110, .7); transition-duration: .15s; }
+.m3d.tilt h3 { text-shadow: calc(var(--px) * -8px) calc(var(--py) * -8px) 16px rgba(255, 90, 110, .35); }
+html[data-theme="light"] .m3d.in.tilt { box-shadow: calc(var(--px) * -26px) calc(var(--py) * -26px + 22px) 44px rgba(90, 30, 40, .22), 0 0 30px rgba(255, 90, 110, .2); }
+/* touch: a short press-in instead of the lean */
+@media (hover: none) { .m3d:active { transform: scale(.985); transition-duration: .1s; } }
+
+/* menu separators: the line draws itself across as the group arrives */
+#menuGrid .menu-sep { border-bottom: 0; padding-bottom: 12px; position: relative; }
+.menu-sep::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--green), var(--gold) 42%, rgba(255, 154, 60, 0)); box-shadow: 0 0 14px rgba(255, 90, 110, .45);
+  transition: transform 1.2s cubic-bezier(.16, 1, .3, 1) .2s; }
+.menu-sep.reveal:not(.in)::after { transform: scaleX(0); }
+
+/* filter chips: lift on hover, spring when chosen */
+.cats button { transition: transform .3s cubic-bezier(.16, 1, .3, 1), box-shadow .3s ease, border-color .3s ease, background-color .3s ease, color .3s ease; }
+.cats button:active { transform: scale(.95); transition-duration: .08s; }
+.cats button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(255, 90, 110, .18), 0 0 24px rgba(255, 90, 110, .5); animation: chipOn .5s cubic-bezier(.16, 1, .3, 1); }
+@keyframes chipOn { 0% { transform: scale(.82); box-shadow: 0 0 0 0 rgba(255, 90, 110, .8); } 55% { transform: scale(1.08); } 100% { transform: none; } }
+
+/* page menu: a lit line slides under the link; on phones the menu drops open in 3D */
+#menu a { position: relative; transition: color .25s ease, opacity .25s ease, text-shadow .25s ease, transform .25s ease; }
+#menu a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; border-radius: 2px; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--green), var(--gold)); box-shadow: 0 0 10px rgba(255, 90, 110, .7); transition: transform .4s cubic-bezier(.16, 1, .3, 1); }
+#menu a[aria-current]::after { transform: scaleX(1); }
+.nav.open #menu a::after { display: none; }
+@keyframes navDrop { from { opacity: 0; transform: perspective(900px) rotateX(-60deg) translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes navItem { from { opacity: 0; transform: translateX(-18px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+.nav.open #menu { animation: navDrop .45s cubic-bezier(.16, 1, .3, 1); transform-origin: 50% 0; }
+.nav.open #menu a { animation: navItem .5s cubic-bezier(.16, 1, .3, 1) backwards; }
+.nav.open #menu a:nth-child(2) { animation-delay: .05s; } .nav.open #menu a:nth-child(3) { animation-delay: .1s; } .nav.open #menu a:nth-child(4) { animation-delay: .15s; }
+.nav.open #menu a:nth-child(5) { animation-delay: .2s; } .nav.open #menu a:nth-child(6) { animation-delay: .25s; } .nav.open #menu a:nth-child(n+7) { animation-delay: .3s; }
+/* language menu: drops open, languages slide in one after another */
+.dj-lang-menu.open { animation: navDrop .38s cubic-bezier(.16, 1, .3, 1); transform-origin: 50% 0; }
+.dj-lang-menu.open .dj-lang-item { animation: navItem .42s cubic-bezier(.16, 1, .3, 1) backwards; }
+.dj-lang-menu.open .dj-lang-item:nth-child(2) { animation-delay: .025s; } .dj-lang-menu.open .dj-lang-item:nth-child(3) { animation-delay: .05s; }
+.dj-lang-menu.open .dj-lang-item:nth-child(4) { animation-delay: .075s; } .dj-lang-menu.open .dj-lang-item:nth-child(5) { animation-delay: .1s; }
+.dj-lang-menu.open .dj-lang-item:nth-child(6) { animation-delay: .125s; } .dj-lang-menu.open .dj-lang-item:nth-child(7) { animation-delay: .15s; }
+.dj-lang-menu.open .dj-lang-item:nth-child(8) { animation-delay: .175s; } .dj-lang-menu.open .dj-lang-item:nth-child(9) { animation-delay: .2s; }
+.dj-lang-menu.open .dj-lang-item:nth-child(n+10) { animation-delay: .225s; }
+
+@media (hover: hover) and (pointer: fine) {
+  .cats button:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 8px 20px rgba(0, 0, 0, .35), 0 0 18px rgba(255, 90, 110, .35); }
+  .cats button[aria-pressed="true"]:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, .35), 0 0 0 3px rgba(255, 90, 110, .22), 0 0 28px rgba(255, 90, 110, .6); }
+  #menu a:hover { transform: translateY(-1px); text-shadow: 0 0 14px rgba(255, 90, 110, .6); }
+  #menu a:hover::after { transform: scaleX(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-l, .reveal-r { opacity: 1; transform: none; transition: none; }
+  .m3d, .m3d *, .m3d-pop, .m3d-pop::after, .cats button, .nav.open #menu, .nav.open #menu a, .dj-lang-menu.open, .dj-lang-menu.open .dj-lang-item { animation: none !important; transition: none !important; }
+  .m3d.in.tilt { transform: none; }
+  .menu-sep.reveal:not(.in)::after { transform: none; }
 }
