@@ -8,10 +8,10 @@
    "source": "https://commons.wikimedia.org/wiki/File:All_Day_Big_Breakfast,_Coffee_Quarter,_Perth_Airport,_2026_(02).jpg"
   },
   "simple-breakfast": {
-   "file": "menu/ex/simple-breakfast.jpg",
-   "author": "Meg H",
-   "licence": "CC BY 2.0",
-   "source": "https://commons.wikimedia.org/wiki/File:Skinny-Fried-Egg-and-Avocado-Toast-Perfect-breakfast_(35555668870).jpg"
+   "file": "menu/ex/simple-breakfast-v3.jpg",
+   "author": "Andy Li",
+   "licence": "CC0",
+   "source": "https://commons.wikimedia.org/wiki/File:Smashed_avocado_%26_poached_eggs_-_M%26S_Caf%C3%A9_2023-12-28.jpg"
   },
   "2x2-breakfast": {
    "file": "menu/ex/2x2-breakfast.jpg",
@@ -50,7 +50,7 @@
    "source": "https://commons.wikimedia.org/wiki/File:Egg_Foo_Young_in_Hong_Kong.jpg"
   },
   "cap-cay": {
-   "file": "menu/ex/cap-cay.jpg",
+   "file": "menu/ex/cap-cay-v3.jpg",
    "author": "Lim Natee",
    "licence": "CC BY-SA 4.0",
    "source": "https://commons.wikimedia.org/wiki/File:Cap_Cay_(Sayur_Cap_Chay).jpg"
